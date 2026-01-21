@@ -53,6 +53,22 @@ export interface ProductGroup {
   icon_url: string;
 }
 
+export interface ProductGroupForm {
+  group: string;
+  short_info: string;
+  image: string;
+  icon: string;
+  category: string;
+  forms: {
+    voucher_fields: Array<{
+      name: string;
+      type: string;
+      label: string;
+      options?: Array<{ name: string; value: string }>;
+    }>;
+  };
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -145,6 +161,16 @@ export const authService = {
   async getProductGroups(): Promise<ProductGroup[]> {
     const response = await apiClient.get<ProductGroup[]>(
       apiConfig.ENDPOINTS.PARTNER.PRODUCT_GROUPS
+    );
+    return response.data;
+  },
+
+  async getProductGroupForm(groupName: string): Promise<ProductGroupForm> {
+    const response = await apiClient.get<ProductGroupForm>(
+      apiConfig.ENDPOINTS.PARTNER.PRODUCT_GROUP_FORM,
+      {
+        params: { group: groupName },
+      }
     );
     return response.data;
   },

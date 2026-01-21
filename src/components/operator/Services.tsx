@@ -57,7 +57,7 @@ function Services() {
             {!isLoading && !error && filteredGroups.length > 0 && (
                 <div className="mt-[24px] grid grid-cols-7 gap-6">
                     {filteredGroups.map((group) => (
-                        <Link key={group.group_name} to="/operator/product">
+                        <Link key={group.group_name} to={`/operator/product?group=${encodeURIComponent(group.group_name)}`}>
                             <div className="overflow-hidden rounded-[24px]">
                                 <img
                                     src={group.icon_url}
