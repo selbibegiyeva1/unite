@@ -23,7 +23,7 @@ function App() {
           {/* operator */}
           <Route path="/operator/home" element={<HomeOperator />} />
           <Route path="/operator/product" element={<ProductOperator />} />
-          <Route path="/operator/category" element={<CategoryOperator />} />
+          <Route path="/operator/products" element={<CategoryOperator />} />
           <Route path="/operator/esim" element={<EsimCategory />} />
           <Route path="/operator/transactions" element={<TransactionsOperator />} />
           

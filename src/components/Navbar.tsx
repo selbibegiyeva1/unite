@@ -66,25 +66,12 @@ function Navbar() {
                         </li>
                         <li className="px-1.5 py-2.5">
                             <NavLink
-                                to="/operator/category"
+                                to="/operator/products"
                                 className={({ isActive }) => getLinkClasses(isActive)}
                             >
                                 {({ isActive }) => (
                                     <>
-                                        <span>Игры</span>
-                                        <span className={underlineClasses(isActive)} />
-                                    </>
-                                )}
-                            </NavLink>
-                        </li>
-                        <li className="px-1.5 py-2.5">
-                            <NavLink
-                                to="/operator/category"
-                                className={({ isActive }) => getLinkClasses(isActive)}
-                            >
-                                {({ isActive }) => (
-                                    <>
-                                        <span>Сервисы</span>
+                                        <span>Продукты</span>
                                         <span className={underlineClasses(isActive)} />
                                     </>
                                 )}
