@@ -84,7 +84,7 @@ function SignInForm() {
                 </div>
                 <button
                     type="submit"
-                    className="p-[13px] mt-[8px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] w-full cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                    className="p-[13px] mt-[8px] bg-[#2D85EA] hover:bg-blue-600 text-white rounded-[8px] w-full cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                     disabled={isLoading}
                 >
                     {isLoading ? 'Загрузка...' : 'Войти'}

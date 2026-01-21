@@ -47,6 +47,12 @@ export interface PartnerMainInfoResponse {
   currency: string;
 }
 
+export interface ProductGroup {
+  group_name: string;
+  category: string;
+  icon_url: string;
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -132,6 +138,13 @@ export const authService = {
   async getPartnerMainInfo(): Promise<PartnerMainInfoResponse> {
     const response = await apiClient.get<PartnerMainInfoResponse>(
       apiConfig.ENDPOINTS.PARTNER.MAIN_INFO
+    );
+    return response.data;
+  },
+
+  async getProductGroups(): Promise<ProductGroup[]> {
+    const response = await apiClient.get<ProductGroup[]>(
+      apiConfig.ENDPOINTS.PARTNER.PRODUCT_GROUPS
     );
     return response.data;
   },
