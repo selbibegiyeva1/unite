@@ -1,11 +1,11 @@
-function ProductOperator() {
+function CategoryOperator() {
     return (
         <div className='px-6 mt-[28px]'>
             <div className='w-[1680px] m-auto'>
-                ProductOperator
+                CategoryOperator
             </div>
         </div>
     )
 }
 
-export default ProductOperator
+export default CategoryOperator

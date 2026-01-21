@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Navbar from './Navbar';
 
 interface ProtectedRouteProps {
   children?: React.ReactNode;
@@ -10,8 +11,11 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div>Loading...</div>
+      <div className="flex h-screen flex-col">
+        <Navbar />
+        <div className="flex flex-1 items-center justify-center">
+          <div>Loading...</div>
+        </div>
       </div>
     );
   }
@@ -20,10 +24,15 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to="/" replace />;
   }
 
-  // Support both nested routes (Outlet) and direct children usage
-  if (children) {
-    return <>{children}</>;
-  }
-
-  return <Outlet />;
+  // Support both nested routes (Outlet) and direct children usage,
+  // but always show the navbar on protected content.
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+      <main className="flex-1">
+        {children ? <>{children}</> : <Outlet />}
+      </main>
+    </div>
+  );
 }
+
