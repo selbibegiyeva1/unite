@@ -13,5 +13,8 @@ export default {
     USER: {
       INFO: '/user/info',
     },
+    PARTNER: {
+      MAIN_INFO: '/partner/info/main',
+    },
   },
 };

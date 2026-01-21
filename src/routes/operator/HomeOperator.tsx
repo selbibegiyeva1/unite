@@ -14,21 +14,7 @@ function HomeOperator() {
                 </div>
 
                 <div>
-                    <h2 className="text-xl font-semibold mb-4">User Information</h2>
-                    <div className="space-y-2">
-                        <div>
-                            <span className="font-medium">Username:</span> {user.username}
-                        </div>
-                        <div>
-                            <span className="font-medium">Email:</span> {user.email}
-                        </div>
-                        <div>
-                            <span className="font-medium">Full Name:</span> {user.full_name}
-                        </div>
-                        <div>
-                            <span className="font-medium">Role:</span> {user.role}
-                        </div>
-                    </div>
+                    {/* main sections content goes here */}
                 </div>
             </div>
         </div>

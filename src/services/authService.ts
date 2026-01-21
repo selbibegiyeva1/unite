@@ -42,6 +42,11 @@ export interface UserInfoResponse {
   };
 }
 
+export interface PartnerMainInfoResponse {
+  balance: number;
+  currency: string;
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -120,6 +125,13 @@ export const authService = {
   async getUserInfo(): Promise<UserInfoResponse> {
     const response = await apiClient.get<UserInfoResponse>(
       apiConfig.ENDPOINTS.USER.INFO
+    );
+    return response.data;
+  },
+
+  async getPartnerMainInfo(): Promise<PartnerMainInfoResponse> {
+    const response = await apiClient.get<PartnerMainInfoResponse>(
+      apiConfig.ENDPOINTS.PARTNER.MAIN_INFO
     );
     return response.data;
   },
