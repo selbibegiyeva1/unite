@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import Sidebar from "./Sidebar";
@@ -15,6 +15,7 @@ function Navbar() {
         `mt-1 h-[1.5px] bg-[#2D85EA] transition-all duration-200 ease-out ${isActive ? "w-full" : "w-0"}`;
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const location = useLocation();
     const { data: userData } = useUserInfo();
     const { data: partnerMain } = usePartnerMainInfo();
 
@@ -27,6 +28,11 @@ function Navbar() {
     const handleSidebarOpen = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
+
+    const searchParams = new URLSearchParams(location.search);
+    const currentGroup = searchParams.get("group");
+    const isSteamActive =
+        location.pathname === "/operator/product" && currentGroup === "Steam";
 
     return (
         <header className="px-[24px]">
@@ -52,17 +58,13 @@ function Navbar() {
                             </NavLink>
                         </li>
                         <li className="px-1.5 py-2.5">
-                            <NavLink
-                                to="/operator/product"
-                                className={({ isActive }) => getLinkClasses(isActive)}
+                            <Link
+                                to="/operator/product?group=Steam"
+                                className={getLinkClasses(isSteamActive)}
                             >
-                                {({ isActive }) => (
-                                    <>
-                                        <span>Steam</span>
-                                        <span className={underlineClasses(isActive)} />
-                                    </>
-                                )}
-                            </NavLink>
+                                <span>Steam</span>
+                                <span className={underlineClasses(isSteamActive)} />
+                            </Link>
                         </li>
                         <li className="px-1.5 py-2.5">
                             <NavLink
