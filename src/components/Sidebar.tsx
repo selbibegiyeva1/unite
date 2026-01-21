@@ -1,4 +1,5 @@
 import { useLogout } from '../hooks/auth/useLogout';
+import { useUserInfo } from '../hooks/auth/useUserInfo';
 
 interface SidebarProps {
     click: () => void;
@@ -7,6 +8,9 @@ interface SidebarProps {
 
 function Sidebar({ click, isSidebarOpen }: SidebarProps) {
     const { handleLogout, isLoading } = useLogout();
+    const { data, isLoading: isUserLoading, error: userError } = useUserInfo();
+
+    const user = data?.user;
 
     return (
         <div
@@ -17,7 +21,7 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
         >
             <div
                 className={`bg-white w-[400px] px-[18px] pt-[18px] pb-[32px] rounded-[16px] transform transition-transform duration-200 ${
-                    isSidebarOpen ? "translate-y-0" : "translate-y-4"
+                    isSidebarOpen ? "translate-y-0" : "translate-y-2"
                 }`}
                 onClick={(e) => e.stopPropagation()}
             >
@@ -29,22 +33,44 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
                 </div>
 
                 <div className="my-5 flex flex-col gap-[14px]">
-                    <div className="flex flex-col gap-[8px]">
-                        <span className="text-[15px] font-medium">Email</span>
-                        <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">roycharyyew@gmail.com</span>
-                    </div>
-                    <div className="flex flex-col gap-[8px]">
-                        <span className="text-[15px] font-medium">Никнейм</span>
-                        <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">Мурад</span>
-                    </div>
-                    <div className="flex flex-col gap-[8px]">
-                        <span className="text-[15px] font-medium">Полное имя</span>
-                        <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">Мурад</span>
-                    </div>
-                    <div className="flex flex-col gap-[8px]">
-                        <span className="text-[15px] font-medium">Роль</span>
-                        <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">Директор</span>
-                    </div>
+                    {isUserLoading && (
+                        <span className="text-[14px] text-[#00000099]">Загружаем данные профиля...</span>
+                    )}
+
+                    {userError && !isUserLoading && (
+                        <span className="text-[14px] text-red-500">
+                            Не удалось загрузить профиль. Попробуйте позже.
+                        </span>
+                    )}
+
+                    {user && (
+                        <>
+                            <div className="flex flex-col gap-[8px]">
+                                <span className="text-[15px] font-medium">Email</span>
+                                <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
+                                    {user.email}
+                                </span>
+                            </div>
+                            <div className="flex flex-col gap-[8px]">
+                                <span className="text-[15px] font-medium">Никнейм</span>
+                                <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
+                                    {user.username}
+                                </span>
+                            </div>
+                            <div className="flex flex-col gap-[8px]">
+                                <span className="text-[15px] font-medium">Полное имя</span>
+                                <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
+                                    {user.full_name}
+                                </span>
+                            </div>
+                            <div className="flex flex-col gap-[8px]">
+                                <span className="text-[15px] font-medium">Роль</span>
+                                <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
+                                    {user.role}
+                                </span>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <button
