@@ -42,7 +42,14 @@ function Header({ productForm, activeTab, setActiveTab }: HeaderProps) {
                                 className={`${baseBtn} ${activeTab === 'voucher' ? activeClasses : inactiveClasses}`}
                             >
                                 Ваучер
-                                <img src="/product/help.png" className='w-[28px]' alt="help" />
+                                <div className='relative group'>
+
+                                    {/* Hover here */}
+                                    <img src="/product/help.png" className='w-[28px]' alt="help" />
+
+                                    {/* Display this on hover */}
+                                    <span className='absolute shadow-2xl border text-black border-[#00000026] rounded-[16px] leading-5 text-left top-[50px] z-10 left-[-50px] font-medium text-[14px] w-[300px] bg-white px-4 py-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>Ваучер — уникальная комбинация из цифр и букв. У ваучера есть денежный номинал, который зачисляется на игровой кошелёк при активации.</span>
+                                </div>
                             </button>
                         )}
                     </div>
