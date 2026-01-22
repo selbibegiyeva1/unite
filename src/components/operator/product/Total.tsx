@@ -1,16 +1,111 @@
-function Total() {
+import { useMemo } from 'react';
+import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
+
+interface TotalProps {
+    productForm: ProductGroupForm;
+    activeTab: 'popolnenie' | 'voucher';
+    selectedRegion: string;
+    formValues: Record<string, string>;
+    selectedNominal: number | null;
+}
+
+function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal }: TotalProps) {
+    // Get the appropriate fields based on active tab
+    const fields = activeTab === 'voucher'
+        ? productForm.forms?.voucher_fields
+        : productForm.forms?.topup_fields;
+
+    // Get region name
+    const regionField = fields?.find(field => field.name === 'region');
+    const regionOption = regionField?.options?.find(
+        opt => 'value' in opt && opt.value === selectedRegion
+    );
+    const regionName = regionOption && 'name' in regionOption ? regionOption.name : '';
+
+    // Get form fields (excluding region and product_id)
+    const formFields = fields?.filter(field =>
+        field.name !== 'region' && field.name !== 'product_id'
+    ) || [];
+
+    // Get selected nominal price
+    const productIdField = fields?.find(field => field.name === 'product_id');
+    const selectedNominalData = useMemo(() => {
+        if (!selectedNominal || !productIdField?.options) return null;
+        
+        return productIdField.options.find((option): option is ProductIdOption =>
+            typeof option === 'object' &&
+            'value' in option &&
+            option.value === selectedNominal
+        ) as ProductIdOption | undefined;
+    }, [selectedNominal, productIdField]);
+
+    const creditedProduct = selectedNominalData?.product || '';
+    
+    // For Steam Пополнение, use amount from form, otherwise use nominal price
+    const totalAmount = (productForm.group === 'Steam' && activeTab === 'popolnenie' && formValues.amount)
+        ? parseFloat(formValues.amount) || 0
+        : (selectedNominalData?.price || 0);
+
     return (
         <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl w-[490px]">
             <p className="text-[24px] font-medium">Оплата</p>
 
             <div className="my-6">
+                {/* Region */}
+                {regionName && (
+                    <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
+                        <p className="font-medium whitespace-nowrap">Регион</p>
+                        <p className="font-medium ml-4">{regionName}</p>
+                    </div>
+                )}
+
+                {/* Form fields */}
+                {productForm.group === 'Steam' && activeTab === 'popolnenie' ? (
+                    // Static fields for Steam - always show all fields
+                    <>
+                        {/* <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
+                            <p className="font-medium whitespace-nowrap">Введите логин в Steam</p>
+                            <p className="font-medium ml-4">{formValues.login || '-'}</p>
+                        </div>
+                        <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
+                            <p className="font-medium whitespace-nowrap">Введите свою почту</p>
+                            <p className="font-medium ml-4">{formValues.email || '-'}</p>
+                        </div> */}
+                        {/* <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
+                            <p className="font-medium whitespace-nowrap">Сумма пополнения в ТМТ</p>
+                            <p className="font-medium ml-4">{formValues.amount ? `${formValues.amount} TMT` : '-'}</p>
+                        </div> */}
+                        <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
+                            <p className="font-medium whitespace-nowrap">К зачислению в Steam</p>
+                            <p className="font-medium ml-4">{formValues.credited || '-'}$</p>
+                        </div>
+                    </>
+                ) : (
+                    // Dynamic fields from backend - show all fields
+                    formFields.map((field) => {
+                        const value = formValues[field.name] || '';
+                        
+                        return (
+                            <div key={field.name} className="flex items-center justify-between py-4 border-b border-[#0000001A]">
+                                <p className="font-medium whitespace-nowrap">{field.label}</p>
+                                <p className="font-medium ml-4">{value || '-'}</p>
+                            </div>
+                        );
+                    })
+                )}
+
+                {/* К зачислению */}
+                {creditedProduct && (
+                    <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
+                        <p className="font-medium whitespace-nowrap">К зачислению</p>
+                        <p className="font-medium text-right ml-4">{creditedProduct}</p>
+                    </div>
+                )}
+
+                {/* Итого к списанию */}
                 <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                    <p className="font-medium">К зачислению в Steam</p>
-                    <p className="font-medium">1000 TMT</p>
-                </div>
-                <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                    <p className="font-medium">Итого к списанию</p>
-                    <p className="font-medium">1000 TMT</p>
+                    <p className="font-medium whitespace-nowrap">Итого к списанию</p>
+                    <p className="font-medium ml-4">{totalAmount} TMT</p>
                 </div>
             </div>
 
