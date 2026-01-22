@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useProductGroupForm } from '../../hooks/operator/product/useProductGroupForm';
 import { useProductValidation } from '../../hooks/operator/product/useProductValidation';
+import { useSteamInfo } from '../../hooks/operator/product/useSteamInfo';
+import { usePayment } from '../../hooks/operator/product/usePayment';
 import Header from '../../components/operator/product/Header';
 import Region from '../../components/operator/product/Region';
 import Nominals from '../../components/operator/product/Nominals';
@@ -73,20 +75,32 @@ function ProductOperator() {
         setValidationErrors({ formFields: {}, checkbox: false });
     }, [activeTab]);
 
+    // Fetch Steam info for validation
+    const { data: steamInfo } = useSteamInfo();
+
     // Validation hook
     const { validateAndScroll, formRefs, checkboxRef } = useProductValidation({
         productForm,
         activeTab,
         formValues,
         isCheckboxChecked,
+        steamInfo: steamInfo || null,
     });
 
-    const handlePayment = () => {
+    // Payment hook
+    const { processPayment, isLoading: isPaymentLoading, error: paymentError } = usePayment({
+        productForm,
+        activeTab,
+        formValues,
+        selectedNominal,
+    });
+
+    const handlePayment = async () => {
         const { isValid, errors } = validateAndScroll();
         setValidationErrors(errors);
         if (isValid) {
             // Proceed with payment
-            console.log('Payment can proceed');
+            await processPayment();
         }
     };
 
@@ -145,6 +159,8 @@ function ProductOperator() {
                         checkboxError={validationErrors.checkbox}
                         checkboxRef={checkboxRef}
                         onPayment={handlePayment}
+                        isPaymentLoading={isPaymentLoading}
+                        paymentError={paymentError}
                     />
                 </div>
             )}

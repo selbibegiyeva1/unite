@@ -93,6 +93,28 @@ export interface SteamInfoResponse {
   steam_max_amount_tmt: number;
 }
 
+export interface PaymentResponse {
+  status: boolean;
+  voucher: string;
+  comment: string;
+}
+
+export interface SteamPaymentRequest {
+  steam_username: string;
+  amount_tmt: number;
+  email: string;
+}
+
+export interface VoucherPaymentRequest {
+  product_id: number;
+  email: string;
+}
+
+export interface TopupPaymentRequest {
+  product_id: number;
+  [key: string]: string | number; // Dynamic fields
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -212,6 +234,30 @@ export const authService = {
   async getSteamInfo(): Promise<SteamInfoResponse> {
     const response = await apiClient.get<SteamInfoResponse>(
       '/partner/steam/info'
+    );
+    return response.data;
+  },
+
+  async paySteam(payload: SteamPaymentRequest): Promise<PaymentResponse> {
+    const response = await apiClient.post<PaymentResponse>(
+      '/products/steam/pay',
+      payload
+    );
+    return response.data;
+  },
+
+  async buyVoucher(payload: VoucherPaymentRequest): Promise<PaymentResponse> {
+    const response = await apiClient.post<PaymentResponse>(
+      '/products/voucher/buy',
+      payload
+    );
+    return response.data;
+  },
+
+  async buyTopup(payload: TopupPaymentRequest): Promise<PaymentResponse> {
+    const response = await apiClient.post<PaymentResponse>(
+      '/products/topup/buy',
+      payload
     );
     return response.data;
   },
