@@ -7,9 +7,11 @@ interface FormProps {
     activeTab: 'popolnenie' | 'voucher';
     formValues: Record<string, string>;
     onFormChange: (values: Record<string, string>) => void;
+    validationErrors: Record<string, boolean>;
+    formRefs: React.MutableRefObject<Record<string, HTMLInputElement | HTMLSelectElement | null>>;
 }
 
-function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
+function Form({ productForm, activeTab, formValues, onFormChange, validationErrors, formRefs }: FormProps) {
     const handleInputChange = (name: string, value: string) => {
         onFormChange({
             ...formValues,
@@ -39,7 +41,7 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
 
     // Validate amount against min/max
     const amountValue = parseFloat(formValues.amount || '0');
-    const amountError = isSteamPopolnenie && steamInfo && formValues.amount
+    const amountRangeError = isSteamPopolnenie && steamInfo && formValues.amount
         ? (amountValue < steamInfo.steam_min_amount_tmt || amountValue > steamInfo.steam_max_amount_tmt)
             ? `Сумма должна быть от ${steamInfo.steam_min_amount_tmt} до ${steamInfo.steam_max_amount_tmt} ТМТ`
             : null
@@ -56,13 +58,15 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
     ) || [];
 
     const renderField = (field: typeof formFields[0]) => {
-        const inputClasses = "w-full text-[14px] font-medium outline-0 rounded-[10px] p-4 bg-[#F5F5F9]";
+        const hasError = validationErrors[field.name];
+        const inputClasses = `w-full text-[14px] font-medium outline-0 rounded-[10px] p-4 bg-[#F5F5F9] ${hasError ? 'border-2 border-red-500' : ''}`;
         const value = formValues[field.name] || '';
 
         switch (field.type) {
             case 'text':
                 return (
                     <input
+                        ref={(el) => { formRefs.current[field.name] = el; }}
                         type="text"
                         value={value}
                         onChange={(e) => handleInputChange(field.name, e.target.value)}
@@ -75,6 +79,7 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
             case 'number':
                 return (
                     <input
+                        ref={(el) => { formRefs.current[field.name] = el; }}
                         type="number"
                         step={field.type === 'float' ? '0.01' : '1'}
                         value={value}
@@ -92,6 +97,7 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
                 return (
                     <div className="relative">
                         <select
+                            ref={(el) => { formRefs.current[field.name] = el; }}
                             value={value}
                             onChange={(e) => handleInputChange(field.name, e.target.value)}
                             className={`${inputClasses} appearance-none cursor-pointer`}
@@ -112,6 +118,7 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
             default:
                 return (
                     <input
+                        ref={(el) => { formRefs.current[field.name] = el; }}
                         type="text"
                         value={value}
                         onChange={(e) => handleInputChange(field.name, e.target.value)}
@@ -126,6 +133,10 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
 
     // Render static fields for Steam only on Пополнение tab
     if (isSteam && activeTab === 'popolnenie') {
+        const loginError = validationErrors['login'];
+        const emailError = validationErrors['email'];
+        const amountError = validationErrors['amount'];
+        
         return (
             <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
                 <p className="text-[24px] font-bold">Пополнение аккаунта</p>
@@ -137,30 +148,33 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
                             <img src="/product/help.png" className='w-[28px]' alt="help" />
                         </div>
                         <input
+                            ref={(el) => { formRefs.current['login'] = el; }}
                             type="text"
                             value={formValues.login || ''}
                             onChange={(e) => handleInputChange('login', e.target.value)}
                             placeholder="Введите логин в Steam"
-                            className={inputClasses}
+                            className={`${inputClasses} ${loginError ? 'border-2 border-red-500' : ''}`}
                         />
                     </div>
                     <div className='flex items-end'>
                         {/* <span className="text-[14px] font-medium pb-4 flex">Введите свою почту</span> */}
                         <input
+                            ref={(el) => { formRefs.current['email'] = el; }}
                             type="email"
                             value={formValues.email || ''}
                             onChange={(e) => handleInputChange('email', e.target.value)}
                             placeholder="Введите свою почту"
-                            className={inputClasses}
+                            className={`${inputClasses} ${emailError ? 'border-2 border-red-500' : ''}`}
                         />
                     </div>
                     <div>
                         <span className="text-[14px] font-medium pb-4 flex">Сумма пополнения в ТМТ</span>
                         <div
-                            className={inputClasses}
+                            className={`${inputClasses} ${amountError ? 'border-2 border-red-500' : ''}`}
                             style={{ display: "flex", alignItems: "center", justifyContent: "space-between",height: "53px" }}
                         >
                             <input
+                                ref={(el) => { formRefs.current['amount'] = el; }}
                                 type="number"
                                 value={formValues.amount || ''}
                                 onChange={(e) => handleInputChange('amount', e.target.value)}
@@ -186,8 +200,8 @@ function Form({ productForm, activeTab, formValues, onFormChange }: FormProps) {
                                 </svg>
                             </div>
                         </div>
-                        {amountError && (
-                            <p className="text-red-500 text-[12px] mt-2">{amountError}</p>
+                        {amountRangeError && (
+                            <p className="text-red-500 text-[12px] mt-2">{amountRangeError}</p>
                         )}
                     </div>
                     <div>

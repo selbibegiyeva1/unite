@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useProductGroupForm } from '../../hooks/operator/product/useProductGroupForm';
+import { useProductValidation } from '../../hooks/operator/product/useProductValidation';
 import Header from '../../components/operator/product/Header';
 import Region from '../../components/operator/product/Region';
 import Nominals from '../../components/operator/product/Nominals';
@@ -15,6 +16,11 @@ function ProductOperator() {
     const [selectedRegion, setSelectedRegion] = useState<string>('');
     const [formValues, setFormValues] = useState<Record<string, string>>({});
     const [selectedNominal, setSelectedNominal] = useState<number | null>(null);
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<{ formFields: Record<string, boolean>; checkbox: boolean }>({
+        formFields: {},
+        checkbox: false,
+    });
 
     // Set default tab based on available fields
     useEffect(() => {
@@ -64,7 +70,25 @@ function ProductOperator() {
     useEffect(() => {
         setFormValues({});
         setSelectedNominal(null);
+        setValidationErrors({ formFields: {}, checkbox: false });
     }, [activeTab]);
+
+    // Validation hook
+    const { validateAndScroll, formRefs, checkboxRef } = useProductValidation({
+        productForm,
+        activeTab,
+        formValues,
+        isCheckboxChecked,
+    });
+
+    const handlePayment = () => {
+        const { isValid, errors } = validateAndScroll();
+        setValidationErrors(errors);
+        if (isValid) {
+            // Proceed with payment
+            console.log('Payment can proceed');
+        }
+    };
 
     return (
         <div className='mt-[28px] pb-[100px] w-[1680px] m-auto'>
@@ -106,6 +130,8 @@ function ProductOperator() {
                             activeTab={activeTab}
                             formValues={formValues}
                             onFormChange={setFormValues}
+                            validationErrors={validationErrors.formFields}
+                            formRefs={formRefs}
                         />
                     </div>
                     <Total
@@ -114,6 +140,11 @@ function ProductOperator() {
                         selectedRegion={selectedRegion}
                         formValues={formValues}
                         selectedNominal={selectedNominal}
+                        isCheckboxChecked={isCheckboxChecked}
+                        onCheckboxChange={setIsCheckboxChecked}
+                        checkboxError={validationErrors.checkbox}
+                        checkboxRef={checkboxRef}
+                        onPayment={handlePayment}
                     />
                 </div>
             )}

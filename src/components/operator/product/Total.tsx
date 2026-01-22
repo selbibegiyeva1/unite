@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
 
 interface TotalProps {
@@ -7,10 +7,14 @@ interface TotalProps {
     selectedRegion: string;
     formValues: Record<string, string>;
     selectedNominal: number | null;
+    isCheckboxChecked: boolean;
+    onCheckboxChange: (checked: boolean) => void;
+    checkboxError: boolean;
+    checkboxRef: React.RefObject<HTMLDivElement | null>;
+    onPayment: () => void;
 }
 
-function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal }: TotalProps) {
-    const [isChecked, setIsChecked] = useState(false);
+function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal, isCheckboxChecked, onCheckboxChange, checkboxError, checkboxRef, onPayment }: TotalProps) {
 
     // Get the appropriate fields based on active tab
     const fields = activeTab === 'voucher'
@@ -89,7 +93,7 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
 
                         return (
                             <div key={field.name} className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                                <p className="font-medium whitespace-nowrap">{field.label}</p>
+                                <p className="font-medium">{field.label}</p>
                                 <p className="font-medium ml-4">{value || '-'}</p>
                             </div>
                         );
@@ -111,11 +115,11 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 </div>
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className={`flex items-center gap-2.5`} ref={checkboxRef}>
                 {/* Checkbox */}
                 <div 
                     className="cursor-pointer relative"
-                    onClick={() => setIsChecked(!isChecked)}
+                    onClick={() => onCheckboxChange(!isCheckboxChecked)}
                 >
                     <svg className="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect 
@@ -124,12 +128,12 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                             width="22.5" 
                             height="22.5" 
                             rx="3.25" 
-                            stroke="black" 
-                            strokeOpacity="0.15" 
-                            strokeWidth="1.5"
-                            fill={isChecked ? "#2D85EA" : "none"}
+                            stroke={checkboxError ? "#EF4444" : "black"}
+                            strokeOpacity={checkboxError ? "1" : "0.15"}
+                            strokeWidth={checkboxError ? "2" : "1.5"}
+                            fill={isCheckboxChecked ? "#2D85EA" : "none"}
                         />
-                        {isChecked && (
+                        {isCheckboxChecked && (
                             <path 
                                 d="M7 12L10.5 15.5L17 9" 
                                 stroke="white" 
@@ -143,7 +147,12 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
             </div>
 
-            <button className="mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer">Оплатить</button>
+            <button 
+                onClick={onPayment}
+                className="mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer"
+            >
+                Оплатить
+            </button>
         </div>
     )
 }
