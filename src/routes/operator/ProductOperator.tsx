@@ -1,5 +1,9 @@
 import { useSearchParams } from 'react-router-dom';
 import { useProductGroupForm } from '../../hooks/operator/product/useProductGroupForm';
+import Header from '../../components/operator/product/Header';
+import Region from '../../components/operator/product/Region';
+import Form from '../../components/operator/product/Form';
+import Total from '../../components/operator/product/Total';
 
 function ProductOperator() {
     const [searchParams] = useSearchParams();
@@ -7,26 +11,40 @@ function ProductOperator() {
     const { data: productForm, isLoading, error } = useProductGroupForm(groupName);
 
     return (
-        <div className='px-6 mt-[28px]'>
-            <div className='w-[1680px] m-auto'>
-                {isLoading && (
-                    <p className="text-[14px] text-[#00000099]">Загружаем информацию о продукте...</p>
-                )}
-                {error && !isLoading && (
-                    <p className="text-red-500 text-[14px]">
-                        Не удалось загрузить информацию о продукте.
-                    </p>
-                )}
-                {!isLoading && !error && productForm && (
-                    <div>
-                        <h1 className="text-[32px] font-bold mb-4">{productForm.group}</h1>
-                        <p className="text-[16px] text-[#00000099]">{productForm.short_info}</p>
+        <div className='mt-[28px] pb-[100px] w-[1680px] m-auto'>
+            {isLoading && (
+                <div className='flex items-start gap-8'>
+                    <div className='flex flex-col gap-4 w-[1158px]'>
+                        <p className="text-[14px] text-[#00000099]">Загружаем информацию о продукте...</p>
                     </div>
-                )}
-                {!groupName && !isLoading && (
-                    <p className="text-[14px] text-[#00000099]">Выберите продукт для просмотра деталей.</p>
-                )}
-            </div>
+                </div>
+            )}
+            {error && !isLoading && (
+                <div className='flex items-start gap-8'>
+                    <div className='flex flex-col gap-4 w-[1158px]'>
+                        <p className="text-red-500 text-[14px]">
+                            Не удалось загрузить информацию о продукте.
+                        </p>
+                    </div>
+                </div>
+            )}
+            {!isLoading && !error && productForm && (
+                <div className='flex items-start gap-8'>
+                    <div className='flex flex-col gap-4 w-[1158px]'>
+                        <Header productForm={productForm} />
+                        <Region />
+                        <Form />
+                    </div>
+                    <Total />
+                </div>
+            )}
+            {!groupName && !isLoading && (
+                <div className='flex items-start gap-8'>
+                    <div className='flex flex-col gap-4 w-[1158px]'>
+                        <p className="text-[14px] text-[#00000099]">Выберите продукт для просмотра деталей.</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
