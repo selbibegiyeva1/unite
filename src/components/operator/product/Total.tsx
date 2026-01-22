@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
 
 interface TotalProps {
@@ -10,6 +10,8 @@ interface TotalProps {
 }
 
 function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal }: TotalProps) {
+    const [isChecked, setIsChecked] = useState(false);
+
     // Get the appropriate fields based on active tab
     const fields = activeTab === 'voucher'
         ? productForm.forms?.voucher_fields
@@ -31,7 +33,7 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
     const productIdField = fields?.find(field => field.name === 'product_id');
     const selectedNominalData = useMemo(() => {
         if (!selectedNominal || !productIdField?.options) return null;
-        
+
         return productIdField.options.find((option): option is ProductIdOption =>
             typeof option === 'object' &&
             'value' in option &&
@@ -40,7 +42,7 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
     }, [selectedNominal, productIdField]);
 
     const creditedProduct = selectedNominalData?.product || '';
-    
+
     // For Steam Пополнение, use amount from form, otherwise use nominal price
     const totalAmount = (productForm.group === 'Steam' && activeTab === 'popolnenie' && formValues.amount)
         ? parseFloat(formValues.amount) || 0
@@ -84,7 +86,7 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                     // Dynamic fields from backend - show all fields
                     formFields.map((field) => {
                         const value = formValues[field.name] || '';
-                        
+
                         return (
                             <div key={field.name} className="flex items-center justify-between py-4 border-b border-[#0000001A]">
                                 <p className="font-medium whitespace-nowrap">{field.label}</p>
@@ -110,9 +112,34 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
             </div>
 
             <div className="flex items-center gap-2.5">
-                <svg className="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.75" y="0.75" width="22.5" height="22.5" rx="3.25" stroke="black" stroke-opacity="0.15" stroke-width="1.5" />
-                </svg>
+                {/* Checkbox */}
+                <div 
+                    className="cursor-pointer relative"
+                    onClick={() => setIsChecked(!isChecked)}
+                >
+                    <svg className="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect 
+                            x="0.75" 
+                            y="0.75" 
+                            width="22.5" 
+                            height="22.5" 
+                            rx="3.25" 
+                            stroke="black" 
+                            strokeOpacity="0.15" 
+                            strokeWidth="1.5"
+                            fill={isChecked ? "#2D85EA" : "none"}
+                        />
+                        {isChecked && (
+                            <path 
+                                d="M7 12L10.5 15.5L17 9" 
+                                stroke="white" 
+                                strokeWidth="2" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                            />
+                        )}
+                    </svg>
+                </div>
                 <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
             </div>
 
