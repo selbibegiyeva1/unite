@@ -84,6 +84,15 @@ export interface ProductGroupForm {
   };
 }
 
+export interface SteamRateResponse {
+  topup_amount_usd: number;
+}
+
+export interface SteamInfoResponse {
+  steam_min_amount_tmt: number;
+  steam_max_amount_tmt: number;
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -186,6 +195,23 @@ export const authService = {
       {
         params: { group: groupName },
       }
+    );
+    return response.data;
+  },
+
+  async getSteamRate(amountTmt: number): Promise<SteamRateResponse> {
+    const response = await apiClient.get<SteamRateResponse>(
+      '/partner/steam/rate',
+      {
+        params: { amount_tmt: amountTmt },
+      }
+    );
+    return response.data;
+  },
+
+  async getSteamInfo(): Promise<SteamInfoResponse> {
+    const response = await apiClient.get<SteamInfoResponse>(
+      '/partner/steam/info'
     );
     return response.data;
   },

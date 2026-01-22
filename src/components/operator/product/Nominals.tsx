@@ -1,14 +1,15 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
 
 interface NominalsProps {
     productForm: ProductGroupForm;
     selectedRegion: string;
     activeTab: 'popolnenie' | 'voucher';
+    selectedNominal: number | null;
+    onNominalChange: (nominal: number | null) => void;
 }
 
-function Nominals({ productForm, selectedRegion, activeTab }: NominalsProps) {
-    const [activeNominal, setActiveNominal] = useState<number | null>(null);
+function Nominals({ productForm, selectedRegion, activeTab, selectedNominal, onNominalChange }: NominalsProps) {
 
     const baseBtn = 'font-bold px-[15px] py-[10px] rounded-[10px] cursor-pointer transition-colors';
     const activeClasses = 'bg-[#2D85EA] text-white border-2 border-[#2D85EA]';
@@ -75,14 +76,14 @@ function Nominals({ productForm, selectedRegion, activeTab }: NominalsProps) {
     useEffect(() => {
         if (nominals.length > 0) {
             // Check if current active nominal is still in the list
-            const isCurrentNominalValid = nominals.some(n => n.value === activeNominal);
-            if (!isCurrentNominalValid || activeNominal === null) {
-                setActiveNominal(nominals[0].value);
+            const isCurrentNominalValid = nominals.some(n => n.value === selectedNominal);
+            if (!isCurrentNominalValid || selectedNominal === null) {
+                onNominalChange(nominals[0].value);
             }
         } else {
-            setActiveNominal(null);
+            onNominalChange(null);
         }
-    }, [nominals]);
+    }, [nominals, selectedNominal, onNominalChange]);
 
     if (nominals.length === 0) {
         return null;
@@ -97,8 +98,8 @@ function Nominals({ productForm, selectedRegion, activeTab }: NominalsProps) {
                     <button
                         key={nominal.value}
                         type="button"
-                        onClick={() => setActiveNominal(nominal.value)}
-                        className={`${baseBtn} ${activeNominal === nominal.value ? activeClasses : inactiveClasses}`}
+                        onClick={() => onNominalChange(nominal.value)}
+                        className={`${baseBtn} ${selectedNominal === nominal.value ? activeClasses : inactiveClasses}`}
                     >
                         {nominal.product}
                     </button>

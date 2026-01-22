@@ -13,6 +13,8 @@ function ProductOperator() {
     const { data: productForm, isLoading, error } = useProductGroupForm(groupName);
     const [activeTab, setActiveTab] = useState<'popolnenie' | 'voucher'>('popolnenie');
     const [selectedRegion, setSelectedRegion] = useState<string>('');
+    const [formValues, setFormValues] = useState<Record<string, string>>({});
+    const [selectedNominal, setSelectedNominal] = useState<number | null>(null);
 
     // Set default tab based on available fields
     useEffect(() => {
@@ -58,6 +60,12 @@ function ProductOperator() {
         }
     }, [productForm, activeTab]);
 
+    // Reset form values and selected nominal when tab changes
+    useEffect(() => {
+        setFormValues({});
+        setSelectedNominal(null);
+    }, [activeTab]);
+
     return (
         <div className='mt-[28px] pb-[100px] w-[1680px] m-auto'>
             {isLoading && (
@@ -90,13 +98,23 @@ function ProductOperator() {
                             productForm={productForm}
                             selectedRegion={selectedRegion}
                             activeTab={activeTab}
+                            selectedNominal={selectedNominal}
+                            onNominalChange={setSelectedNominal}
                         />
                         <Form
                             productForm={productForm}
                             activeTab={activeTab}
+                            formValues={formValues}
+                            onFormChange={setFormValues}
                         />
                     </div>
-                    <Total />
+                    <Total
+                        productForm={productForm}
+                        activeTab={activeTab}
+                        selectedRegion={selectedRegion}
+                        formValues={formValues}
+                        selectedNominal={selectedNominal}
+                    />
                 </div>
             )}
             {!groupName && !isLoading && (
