@@ -26,21 +26,25 @@ function Header({ productForm, activeTab, setActiveTab }: HeaderProps) {
                     <p className="text-[24px] font-bold">{productForm.group}</p>
                     <p className="text-[14px] text-[#00000099] py-[18px]">{productForm.short_info}</p>
                     <div className='flex items-center gap-2.5'>
-                        <button
-                            type="button"
-                            onClick={() => setActiveTab('popolnenie')}
-                            className={`${baseBtn} ${activeTab === 'popolnenie' ? activeClasses : inactiveClasses}`}
-                        >
-                            Пополнение
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setActiveTab('voucher')}
-                            className={`${baseBtn} ${activeTab === 'voucher' ? activeClasses : inactiveClasses}`}
-                        >
-                            Ваучер
-                            <img src="/product/help.png" className='w-[28px]' alt="help" />
-                        </button>
+                        {productForm.forms?.topup_fields !== null && productForm.forms?.topup_fields !== undefined && (
+                            <button
+                                type="button"
+                                onClick={() => setActiveTab('popolnenie')}
+                                className={`${baseBtn} ${activeTab === 'popolnenie' ? activeClasses : inactiveClasses}`}
+                            >
+                                Пополнение
+                            </button>
+                        )}
+                        {productForm.forms?.voucher_fields !== null && productForm.forms?.voucher_fields !== undefined && (
+                            <button
+                                type="button"
+                                onClick={() => setActiveTab('voucher')}
+                                className={`${baseBtn} ${activeTab === 'voucher' ? activeClasses : inactiveClasses}`}
+                            >
+                                Ваучер
+                                <img src="/product/help.png" className='w-[28px]' alt="help" />
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

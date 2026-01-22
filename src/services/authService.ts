@@ -53,18 +53,33 @@ export interface ProductGroup {
   icon_url: string;
 }
 
+export interface ProductIdOption {
+  value: number;
+  product: string;
+  price: number;
+  region: string;
+  name_prefix: string;
+  type: 'VOUCHER' | 'TOPUP';
+}
+
 export interface ProductGroupForm {
   group: string;
   short_info: string;
   image: string;
   icon: string;
   category: string;
-  forms: {
-    voucher_fields: Array<{
+  forms?: {
+    voucher_fields?: Array<{
       name: string;
       type: string;
       label: string;
-      options?: Array<{ name: string; value: string }>;
+      options?: Array<{ name: string; value: string } | ProductIdOption>;
+    }>;
+    topup_fields?: Array<{
+      name: string;
+      type: string;
+      label: string;
+      options?: Array<{ name: string; value: string } | ProductIdOption>;
     }>;
   };
 }
