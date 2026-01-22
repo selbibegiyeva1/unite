@@ -136,7 +136,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
         const loginError = validationErrors['login'];
         const emailError = validationErrors['email'];
         const amountError = validationErrors['amount'];
-        
+
         return (
             <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
                 <p className="text-[24px] font-bold">Пополнение аккаунта</p>
@@ -145,7 +145,21 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                     <div>
                         <div className='pb-4 flex items-center gap-2.5'>
                             <span className="text-[14px] font-medium flex">Где искать</span>
-                            <img src="/product/help.png" className='w-[28px]' alt="help" />
+                            <div className='relative group'>
+                                {/* Hover here */}
+                                <img src="/product/help.png" className='w-[28px] cursor-pointer' alt="help" />
+                                {/* Display this on hover */}
+                                <div className='absolute shadow-2xl border text-black border-[#00000026] rounded-[32px] text-left top-[50px] z-10 left-[-50px] text-[14px] w-[600px] bg-white p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>
+                                    <p className='font-medium text-[32px]'>Как найти свой логин в Steam?</p>
+
+                                    <ul className='mt-4 mb-6 list-disc text-[14px] list-inside flex flex-col gap-2 marker:text-[#2D85EA]'>
+                                        <li>Откройте клиент Steam.Нажмите на имя пользователя в правом углу главной страницы</li>
+                                        <li>В выпадающем меню выберите пункт “Об аккаунте”</li>
+                                    </ul>
+
+                                    <img src="/product/steam.png" alt="steam" className='w-full' />
+                                </div>
+                            </div>
                         </div>
                         <input
                             ref={(el) => { formRefs.current['login'] = el; }}
@@ -171,7 +185,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                         <span className="text-[14px] font-medium pb-4 flex">Сумма пополнения в ТМТ</span>
                         <div
                             className={`${inputClasses} ${amountError ? 'border-2 border-red-500' : ''}`}
-                            style={{ display: "flex", alignItems: "center", justifyContent: "space-between",height: "53px" }}
+                            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "53px" }}
                         >
                             <input
                                 ref={(el) => { formRefs.current['amount'] = el; }}
@@ -184,12 +198,12 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                             <div className='flex items-center gap-[4px]'>
 
                                 {/* reset value */}
-                                <svg 
-                                    className='cursor-pointer' 
-                                    width="24" 
-                                    height="24" 
-                                    viewBox="0 0 24 24" 
-                                    fill="none" 
+                                <svg
+                                    className='cursor-pointer'
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
                                     onClick={() => handleInputChange('amount', '')}
                                 >
