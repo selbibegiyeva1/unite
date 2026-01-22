@@ -12,9 +12,11 @@ interface TotalProps {
     checkboxError: boolean;
     checkboxRef: React.RefObject<HTMLDivElement | null>;
     onPayment: () => void;
+    isPaymentLoading?: boolean;
+    paymentError?: string | null;
 }
 
-function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal, isCheckboxChecked, onCheckboxChange, checkboxError, checkboxRef, onPayment }: TotalProps) {
+function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal, isCheckboxChecked, onCheckboxChange, checkboxError, checkboxRef, onPayment, isPaymentLoading, paymentError }: TotalProps) {
 
     // Get the appropriate fields based on active tab
     const fields = activeTab === 'voucher'
@@ -147,11 +149,15 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
             </div>
 
+            {paymentError && (
+                <p className="mt-4 text-red-500 text-[12px] text-center">{paymentError}</p>
+            )}
             <button 
                 onClick={onPayment}
-                className="mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer"
+                disabled={isPaymentLoading}
+                className={`mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer ${isPaymentLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-                Оплатить
+                {isPaymentLoading ? 'Обработка...' : 'Оплатить'}
             </button>
         </div>
     )

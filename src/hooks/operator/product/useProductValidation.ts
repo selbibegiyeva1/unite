@@ -6,11 +6,17 @@ interface ValidationErrors {
   checkbox: boolean;
 }
 
+interface SteamInfo {
+  steam_min_amount_tmt: number;
+  steam_max_amount_tmt: number;
+}
+
 interface UseProductValidationOptions {
   productForm: ProductGroupForm | undefined;
   activeTab: 'popolnenie' | 'voucher';
   formValues: Record<string, string>;
   isCheckboxChecked: boolean;
+  steamInfo?: SteamInfo | null;
 }
 
 export function useProductValidation({
@@ -18,6 +24,7 @@ export function useProductValidation({
   activeTab,
   formValues,
   isCheckboxChecked,
+  steamInfo,
 }: UseProductValidationOptions) {
   const formRefs = useRef<Record<string, HTMLInputElement | HTMLSelectElement | null>>({});
   const checkboxRef = useRef<HTMLDivElement>(null);
@@ -51,6 +58,14 @@ export function useProductValidation({
       }
       if (!formValues.amount || formValues.amount.trim() === '') {
         errors.formFields['amount'] = true;
+      } else if (steamInfo) {
+        // Validate amount is within min/max range
+        const amountValue = parseFloat(formValues.amount);
+        if (isNaN(amountValue) || 
+            amountValue < steamInfo.steam_min_amount_tmt || 
+            amountValue > steamInfo.steam_max_amount_tmt) {
+          errors.formFields['amount'] = true;
+        }
       }
     } else {
       // Validate dynamic fields (excluding region and product_id)
@@ -74,7 +89,7 @@ export function useProductValidation({
     const isValid = Object.keys(errors.formFields).length === 0 && !errors.checkbox;
 
     return { isValid, errors };
-  }, [productForm, activeTab, formValues, isCheckboxChecked]);
+  }, [productForm, activeTab, formValues, isCheckboxChecked, steamInfo]);
 
   const scrollToFirstError = useCallback((errors: ValidationErrors) => {
     // First check form fields
