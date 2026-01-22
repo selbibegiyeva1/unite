@@ -8,6 +8,7 @@ import Header from '../../components/operator/product/Header';
 import Region from '../../components/operator/product/Region';
 import Nominals from '../../components/operator/product/Nominals';
 import Form from '../../components/operator/product/Form';
+import ProductFaq from '../../components/operator/product/ProductFaq';
 import Total from '../../components/operator/product/Total';
 
 function ProductOperator() {
@@ -146,6 +147,10 @@ function ProductOperator() {
                             onFormChange={setFormValues}
                             validationErrors={validationErrors.formFields}
                             formRefs={formRefs}
+                        />
+                        <ProductFaq 
+                            productForm={productForm}
+                            activeTab={activeTab}
                         />
                     </div>
                     <Total
