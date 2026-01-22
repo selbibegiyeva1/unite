@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { type ProductGroupForm } from '../../../services/authService';
 
 interface HeaderProps {
     productForm: ProductGroupForm;
+    activeTab: 'popolnenie' | 'voucher';
+    setActiveTab: (tab: 'popolnenie' | 'voucher') => void;
 }
 
-function Header({ productForm }: HeaderProps) {
-    const [activeTab, setActiveTab] = useState<'popolnenie' | 'voucher'>('popolnenie');
+function Header({ productForm, activeTab, setActiveTab }: HeaderProps) {
 
     const baseBtn =
         'flex items-center gap-[10px] text-[15px] font-bold px-[15px] py-[10px] rounded-[8px] cursor-pointer h-[45px] transition-colors';
