@@ -69,7 +69,7 @@ function HomeOperator() {
                     <b>Сегодня по операциям</b>
                 </div>
 
-                <Transactions />
+                <Transactions period="day" />
             </div>
         </div>
     );
