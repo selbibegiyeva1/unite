@@ -16,7 +16,7 @@ interface TotalProps {
     paymentError?: string | null;
 }
 
-function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal, isCheckboxChecked, onCheckboxChange, checkboxError, checkboxRef, onPayment, isPaymentLoading, paymentError }: TotalProps) {
+function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal, isCheckboxChecked, onCheckboxChange, checkboxError, checkboxRef, onPayment, isPaymentLoading }: TotalProps) {
 
     // Get the appropriate fields based on active tab
     const fields = activeTab === 'voucher'
@@ -119,28 +119,28 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
 
             <div className={`flex items-center gap-2.5`} ref={checkboxRef}>
                 {/* Checkbox */}
-                <div 
+                <div
                     className="cursor-pointer relative"
                     onClick={() => onCheckboxChange(!isCheckboxChecked)}
                 >
                     <svg className="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect 
-                            x="0.75" 
-                            y="0.75" 
-                            width="22.5" 
-                            height="22.5" 
-                            rx="3.25" 
+                        <rect
+                            x="0.75"
+                            y="0.75"
+                            width="22.5"
+                            height="22.5"
+                            rx="3.25"
                             stroke={checkboxError ? "#EF4444" : "black"}
                             strokeOpacity={checkboxError ? "1" : "0.15"}
                             strokeWidth={checkboxError ? "2" : "1.5"}
                             fill={isCheckboxChecked ? "#2D85EA" : "none"}
                         />
                         {isCheckboxChecked && (
-                            <path 
-                                d="M7 12L10.5 15.5L17 9" 
-                                stroke="white" 
-                                strokeWidth="2" 
-                                strokeLinecap="round" 
+                            <path
+                                d="M7 12L10.5 15.5L17 9"
+                                stroke="white"
+                                strokeWidth="2"
+                                strokeLinecap="round"
                                 strokeLinejoin="round"
                             />
                         )}
@@ -149,7 +149,7 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
             </div>
 
-            <button 
+            <button
                 onClick={onPayment}
                 disabled={isPaymentLoading}
                 className={`mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer ${isPaymentLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
