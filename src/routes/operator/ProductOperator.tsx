@@ -10,6 +10,7 @@ import Nominals from '../../components/operator/product/Nominals';
 import Form from '../../components/operator/product/Form';
 import ProductFaq from '../../components/operator/product/ProductFaq';
 import Total from '../../components/operator/product/Total';
+import Modal from '../../components/operator/product/Modal';
 
 function ProductOperator() {
     const [searchParams] = useSearchParams();
@@ -20,6 +21,7 @@ function ProductOperator() {
     const [formValues, setFormValues] = useState<Record<string, string>>({});
     const [selectedNominal, setSelectedNominal] = useState<number | null>(null);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [validationErrors, setValidationErrors] = useState<{ formFields: Record<string, boolean>; checkbox: boolean }>({
         formFields: {},
         checkbox: false,
@@ -96,13 +98,18 @@ function ProductOperator() {
         selectedNominal,
     });
 
-    const handlePayment = async () => {
+    const handleOpenModal = () => {
         const { isValid, errors } = validateAndScroll();
         setValidationErrors(errors);
         if (isValid) {
-            // Proceed with payment
-            await processPayment();
+            // Open modal if validation passes
+            setIsModalOpen(true);
         }
+    };
+
+    const handleModalPayment = async () => {
+        // Process payment from modal
+        await processPayment();
     };
 
     return (
@@ -126,6 +133,18 @@ function ProductOperator() {
             {!isLoading && !error && productForm && (
                 <div className='flex items-start gap-8'>
                     <div className='flex flex-col gap-4 w-[1158px]'>
+                        <Modal 
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            productForm={productForm}
+                            activeTab={activeTab}
+                            selectedRegion={selectedRegion}
+                            formValues={formValues}
+                            selectedNominal={selectedNominal}
+                            onPayment={handleModalPayment}
+                            isPaymentLoading={isPaymentLoading}
+                            paymentError={paymentError}
+                        />
                         <Header productForm={productForm} activeTab={activeTab} setActiveTab={setActiveTab} />
                         <Region
                             productForm={productForm}
@@ -163,7 +182,7 @@ function ProductOperator() {
                         onCheckboxChange={setIsCheckboxChecked}
                         checkboxError={validationErrors.checkbox}
                         checkboxRef={checkboxRef}
-                        onPayment={handlePayment}
+                        onPayment={handleOpenModal}
                         isPaymentLoading={isPaymentLoading}
                         paymentError={paymentError}
                     />

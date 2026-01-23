@@ -149,9 +149,6 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
             </div>
 
-            {paymentError && (
-                <p className="mt-4 text-red-500 text-[12px] text-center">{paymentError}</p>
-            )}
             <button 
                 onClick={onPayment}
                 disabled={isPaymentLoading}
