@@ -271,11 +271,8 @@ function Transactions() {
             </div>
 
             <div className='flex items-center gap-2 justify-center mt-6'>
-                <button className="w-9 h-9 bg-[#2D85EA] text-white rounded-[6px] text-[13px]">1</button>
-                <button className="w-9 h-9 border border-[#00000026] rounded-[6px] text-[13px]">2</button>
-                <button className="w-9 h-9 border border-[#00000026] rounded-[6px] text-[13px]">2</button>
-                <button className="w-9 h-9 border border-[#00000026] rounded-[6px] text-[13px]">2</button>
-                <button className="w-9 h-9 border border-[#00000026] rounded-[6px] text-[13px]">2</button>
+                <button className="w-9 h-9 cursor-pointer bg-[#2D85EA] text-white rounded-[6px] text-[13px]">1</button>
+                <button className="w-9 h-9 cursor-pointer border border-[#00000026] rounded-[6px] text-[13px]">2</button>
             </div>
         </div>
     )
