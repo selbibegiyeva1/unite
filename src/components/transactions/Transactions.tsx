@@ -106,7 +106,7 @@ function Transactions({ period }: TransactionsProps = {}) {
                 <div className="mt-3.5">
                     <table className="w-full">
                         <thead>
-                            <tr className="grid grid-cols-9 text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
+                            <tr className="grid grid-cols-9 gap-[30px] text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
                                 <td className="text-left">Дата</td>
                                 <td>Почта</td>
                                 <td>ID Транзакции</td>
