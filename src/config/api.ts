@@ -17,6 +17,7 @@ export default {
       MAIN_INFO: '/partner/info/main',
       PRODUCT_GROUPS: '/partner/catalog/product/groups',
       PRODUCT_GROUP_FORM: '/partner/catalog/product/group/form',
+      ORDERS: '/partner/info/orders',
     },
   },
 };

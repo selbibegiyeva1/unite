@@ -115,6 +115,31 @@ export interface TopupPaymentRequest {
   [key: string]: string | number; // Dynamic fields
 }
 
+export interface OrderHistoryItem {
+  datetime: string;
+  email: string;
+  transaction_id: string;
+  operator: string;
+  category: string;
+  description: string;
+  status: string;
+  amount: number;
+  instruction_url: string;
+}
+
+export interface OrdersResponse {
+  total_pages: number;
+  orders_history: OrderHistoryItem[];
+}
+
+export interface OrdersQueryParams {
+  page?: number;
+  per_page?: number;
+  category?: string;
+  period?: string;
+  transaction_id?: string;
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -258,6 +283,16 @@ export const authService = {
     const response = await apiClient.post<PaymentResponse>(
       '/products/topup/buy',
       payload
+    );
+    return response.data;
+  },
+
+  async getOrders(params?: OrdersQueryParams): Promise<OrdersResponse> {
+    const response = await apiClient.get<OrdersResponse>(
+      apiConfig.ENDPOINTS.PARTNER.ORDERS,
+      {
+        params,
+      }
     );
     return response.data;
   },

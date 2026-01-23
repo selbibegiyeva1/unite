@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTransactions } from '../../hooks/operator/transactions/useTransactions';
 
 interface Transaction {
     id: string;
@@ -13,177 +14,54 @@ interface Transaction {
     link: string;
 }
 
-function Transactions() {
-    const [transactions] = useState<Transaction[]>([
-        {
-            id: '1',
-            date: '6 авг. 2024 г. 15:56',
-            email: 'Ruslanchik121@gmail.com',
-            transactionId: 'x0565847856584785',
-            operator: 'Гуванч',
-            category: 'eSIM',
-            description: 'Merhaba 10gb, 3 day',
-            amount: '+325 ТМТ',
-            status: 'success',
-            link: '#'
-        },
-        {
-            id: '2',
-            date: '5 авг. 2024 г. 10:23',
-            email: 'user@example.com',
-            transactionId: 'x0987654321098765',
-            operator: 'Анна',
-            category: 'Steam',
-            description: 'Steam пополнение 50$',
-            amount: '+450 ТМТ',
-            status: 'success',
-            link: '#'
-        },
-        {
-            id: '3',
-            date: '4 авг. 2024 г. 14:45',
-            email: 'test@gmail.com',
-            transactionId: 'x1122334455667788',
-            operator: 'Иван',
-            category: 'Игры',
-            description: 'Roblox 1700 Robux',
-            amount: '+430 ТМТ',
-            status: 'pending',
-            link: '#'
-        },
-        {
-            id: '4',
-            date: '3 авг. 2024 г. 09:12',
-            email: 'customer@mail.ru',
-            transactionId: 'x9988776655443322',
-            operator: 'Мария',
-            category: 'Сервисы',
-            description: 'Netflix Premium 1 месяц',
-            amount: '+280 ТМТ',
-            status: 'failed',
-            link: '#'
-        },
-        {
-            id: '5',
-            date: '2 авг. 2024 г. 16:30',
-            email: 'buyer@yahoo.com',
-            transactionId: 'x5566778899001122',
-            operator: 'Петр',
-            category: 'eSIM',
-            description: 'Airalo 5gb, 7 day',
-            amount: '+150 ТМТ',
-            status: 'success',
-            link: '#'
-        },
-        {
-            id: '1',
-            date: '6 авг. 2024 г. 15:56',
-            email: 'Ruslanchik121@gmail.com',
-            transactionId: 'x0565847856584785',
-            operator: 'Гуванч',
-            category: 'eSIM',
-            description: 'Merhaba 10gb, 3 day',
-            amount: '+325 ТМТ',
-            status: 'success',
-            link: '#'
-        },
-        {
-            id: '2',
-            date: '5 авг. 2024 г. 10:23',
-            email: 'user@example.com',
-            transactionId: 'x0987654321098765',
-            operator: 'Анна',
-            category: 'Steam',
-            description: 'Steam пополнение 50$',
-            amount: '+450 ТМТ',
-            status: 'success',
-            link: '#'
-        },
-        {
-            id: '3',
-            date: '4 авг. 2024 г. 14:45',
-            email: 'test@gmail.com',
-            transactionId: 'x1122334455667788',
-            operator: 'Иван',
-            category: 'Игры',
-            description: 'Roblox 1700 Robux',
-            amount: '+430 ТМТ',
-            status: 'pending',
-            link: '#'
-        },
-        {
-            id: '4',
-            date: '3 авг. 2024 г. 09:12',
-            email: 'customer@mail.ru',
-            transactionId: 'x9988776655443322',
-            operator: 'Мария',
-            category: 'Сервисы',
-            description: 'Netflix Premium 1 месяц',
-            amount: '+280 ТМТ',
-            status: 'failed',
-            link: '#'
-        },
-        {
-            id: '5',
-            date: '2 авг. 2024 г. 16:30',
-            email: 'buyer@yahoo.com',
-            transactionId: 'x5566778899001122',
-            operator: 'Петр',
-            category: 'eSIM',
-            description: 'Airalo 5gb, 7 day',
-            amount: '+150 ТМТ',
-            status: 'success',
-            link: '#'
-        },
-        {
-            id: '4',
-            date: '3 авг. 2024 г. 09:12',
-            email: 'customer@mail.ru',
-            transactionId: 'x9988776655443322',
-            operator: 'Мария',
-            category: 'Сервисы',
-            description: 'Netflix Premium 1 месяц',
-            amount: '+280 ТМТ',
-            status: 'failed',
-            link: '#'
-        },
-        {
-            id: '5',
-            date: '2 авг. 2024 г. 16:30',
-            email: 'buyer@yahoo.com',
-            transactionId: 'x5566778899001122',
-            operator: 'Петр',
-            category: 'eSIM',
-            description: 'Airalo 5gb, 7 day',
-            amount: '+150 ТМТ',
-            status: 'success',
-            link: '#'
-        },
-        {
-            id: '4',
-            date: '3 авг. 2024 г. 09:12',
-            email: 'customer@mail.ru',
-            transactionId: 'x9988776655443322',
-            operator: 'Мария',
-            category: 'Сервисы',
-            description: 'Netflix Premium 1 месяц',
-            amount: '+280 ТМТ',
-            status: 'failed',
-            link: '#'
-        },
-        {
-            id: '5',
-            date: '2 авг. 2024 г. 16:30',
-            email: 'buyer@yahoo.com',
-            transactionId: 'x5566778899001122',
-            operator: 'Петр',
-            category: 'eSIM',
-            description: 'Airalo 5gb, 7 day',
-            amount: '+150 ТМТ',
-            status: 'success',
-            link: '#'
+interface TransactionsProps {
+    period?: string;
+}
+
+function Transactions({ period }: TransactionsProps = {}) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const { data, isLoading, error } = useTransactions({
+        page: currentPage,
+        perPage: 8,
+        period,
+    });
+
+    // Transform API data to component format
+    const transactions: Transaction[] = data?.orders_history.map((order) => {
+        // Format date from ISO string to readable format
+        const date = new Date(order.datetime);
+        const formattedDate = date.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+
+        // Map API status to component status
+        let status: 'success' | 'pending' | 'failed' = 'pending';
+        if (order.status === 'PAID' || order.status === 'SUCCESS') {
+            status = 'success';
+        } else if (order.status === 'FAILED' || order.status === 'ERROR') {
+            status = 'failed';
         }
-    ]);
+
+        // Format amount
+        const formattedAmount = `+${order.amount} ТМТ`;
+
+        return {
+            id: order.transaction_id,
+            date: formattedDate,
+            email: order.email,
+            transactionId: order.transaction_id,
+            operator: order.operator,
+            category: order.category,
+            description: order.description,
+            amount: formattedAmount,
+            status,
+            link: order.instruction_url || '#',
+        };
+    }) || [];
 
     const getStatusIcon = (status: Transaction['status']) => {
         if (status === 'success') {
@@ -228,7 +106,7 @@ function Transactions() {
                 <div className="mt-3.5">
                     <table className="w-full">
                         <thead>
-                            <tr className="grid grid-cols-9 text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
+                            <tr className="grid grid-cols-9 gap-[30px] text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
                                 <td className="text-left">Дата</td>
                                 <td>Почта</td>
                                 <td>ID Транзакции</td>
@@ -245,35 +123,62 @@ function Transactions() {
 
                 {/* Scroll only table body */}
                 <div className="flex-1 overflow-y-auto transactions-table-scroll">
-                    <table className="w-full">
-                        <tbody className="text-[#00000099] text-[12px]">
-                            {transactions.map((transaction) => (
-                                <tr key={transaction.id} className="grid grid-cols-9 text-center px-2.5 py-3 mb-[20px] rounded-[6px] text-black">
-                                    <td className="text-left">{transaction.date}</td>
-                                    <td>{transaction.email}</td>
-                                    <td className="text-[#2D85EA] cursor-pointer">{transaction.transactionId}</td>
-                                    <td>{transaction.operator}</td>
-                                    <td>{transaction.category}</td>
-                                    <td>{transaction.description}</td>
-                                    <td>{transaction.amount}</td>
-                                    <td className="flex items-center gap-2 justify-center">
-                                        {getStatusIcon(transaction.status)}
-                                        {getStatusText(transaction.status)}
-                                    </td>
-                                    <td className="text-right text-[#2D85EA]">
-                                        <a href={transaction.link}>QR/Инструкция</a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    {isLoading ? (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-[#00000099]">Загрузка...</p>
+                        </div>
+                    ) : error ? (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-[#ED2428]">Ошибка загрузки данных</p>
+                        </div>
+                    ) : transactions.length === 0 ? (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-[#00000099]">Нет транзакций</p>
+                        </div>
+                    ) : (
+                        <table className="w-full">
+                            <tbody className="text-[#00000099] text-[12px]">
+                                {transactions.map((transaction) => (
+                                    <tr key={transaction.id} className="transaction grid grid-cols-9 gap-[30px] items-center text-center px-2.5 py-3 mb-[20px] rounded-[6px] text-black">
+                                        <td className="flex itemms-right">{transaction.date}</td>
+                                        <td className="truncate min-w-0">{transaction.email}</td>
+                                        <td className="text-[#2D85EA] cursor-pointer truncate min-w-0">{transaction.transactionId}</td>
+                                        <td>{transaction.operator}</td>
+                                        <td>{transaction.category}</td>
+                                        <td>{transaction.description}</td>
+                                        <td>{transaction.amount}</td>
+                                        <td className="flex items-center gap-2 justify-center">
+                                            {getStatusIcon(transaction.status)}
+                                            {getStatusText(transaction.status)}
+                                        </td>
+                                        <td className="text-right text-[#2D85EA]">
+                                            <a href={transaction.link} target="_blank" rel="noopener noreferrer">QR/Инструкция</a>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </div>
 
-            <div className='flex items-center gap-2 justify-center mt-6'>
-                <button className="w-9 h-9 cursor-pointer bg-[#2D85EA] text-white rounded-[6px] text-[13px]">1</button>
-                <button className="w-9 h-9 cursor-pointer border border-[#00000026] rounded-[6px] text-[13px]">2</button>
-            </div>
+            {data && data.total_pages > 1 && (
+                <div className='flex items-center gap-2 justify-center mt-6'>
+                    {Array.from({ length: data.total_pages }, (_, i) => i + 1).map((page) => (
+                        <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`w-9 h-9 cursor-pointer rounded-[6px] text-[13px] ${
+                                currentPage === page
+                                    ? 'bg-[#2D85EA] text-white'
+                                    : 'border border-[#00000026]'
+                            }`}
+                        >
+                            {page}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
