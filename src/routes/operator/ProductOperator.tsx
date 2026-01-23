@@ -112,6 +112,17 @@ function ProductOperator() {
         await processPayment();
     };
 
+    // Update document title with loading state
+    useEffect(() => {
+        if (isLoading) {
+            document.title = 'Загрузка...';
+        } else if (productForm?.group) {
+            document.title = 'Unite Shop - ' + productForm.group;
+        } else {
+            document.title = 'Unite Shop';
+        }
+    }, [isLoading, productForm?.group]);
+
     return (
         <div className='mt-[28px] pb-[100px] w-[1680px] m-auto'>
             {isLoading && (
@@ -133,7 +144,7 @@ function ProductOperator() {
             {!isLoading && !error && productForm && (
                 <div className='flex items-start gap-8'>
                     <div className='flex flex-col gap-4 w-[1158px]'>
-                        <Modal 
+                        <Modal
                             isOpen={isModalOpen}
                             onClose={() => setIsModalOpen(false)}
                             productForm={productForm}
@@ -167,7 +178,7 @@ function ProductOperator() {
                             validationErrors={validationErrors.formFields}
                             formRefs={formRefs}
                         />
-                        <ProductFaq 
+                        <ProductFaq
                             productForm={productForm}
                             activeTab={activeTab}
                         />

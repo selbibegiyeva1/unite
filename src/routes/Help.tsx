@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 function Help() {
+    document.title = 'Unite Shop - Помощь';
+    
     const [faqs] = useState([
         {
             question: "Как изменить пароль или контактные данные?",

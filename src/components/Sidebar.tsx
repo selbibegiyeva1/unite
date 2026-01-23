@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLogout } from '../hooks/auth/useLogout';
 import { useUserInfo } from '../hooks/auth/useUserInfo';
 
@@ -11,6 +12,23 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
     const { data, isLoading: isUserLoading, error: userError } = useUserInfo();
 
     const user = data?.user;
+
+    // Close sidebar on ESC key press
+    useEffect(() => {
+        const handleEscKey = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && isSidebarOpen) {
+                click();
+            }
+        };
+
+        if (isSidebarOpen) {
+            document.addEventListener('keydown', handleEscKey);
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscKey);
+        };
+    }, [isSidebarOpen, click]);
 
     return (
         <div
