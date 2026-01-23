@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
 
 interface ModalProps {
@@ -16,6 +16,23 @@ interface ModalProps {
 
 function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formValues, selectedNominal, onPayment, isPaymentLoading, paymentError }: ModalProps) {
     const [isModalCheckboxChecked, setIsModalCheckboxChecked] = useState(false);
+
+    // Close modal on ESC key press
+    useEffect(() => {
+        const handleEscKey = (event: KeyboardEvent) => {
+            if (event.key === 'Escape' && isOpen) {
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('keydown', handleEscKey);
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscKey);
+        };
+    }, [isOpen, onClose]);
 
     // Get the appropriate fields based on active tab
     const fields = activeTab === 'voucher'

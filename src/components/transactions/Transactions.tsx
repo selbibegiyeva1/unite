@@ -223,7 +223,7 @@ function Transactions() {
                         <path d="M12 18H15.7535M12 18V14M12 18L15.1347 14.3431C18.0778 11.219 22.8495 11.219 25.7927 14.3431C28.7358 17.4673 28.7358 22.5327 25.7927 25.6569C22.8495 28.781 18.0778 28.781 15.1347 25.6569C14.3963 24.873 13.8431 23.9669 13.4752 23" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </div>
-                <div className="mt-3.5 flex-1 overflow-y-auto">
+                <div className="mt-3.5 flex-1 overflow-y-auto transactions-table-scroll">
                     <table className="w-full">
                         <thead>
                             <tr className="grid grid-cols-9 text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">

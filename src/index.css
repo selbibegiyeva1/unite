@@ -11,3 +11,22 @@
         @apply border border-[#00000026] rounded-[8px] px-4 py-[12.5px] w-full outline-0 focus:border-blue-500 transition-all;
     }
 }
+
+/* Transactions table custom scrollbar */
+.transactions-table-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #2D85EA transparent;
+}
+
+.transactions-table-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.transactions-table-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.transactions-table-scroll::-webkit-scrollbar-thumb {
+    background: #2D85EA;
+    border-radius: 3px;
+}

@@ -9,6 +9,8 @@ function HomeOperator() {
         return <div>Loading...</div>;
     }
 
+    document.title = 'Unite Shop - Главная';
+
     return (
         <div className="px-6 pb-[100px] mt-[28px]">
             <div className='w-[1680px] m-auto'>

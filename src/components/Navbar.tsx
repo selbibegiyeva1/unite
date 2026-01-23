@@ -4,6 +4,8 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import { useUserInfo } from "../hooks/auth/useUserInfo";
 import { usePartnerMainInfo } from "../hooks/auth/usePartnerMainInfo";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function Navbar() {
     const linkBaseClasses = "inline-flex flex-col items-start text-[14px] font-medium outline-0";
@@ -41,7 +43,15 @@ function Navbar() {
             <div className="m-auto flex h-[90px] w-[1680px] items-center justify-between">
                 <div className="flex items-center gap-8">
                     <Link to="/operator/home">
-                        <img src="/favicon.png" alt="Unite Shop" className="w-[35px]" />
+                        {userData?.company?.logo ? (
+                            <img
+                                src={userData.company.logo}
+                                alt="Unite Shop"
+                                className="w-[35px]"
+                            />
+                        ) : (
+                            <Skeleton width={35} height={35} circle />
+                        )}
                     </Link>
                     <ul className="flex gap-4">
                         <li className="px-1.5 py-2.5">
