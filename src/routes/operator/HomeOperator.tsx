@@ -1,15 +1,23 @@
 import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import { usePartnerMainInfo } from '../../hooks/auth/usePartnerMainInfo';
 
 import Transactions from '../../components/transactions/Transactions';
 
 function HomeOperator() {
     const { user } = useAuth();
+    const { data: partnerMain } = usePartnerMainInfo();
+    
     if (!user) {
         return <div>Loading...</div>;
     }
 
     document.title = 'Unite Shop - Главная';
+
+    const formattedBalance =
+        partnerMain?.balance !== undefined
+            ? new Intl.NumberFormat('ru-RU').format(partnerMain.balance) + ' ' + (partnerMain.currency || 'ТМТ')
+            : '-';
 
     return (
         <div className="px-6 pb-[100px] mt-[28px]">
@@ -55,7 +63,7 @@ function HomeOperator() {
                         <div className='mt-6 text-[20px] font-medium'>
                             <div className='flex items-center justify-between'>
                                 <p>Доступно</p>
-                                <p>45,12 ТМТ</p>
+                                <p>{formattedBalance}</p>
                             </div>
                             <div className='flex items-center justify-between mt-4'>
                                 <p>Режим</p>
