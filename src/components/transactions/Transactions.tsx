@@ -34,41 +34,55 @@ function Transactions({ period }: TransactionsProps = {}) {
     };
 
     // Transform API data to component format
-    const transactions: Transaction[] = data?.orders_history.map((order) => {
-        // Format date from ISO string to readable format
-        const date = new Date(order.datetime);
-        const formattedDate = date.toLocaleDateString('ru-RU', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
+    const transactions: Transaction[] = (data?.orders_history || [])
+        .filter((order) => {
+            // Filter out invalid/empty orders - must have datetime and transaction_id at minimum
+            // Also validate that datetime is a valid date
+            if (!order || !order.datetime || !order.transaction_id) {
+                return false;
+            }
+            const date = new Date(order.datetime);
+            return !isNaN(date.getTime());
+        })
+        .map((order) => {
+            // Format date from ISO string to readable format
+            const date = new Date(order.datetime);
+            const formattedDate = isNaN(date.getTime())
+                ? 'Invalid Date'
+                : date.toLocaleDateString('ru-RU', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                  });
+
+            // Map API status to component status
+            let status: 'success' | 'pending' | 'failed' = 'pending';
+            if (order.status === 'PAID' || order.status === 'SUCCESS') {
+                status = 'success';
+            } else if (order.status === 'FAILED' || order.status === 'ERROR') {
+                status = 'failed';
+            }
+
+            // Format amount
+            const formattedAmount = order.amount !== undefined && order.amount !== null
+                ? `+${order.amount} ТМТ`
+                : '+0 ТМТ';
+
+            return {
+                id: order.transaction_id,
+                date: formattedDate,
+                email: order.email || '',
+                transactionId: order.transaction_id,
+                operator: order.operator || '',
+                category: order.category || '',
+                description: order.description || '',
+                amount: formattedAmount,
+                status,
+                link: order.instruction_url || '#',
+            };
         });
-
-        // Map API status to component status
-        let status: 'success' | 'pending' | 'failed' = 'pending';
-        if (order.status === 'PAID' || order.status === 'SUCCESS') {
-            status = 'success';
-        } else if (order.status === 'FAILED' || order.status === 'ERROR') {
-            status = 'failed';
-        }
-
-        // Format amount
-        const formattedAmount = `+${order.amount} ТМТ`;
-
-        return {
-            id: order.transaction_id,
-            date: formattedDate,
-            email: order.email,
-            transactionId: order.transaction_id,
-            operator: order.operator,
-            category: order.category,
-            description: order.description,
-            amount: formattedAmount,
-            status,
-            link: order.instruction_url || '#',
-        };
-    }) || [];
 
     const getStatusIcon = (status: Transaction['status']) => {
         if (status === 'success') {
