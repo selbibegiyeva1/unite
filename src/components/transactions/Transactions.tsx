@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTransactions } from '../../hooks/operator/transactions/useTransactions';
+import Copied from './Copied';
 
 interface Transaction {
     id: string;
@@ -16,16 +17,53 @@ interface Transaction {
 
 interface TransactionsProps {
     period?: string;
+    transactionId?: string;
 }
 
-function Transactions({ period }: TransactionsProps = {}) {
+function Transactions({ period, transactionId }: TransactionsProps = {}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [showCopied, setShowCopied] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const { data, isLoading, error, refetch } = useTransactions({
         page: currentPage,
         perPage: 8,
         period,
+        transactionId,
     });
+
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [period, transactionId]);
+
+    // Handle copied notification visibility and auto-hide
+    useEffect(() => {
+        if (showCopied) {
+            // Trigger fade-in animation
+            setTimeout(() => setIsVisible(true), 10);
+            
+            // Hide after 3 seconds
+            const timer = setTimeout(() => {
+                setIsVisible(false);
+                // Remove from DOM after fade-out
+                setTimeout(() => setShowCopied(false), 300);
+            }, 3000);
+            
+            return () => clearTimeout(timer);
+        } else {
+            setIsVisible(false);
+        }
+    }, [showCopied]);
+
+    const handleCopyTransactionId = async (id: string) => {
+        try {
+            await navigator.clipboard.writeText(id);
+            setShowCopied(true);
+        } catch (err) {
+            console.error('Failed to copy transaction ID:', err);
+        }
+    };
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
@@ -178,7 +216,13 @@ function Transactions({ period }: TransactionsProps = {}) {
                                     <tr key={transaction.id} className="transaction grid grid-cols-9 gap-[30px] items-center text-center px-2.5 py-3 mb-[20px] rounded-[6px] text-black">
                                         <td className="flex itemms-right">{transaction.date}</td>
                                         <td className="truncate min-w-0">{transaction.email}</td>
-                                        <td className="text-[#2D85EA] cursor-pointer truncate min-w-0">{transaction.transactionId}</td>
+                                        <td
+                                            onClick={() => handleCopyTransactionId(transaction.transactionId)}
+                                            className="text-[#2D85EA] cursor-pointer truncate min-w-0 hover:underline"
+                                            title="Нажмите, чтобы скопировать"
+                                        >
+                                            {transaction.transactionId}
+                                        </td>
                                         <td>{transaction.operator}</td>
                                         <td>{transaction.category}</td>
                                         <td>{transaction.description}</td>
@@ -215,6 +259,8 @@ function Transactions({ period }: TransactionsProps = {}) {
                     ))}
                 </div>
             )}
+
+            {showCopied && <Copied isVisible={isVisible} />}
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navbar from './Navbar';
+import Copied from './transactions/Copied';
 
 interface ProtectedRouteProps {
   children?: React.ReactNode;
@@ -12,7 +13,6 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (isLoading) {
     return (
       <div className="flex h-screen flex-col">
-        <Navbar />
         <div className="flex flex-1 items-center justify-center">
           <div>Loading...</div>
         </div>
@@ -32,6 +32,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       <main className="flex-1">
         {children ? <>{children}</> : <Outlet />}
       </main>
+      <Copied />
     </div>
   );
 }

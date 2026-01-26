@@ -21,7 +21,8 @@ export function useTransactions(options: UseTransactionsOptions = {}) {
       };
 
       if (category) params.category = category;
-      if (period) params.period = period;
+      // Only send period if it's not 'all_time'
+      if (period && period !== 'all_time') params.period = period;
       if (transactionId) params.transaction_id = transactionId;
 
       return authService.getOrders(params);
