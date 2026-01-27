@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useTransactions } from '../../hooks/operator/transactions/useTransactions';
+import { useTransactions } from '../../../hooks/operator/transactions/useTransactions';
 import Copied from './Copied';
 
 interface Transaction {

@@ -2,7 +2,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { usePartnerMainInfo } from '../../hooks/auth/usePartnerMainInfo';
 
-import Transactions from '../../components/transactions/Transactions';
+import Transactions from '../../components/operator/transactions/Transactions';
 
 function HomeOperator() {
     const { user } = useAuth();
