@@ -18,6 +18,8 @@ export default {
       PRODUCT_GROUPS: '/partner/catalog/product/groups',
       PRODUCT_GROUP_FORM: '/partner/catalog/product/group/form',
       ORDERS: '/partner/info/orders',
+      ESIM_COUNTRIES: '/partner/esim/countries',
+      ESIM_REGIONS: '/partner/esim/regions',
     },
   },
 };

@@ -140,6 +140,27 @@ export interface OrdersQueryParams {
   transaction_id?: string;
 }
 
+export interface EsimCountry {
+  country_code: string;
+  country_name: {
+    en: string;
+    ru: string;
+    tm: string;
+  };
+  tariff_count: number;
+  flag_url: string;
+}
+
+export interface EsimRegion {
+  region_name: {
+    en: string;
+    ru: string;
+    tm: string;
+  };
+  tariff_count: number;
+  region_url: string;
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -293,6 +314,20 @@ export const authService = {
       {
         params,
       }
+    );
+    return response.data;
+  },
+
+  async getEsimCountries(): Promise<EsimCountry[]> {
+    const response = await apiClient.get<EsimCountry[]>(
+      apiConfig.ENDPOINTS.PARTNER.ESIM_COUNTRIES
+    );
+    return response.data;
+  },
+
+  async getEsimRegions(): Promise<EsimRegion[]> {
+    const response = await apiClient.get<EsimRegion[]>(
+      apiConfig.ENDPOINTS.PARTNER.ESIM_REGIONS
     );
     return response.data;
   },
