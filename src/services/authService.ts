@@ -161,6 +161,29 @@ export interface EsimRegion {
   region_url: string;
 }
 
+export interface EsimTariff {
+  name: string;
+  price_tmt: number;
+  days: number;
+  traffic: number;
+  operator: string;
+  is_unlimited: boolean;
+  operator_icon: string;
+}
+
+export interface EsimTariffsResponse {
+  country_name: {
+    en: string | null;
+    ru: string | null;
+    tm: string | null;
+  } | null;
+  country_code: string | string[];
+  flag_url: string | null;
+  // NOTE: backend uses a typo: "tarrifs" instead of "tariffs"
+  // Keep the same key here so Axios maps the response correctly.
+  tarrifs: EsimTariff[];
+}
+
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(
   (config) => {
@@ -328,6 +351,27 @@ export const authService = {
   async getEsimRegions(): Promise<EsimRegion[]> {
     const response = await apiClient.get<EsimRegion[]>(
       apiConfig.ENDPOINTS.PARTNER.ESIM_REGIONS
+    );
+    return response.data;
+  },
+
+  /**
+   * Get tariffs either by country code or by region name.
+   * - For countries: type = 'countries', code = country_code (e.g. 'HK')
+   * - For regions:  type = 'regions',  code = region name in EN (e.g. 'africa')
+   */
+  async getEsimTariffs(
+    type: 'countries' | 'regions',
+    code: string
+  ): Promise<EsimTariffsResponse> {
+    const params =
+      type === 'countries'
+        ? { country_code: code }
+        : { region: code };
+
+    const response = await apiClient.get<EsimTariffsResponse>(
+      apiConfig.ENDPOINTS.PARTNER.ESIM_COUNTRIES_TARIFFS,
+      { params }
     );
     return response.data;
   },

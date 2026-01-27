@@ -20,6 +20,7 @@ export default {
       ORDERS: '/partner/info/orders',
       ESIM_COUNTRIES: '/partner/esim/countries',
       ESIM_REGIONS: '/partner/esim/regions',
+      ESIM_COUNTRIES_TARIFFS: '/partner/esim/countries/tarrifs',
     },
   },
 };

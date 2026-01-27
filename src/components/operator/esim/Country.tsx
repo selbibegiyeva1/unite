@@ -1,16 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useEsimLocations } from '../../../hooks/operator/esim/useEsimLocations';
+import type { EsimTab } from '../../../hooks/operator/esim/useEsimLocations';
 
 interface CountryProps {
-    activeTab: 'countries' | 'regions';
-    setActiveTab: (tab: 'countries' | 'regions') => void;
+    activeTab: EsimTab;
+    setActiveTab: (tab: EsimTab) => void;
+    onSelectLocation?: (params: {
+        codeForApi: string;
+        displayName: string;
+        imageUrl: string;
+        tab: EsimTab;
+    }) => void;
 }
 
-function Country({ activeTab, setActiveTab }: CountryProps) {
+function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
 
     const [search, setSearch] = useState('');
     const { data, isLoading, isError } = useEsimLocations(activeTab);
+    const [selectedCodeForApi, setSelectedCodeForApi] = useState<string | null>(null);
     const searchQuery = search.trim().toLowerCase();
+
+    // Auto-select the first item when data is loaded and nothing is selected yet
+    useEffect(() => {
+        if (!data || data.length === 0 || selectedCodeForApi) {
+            return;
+        }
+
+        const first = data[0];
+
+        const codeForApi =
+            'country_code' in first
+                ? first.country_code
+                : first.region_name.en.toLowerCase();
+
+        const name =
+            'country_name' in first
+                ? first.country_name.ru
+                : first.region_name.ru;
+
+        const imageUrl =
+            'flag_url' in first ? first.flag_url : first.region_url;
+
+        setSelectedCodeForApi(codeForApi);
+
+        onSelectLocation?.({
+            codeForApi,
+            displayName: name,
+            imageUrl,
+            tab: activeTab,
+        });
+    }, [data, activeTab, onSelectLocation, selectedCodeForApi]);
 
     const filteredData = !data
         ? []
@@ -40,14 +79,20 @@ function Country({ activeTab, setActiveTab }: CountryProps) {
             <div className="flex items-center gap-2.5 my-5">
                 <button
                     type="button"
-                    onClick={() => setActiveTab('countries')}
+                    onClick={() => {
+                        setActiveTab('countries');
+                        setSelectedCodeForApi(null);
+                    }}
                     className={`${baseBtn} ${activeTab === 'countries' ? activeClasses : inactiveClasses}`}
                 >
                     Страны
                 </button>
                 <button
                     type="button"
-                    onClick={() => setActiveTab('regions')}
+                    onClick={() => {
+                        setActiveTab('regions');
+                        setSelectedCodeForApi(null);
+                    }}
                     className={`${baseBtn} ${activeTab === 'regions' ? activeClasses : inactiveClasses}`}
                 >
                     Регионы
@@ -81,10 +126,11 @@ function Country({ activeTab, setActiveTab }: CountryProps) {
                 )}
 
                 {!isLoading && !isError && filteredData.map((item) => {
-                        const key =
+                        const codeForApi =
                             'country_code' in item
                                 ? item.country_code
-                                : item.region_name.en;
+                                // For regions API expects lowercased `region` value (e.g. "africa")
+                                : item.region_name.en.toLowerCase();
 
                         const name =
                             'country_name' in item
@@ -94,10 +140,21 @@ function Country({ activeTab, setActiveTab }: CountryProps) {
                         const imageUrl =
                             'flag_url' in item ? item.flag_url : item.region_url;
 
+                        const isSelected = selectedCodeForApi === codeForApi;
+
                         return (
                             <div
-                                key={key}
-                                className="flex items-center justify-between gap-2.5 py-[13px] px-4 hover:bg-[#F5F5F9] transition-all duration-300 font-medium cursor-pointer rounded-[8px]"
+                                key={codeForApi}
+                                className={`flex items-center justify-between gap-2.5 py-[13px] px-4 hover:bg-[#F5F5F9] transition-all duration-300 font-medium cursor-pointer rounded-[8px] ${isSelected ? 'bg-[#E3F1FF]' : ''}`}
+                                onClick={() => {
+                                    setSelectedCodeForApi(codeForApi);
+                                    onSelectLocation?.({
+                                        codeForApi,
+                                        displayName: name,
+                                        imageUrl,
+                                        tab: activeTab,
+                                    });
+                                }}
                             >
                                 <div className='flex items-center gap-2'>
                                     <img src={imageUrl} alt={name} className='w-[36px]' />
