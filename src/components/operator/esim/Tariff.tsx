@@ -32,12 +32,17 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl }
 
     // The backend might return either a single object or an array of objects.
     let tariffs: EsimTariff[] = [];
+    let coverageCount: number | null = null;
 
     const normalize = (item: EsimTariffsResponse | undefined) => {
         if (!item) return;
         // Backend field is "tarrifs" (with double "r")
         if (Array.isArray(item.tarrifs)) {
             tariffs = tariffs.concat(item.tarrifs);
+        }
+        // For regions the API returns an array of country codes - use it as coverage.
+        if (Array.isArray(item.country_code)) {
+            coverageCount = item.country_code.length;
         }
     };
 
@@ -73,11 +78,22 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl }
                         <div className="flex items-center gap-2.5 justify-between py-[10px]">
                             <b className="text-[32px]">{formatTraffic(tariff.traffic)}</b>
                             <img
-                                src={tariff.operator_icon || selectedFlagUrl || '/esim/AU2.png'}
+                                src={tariff.flag_url || selectedFlagUrl || '/esim/AU2.png'}
                                 alt={tariff.operator}
                                 className="w-[56px]"
                             />
                         </div>
+                        {activeTab === 'regions' && coverageCount !== null && (
+                            <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
+                                <p>Покрытие</p>
+                                <div className="flex items-center gap-2 cursor-pointer">
+                                    <p>{coverageCount} стран</p>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11.9999 11.9999H20.9999M20.9999 11.9999L17 8M20.9999 11.9999L17 15.9999M9 12H9.01M6 12H6.01M3 12H3.01" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
                         {activeTab === 'regions' && (
                             <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
                                 <p>Оператор</p>

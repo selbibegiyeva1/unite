@@ -166,6 +166,7 @@ export interface EsimTariff {
   price_tmt: number;
   days: number;
   traffic: number;
+  flag_url: string;
   operator: string;
   is_unlimited: boolean;
   operator_icon: string;

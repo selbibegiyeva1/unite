@@ -20,7 +20,7 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
     const [selectedCodeForApi, setSelectedCodeForApi] = useState<string | null>(null);
     const searchQuery = search.trim().toLowerCase();
 
-    // Auto-select the first item when data is loaded and nothing is selected yet
+    // Auto-select the first item when data is loaded AND nothing is selected yet.
     useEffect(() => {
         if (!data || data.length === 0 || selectedCodeForApi) {
             return;

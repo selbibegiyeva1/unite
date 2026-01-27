@@ -7,7 +7,10 @@ import type { EsimTab } from '../../hooks/operator/esim/useEsimLocations';
 function EsimCategory() {
     document.title = 'Unite Shop - eSIM';
     const [activeTab, setActiveTab] = useState<EsimTab>('countries');
-    const [selectedCodeForApi, setSelectedCodeForApi] = useState<string | null>(null);
+    // Defaults:
+    // - countries: Afghanistan -> AF
+    // - regions: Africa -> africa
+    const [selectedCodeForApi, setSelectedCodeForApi] = useState<string | null>('AF');
     const [selectedName, setSelectedName] = useState<string | null>(null);
     const [selectedFlagUrl, setSelectedFlagUrl] = useState<string | null>(null);
 
@@ -20,8 +23,12 @@ function EsimCategory() {
                         activeTab={activeTab}
                         setActiveTab={(tab) => {
                             setActiveTab(tab);
-                            // Reset selection when switching between countries and regions
-                            setSelectedCodeForApi(null);
+                            // Set default selection when switching between tabs
+                            if (tab === 'countries') {
+                                setSelectedCodeForApi('AF');
+                            } else {
+                                setSelectedCodeForApi('africa');
+                            }
                             setSelectedName(null);
                             setSelectedFlagUrl(null);
                         }}
