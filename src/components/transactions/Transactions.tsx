@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTransactions } from '../../hooks/operator/transactions/useTransactions';
+import Copied from './Copied';
 
 interface Transaction {
     id: string;
@@ -16,52 +17,112 @@ interface Transaction {
 
 interface TransactionsProps {
     period?: string;
+    category?: string;
+    transactionId?: string;
 }
 
-function Transactions({ period }: TransactionsProps = {}) {
+function Transactions({ period, category, transactionId }: TransactionsProps = {}) {
     const [currentPage, setCurrentPage] = useState(1);
-    const { data, isLoading, error } = useTransactions({
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [showCopied, setShowCopied] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const { data, isLoading, error, refetch } = useTransactions({
         page: currentPage,
         perPage: 8,
         period,
+        category,
+        transactionId,
     });
 
-    // Transform API data to component format
-    const transactions: Transaction[] = data?.orders_history.map((order) => {
-        // Format date from ISO string to readable format
-        const date = new Date(order.datetime);
-        const formattedDate = date.toLocaleDateString('ru-RU', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [period, category, transactionId]);
 
-        // Map API status to component status
-        let status: 'success' | 'pending' | 'failed' = 'pending';
-        if (order.status === 'PAID' || order.status === 'SUCCESS') {
-            status = 'success';
-        } else if (order.status === 'FAILED' || order.status === 'ERROR') {
-            status = 'failed';
+    // Handle copied notification visibility and auto-hide
+    useEffect(() => {
+        if (showCopied) {
+            // Trigger fade-in animation
+            setTimeout(() => setIsVisible(true), 10);
+            
+            // Hide after 3 seconds
+            const timer = setTimeout(() => {
+                setIsVisible(false);
+                // Remove from DOM after fade-out
+                setTimeout(() => setShowCopied(false), 300);
+            }, 3000);
+            
+            return () => clearTimeout(timer);
+        } else {
+            setIsVisible(false);
         }
+    }, [showCopied]);
 
-        // Format amount
-        const formattedAmount = `+${order.amount} ТМТ`;
+    const handleCopyTransactionId = async (id: string) => {
+        try {
+            await navigator.clipboard.writeText(id);
+            setShowCopied(true);
+        } catch (err) {
+            console.error('Failed to copy transaction ID:', err);
+        }
+    };
 
-        return {
-            id: order.transaction_id,
-            date: formattedDate,
-            email: order.email,
-            transactionId: order.transaction_id,
-            operator: order.operator,
-            category: order.category,
-            description: order.description,
-            amount: formattedAmount,
-            status,
-            link: order.instruction_url || '#',
-        };
-    }) || [];
+    const handleRefresh = async () => {
+        setIsRefreshing(true);
+        await refetch();
+        setIsRefreshing(false);
+    };
+
+    // Transform API data to component format
+    const transactions: Transaction[] = (data?.orders_history || [])
+        .filter((order) => {
+            // Filter out invalid/empty orders - must have datetime and transaction_id at minimum
+            // Also validate that datetime is a valid date
+            if (!order || !order.datetime || !order.transaction_id) {
+                return false;
+            }
+            const date = new Date(order.datetime);
+            return !isNaN(date.getTime());
+        })
+        .map((order) => {
+            // Format date from ISO string to readable format
+            const date = new Date(order.datetime);
+            const formattedDate = isNaN(date.getTime())
+                ? 'Invalid Date'
+                : date.toLocaleDateString('ru-RU', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                  });
+
+            // Map API status to component status
+            let status: 'success' | 'pending' | 'failed' = 'pending';
+            if (order.status === 'PAID' || order.status === 'SUCCESS') {
+                status = 'success';
+            } else if (order.status === 'FAILED' || order.status === 'ERROR') {
+                status = 'failed';
+            }
+
+            // Format amount
+            const formattedAmount = order.amount !== undefined && order.amount !== null
+                ? `+${order.amount} ТМТ`
+                : '+0 ТМТ';
+
+            return {
+                id: order.transaction_id,
+                date: formattedDate,
+                email: order.email || '',
+                transactionId: order.transaction_id,
+                operator: order.operator || '',
+                category: order.category || '',
+                description: order.description || '',
+                amount: formattedAmount,
+                status,
+                link: order.instruction_url || '#',
+            };
+        });
 
     const getStatusIcon = (status: Transaction['status']) => {
         if (status === 'success') {
@@ -96,10 +157,25 @@ function Transactions({ period }: TransactionsProps = {}) {
             <div className="p-5 border border-[#00000026] rounded-[16px] h-[665px] flex flex-col">
                 <div className="flex items-center justify-between">
                     <p className="font-medium text-[18px]">История транзакции</p>
-                    <svg className="cursor-pointer" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="40" height="40" rx="8" fill="#2D85EA" />
-                        <path d="M12 18H15.7535M12 18V14M12 18L15.1347 14.3431C18.0778 11.219 22.8495 11.219 25.7927 14.3431C28.7358 17.4673 28.7358 22.5327 25.7927 25.6569C22.8495 28.781 18.0778 28.781 15.1347 25.6569C14.3963 24.873 13.8431 23.9669 13.4752 23" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+
+                    {/* Refresh */}
+                    <button
+                        onClick={handleRefresh}
+                        disabled={isRefreshing || isLoading}
+                        className="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-300 hover:scale-105"
+                        title="Обновить"
+                    >
+                        <svg
+                            width="40"
+                            height="40"
+                            viewBox="0 0 40 40"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <rect width="40" height="40" rx="8" fill="#2D85EA" />
+                            <path d="M12 18H15.7535M12 18V14M12 18L15.1347 14.3431C18.0778 11.219 22.8495 11.219 25.7927 14.3431C28.7358 17.4673 28.7358 22.5327 25.7927 25.6569C22.8495 28.781 18.0778 28.781 15.1347 25.6569C14.3963 24.873 13.8431 23.9669 13.4752 23" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
                 </div>
 
                 {/* Header row (not scrollable) */}
@@ -142,7 +218,13 @@ function Transactions({ period }: TransactionsProps = {}) {
                                     <tr key={transaction.id} className="transaction grid grid-cols-9 gap-[30px] items-center text-center px-2.5 py-3 mb-[20px] rounded-[6px] text-black">
                                         <td className="flex itemms-right">{transaction.date}</td>
                                         <td className="truncate min-w-0">{transaction.email}</td>
-                                        <td className="text-[#2D85EA] cursor-pointer truncate min-w-0">{transaction.transactionId}</td>
+                                        <td
+                                            onClick={() => handleCopyTransactionId(transaction.transactionId)}
+                                            className="text-[#2D85EA] cursor-pointer truncate min-w-0 hover:underline"
+                                            title="Нажмите, чтобы скопировать"
+                                        >
+                                            {transaction.transactionId}
+                                        </td>
                                         <td>{transaction.operator}</td>
                                         <td>{transaction.category}</td>
                                         <td>{transaction.description}</td>
@@ -179,6 +261,8 @@ function Transactions({ period }: TransactionsProps = {}) {
                     ))}
                 </div>
             )}
+
+            {showCopied && <Copied isVisible={isVisible} />}
         </div>
     )
 }

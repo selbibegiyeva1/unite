@@ -12,7 +12,6 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (isLoading) {
     return (
       <div className="flex h-screen flex-col">
-        <Navbar />
         <div className="flex flex-1 items-center justify-center">
           <div>Loading...</div>
         </div>

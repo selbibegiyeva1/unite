@@ -20,8 +20,10 @@ export function useTransactions(options: UseTransactionsOptions = {}) {
         per_page: perPage,
       };
 
-      if (category) params.category = category;
-      if (period) params.period = period;
+      // Only send category if it's not 'ALL'
+      if (category && category !== 'ALL') params.category = category;
+      // Only send period if it's not 'all_time'
+      if (period && period !== 'all_time') params.period = period;
       if (transactionId) params.transaction_id = transactionId;
 
       return authService.getOrders(params);

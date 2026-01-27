@@ -1,16 +1,32 @@
+import { useState } from 'react';
 import Transactions from '../../components/transactions/Transactions';
 import Filter from '../../components/transactions/Filter';
 
 function TransactionsOperator() {
     document.title = 'Unite Shop - Транзакции';
+    
+    const [filters, setFilters] = useState<{ period: string; category: string; transactionId: string }>({
+        period: 'all_time',
+        category: 'ALL',
+        transactionId: '',
+    });
+
+    const handleFiltersChange = (newFilters: { period: string; category: string; transactionId: string }) => {
+        setFilters(newFilters);
+    };
+
     return (
         <div className='px-6 mt-[28px] pb-[100px]'>
             <div className='w-[1680px] m-auto'>
                 <p className='text-[36px] font-bold mb-5'>Транзакции</p>
                 <div className='mb-5'>
-                    <Filter />
+                    <Filter onFiltersChange={handleFiltersChange} />
                 </div>
-                <Transactions />
+                <Transactions 
+                    period={filters.period} 
+                    category={filters.category !== 'ALL' ? filters.category : undefined}
+                    transactionId={filters.transactionId || undefined} 
+                />
             </div>
         </div>
     )

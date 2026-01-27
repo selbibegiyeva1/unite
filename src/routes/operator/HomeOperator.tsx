@@ -73,7 +73,7 @@ function HomeOperator() {
                     </div>
                 </div>
 
-                <div className='mt-7 mb-6 border border-[#00000026] p-8 text-[24px] rounded-[24px] w-fit'>
+                <div className='mt-7 mb-6 border w-[552px] border-[#00000026] p-8 text-[24px] rounded-[24px]'>
                     <b>Сегодня по операциям</b>
                 </div>
 
