@@ -1,73 +1,122 @@
+import type { EsimTab } from '../../../hooks/operator/esim/useEsimLocations';
+import { useEsimTariffs } from '../../../hooks/operator/esim/useEsimLocations';
+import type { EsimTariff, EsimTariffsResponse } from '../../../services/authService';
+
 interface TariffProps {
-    activeTab: 'countries' | 'regions';
+    activeTab: EsimTab;
+    selectedCodeForApi: string | null;
+    selectedName: string | null;
+    selectedFlagUrl: string | null;
 }
 
-interface TariffData {
-    data: string;
-    country: string;
-    validity: string;
-    price: number;
-    coverage?: string;
+function formatTraffic(traffic: number): string {
+    if (traffic >= 1024) {
+        const gb = traffic / 1024;
+        return `${gb % 1 === 0 ? gb : gb.toFixed(1)} GB`;
+    }
+    return `${traffic} MB`;
 }
 
-function Tariff({ activeTab }: TariffProps) {
-    // Fake tariffs for Страны (Countries)
-    const countryTariffs: TariffData[] = [
-        { data: '1GB', country: 'Австралия', validity: '3 дней', price: 150 },
-        { data: '3GB', country: 'Австралия', validity: '7 дней', price: 250 },
-        { data: '5GB', country: 'Австралия', validity: '10 дней', price: 350 },
-        { data: '10GB', country: 'Австралия', validity: '15 дней', price: 500 },
-    ];
+function formatDays(days: number): string {
+    if (days === 1) {
+        return '1 день';
+    }
+    if (days >= 2 && days <= 4) {
+        return `${days} дня`;
+    }
+    return `${days} дней`;
+}
 
-    // Fake tariffs for Регионы (Regions) - all have coverage and 3 days validity
-    const regionTariffs: TariffData[] = [
-        { data: '1GB', country: 'Европа', validity: '3 дней', price: 200, coverage: '30 стран' },
-        { data: '3GB', country: 'Европа', validity: '3 дней', price: 350, coverage: '30 стран' },
-        { data: '5GB', country: 'Европа', validity: '3 дней', price: 450, coverage: '30 стран' },
-        { data: '10GB', country: 'Европа', validity: '3 дней', price: 600, coverage: '30 стран' },
-    ];
+function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl }: TariffProps) {
+    const { data, isLoading, isError } = useEsimTariffs(activeTab, selectedCodeForApi);
 
-    const tariffs = activeTab === 'countries' ? countryTariffs : regionTariffs;
+    // The backend might return either a single object or an array of objects.
+    let tariffs: EsimTariff[] = [];
+    let coverageCount: number | null = null;
+
+    const normalize = (item: EsimTariffsResponse | undefined) => {
+        if (!item) return;
+        // Backend field is "tarrifs" (with double "r")
+        if (Array.isArray(item.tarrifs)) {
+            tariffs = tariffs.concat(item.tarrifs);
+        }
+        // For regions the API returns an array of country codes - use it as coverage.
+        if (Array.isArray(item.country_code)) {
+            coverageCount = item.country_code.length;
+        }
+    };
+
+    if (Array.isArray(data)) {
+        data.forEach((item) => normalize(item));
+    } else if (data) {
+        normalize(data);
+    }
 
     return (
         <div>
             <p className="font-bold text-[32px]">Тарифы</p>
 
+            {selectedCodeForApi && isLoading && (
+                <p className="mt-6.5 text-sm text-[#00000099]">Загрузка тарифов...</p>
+            )}
+
+            {selectedCodeForApi && isError && (
+                <p className="mt-6.5 text-sm text-red-500">
+                    Не удалось загрузить тарифы. Попробуйте позже.
+                </p>
+            )}
+
             <div className="mt-6.5 grid grid-cols-4 gap-8">
-                {tariffs.map((tariff, index) => (
+                {selectedCodeForApi && !isLoading && !isError && tariffs.length === 0 && (
+                    <p className="text-sm text-[#00000099]">
+                        Для выбранного направления тарифы отсутствуют.
+                    </p>
+                )}
+
+                {tariffs.map((tariff: EsimTariff, index: number) => (
                     <div key={index} className="px-6 pb-8 pt-6 rounded-[24px] border-[1.5px] border-[#00000026] hover:border-[#2D85EA] hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
                         <div className="flex items-center gap-2.5 justify-between py-[10px]">
-                            <b className="text-[32px]">{tariff.data}</b>
-                            <img src="/esim/AU2.png" alt="gb" className="w-[56px]" />
+                            <b className="text-[32px]">{formatTraffic(tariff.traffic)}</b>
+                            <img
+                                src={tariff.flag_url || selectedFlagUrl || '/esim/AU2.png'}
+                                alt={tariff.operator}
+                                className="w-[56px]"
+                            />
                         </div>
-                        {activeTab === 'regions' && tariff.coverage && (
+                        {activeTab === 'regions' && coverageCount !== null && (
                             <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
                                 <p>Покрытие</p>
                                 <div className="flex items-center gap-2 cursor-pointer">
-                                    <p>{tariff.coverage}</p>
+                                    <p>{coverageCount} стран</p>
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.9999 11.9999H20.9999M20.9999 11.9999L17 8M20.9999 11.9999L17 15.9999M9 12H9.01M6 12H6.01M3 12H3.01" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
                             </div>
                         )}
+                        {activeTab === 'regions' && (
+                            <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
+                                <p>Оператор</p>
+                                <p>{tariff.operator}</p>
+                            </div>
+                        )}
                         {activeTab === 'countries' && (
                             <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
                                 <p>Страна</p>
-                                <p>{tariff.country}</p>
+                                <p>{selectedName ?? tariff.operator}</p>
                             </div>
                         )}
                         <div className="flex items-center justify-between gap-2 py-[18px] font-medium">
                             <p>Срок действия</p>
-                            <p className="text-[#00000099]">{tariff.validity}</p>
+                            <p className="text-[#00000099]">{formatDays(tariff.days)}</p>
                         </div>
 
                         <div className="mt-6">
                             <div className="flex items-center justify-between gap-2 text-[22px]">
                                 <b>Сумма</b>
-                                <b>{tariff.price} ТМТ</b>
+                                <b>{tariff.price_tmt} ТМТ</b>
                             </div>
-                            <button className="bg-[#2D85EA] text-white text-[15px] font-medium rounded-[8px] mt-6 w-full p-[11px] cursor-pointer">Купить</button>
+                            <button className="bg-[#2D85EA] hover:bg-[#2D85EA]/80 transition-all duration-300 text-white text-[15px] font-medium rounded-[8px] mt-6 w-full p-[11px] cursor-pointer">Купить</button>
                         </div>
                     </div>
                 ))}
