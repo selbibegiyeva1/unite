@@ -1,4 +1,4 @@
-import { useTransactionFilters } from '../../hooks/operator/transactions/useTransactionFilters';
+import { useTransactionFilters } from '../../../hooks/operator/transactions/useTransactionFilters';
 
 interface FilterProps {
     onFiltersChange: (filters: { period: string; category: string; transactionId: string }) => void;

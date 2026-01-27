@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Transactions from '../../components/transactions/Transactions';
-import Filter from '../../components/transactions/Filter';
+import Transactions from '../../components/operator/transactions/Transactions';
+import Filter from '../../components/operator/transactions/Filter';
 
 function TransactionsOperator() {
     document.title = 'Unite Shop - Транзакции';
