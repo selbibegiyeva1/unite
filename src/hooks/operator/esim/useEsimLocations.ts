@@ -1,8 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import authService, {
-  type EsimCountry,
-  type EsimRegion,
-} from '../services/authService';
+import authService, { type EsimCountry, type EsimRegion } from '../../../services/authService';
 
 export type EsimTab = 'countries' | 'regions';
 

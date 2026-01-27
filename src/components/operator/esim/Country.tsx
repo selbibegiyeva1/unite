@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useEsimLocations } from '../../../hooks/useEsimLocations';
+import { useEsimLocations } from '../../../hooks/operator/esim/useEsimLocations';
 
 interface CountryProps {
     activeTab: 'countries' | 'regions';
