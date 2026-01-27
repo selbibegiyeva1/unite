@@ -17,10 +17,11 @@ interface Transaction {
 
 interface TransactionsProps {
     period?: string;
+    category?: string;
     transactionId?: string;
 }
 
-function Transactions({ period, transactionId }: TransactionsProps = {}) {
+function Transactions({ period, category, transactionId }: TransactionsProps = {}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [showCopied, setShowCopied] = useState(false);
@@ -29,13 +30,14 @@ function Transactions({ period, transactionId }: TransactionsProps = {}) {
         page: currentPage,
         perPage: 8,
         period,
+        category,
         transactionId,
     });
 
     // Reset to page 1 when filters change
     useEffect(() => {
         setCurrentPage(1);
-    }, [period, transactionId]);
+    }, [period, category, transactionId]);
 
     // Handle copied notification visibility and auto-hide
     useEffect(() => {

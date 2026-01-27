@@ -1,15 +1,20 @@
 import { useTransactionFilters } from '../../hooks/operator/transactions/useTransactionFilters';
 
 interface FilterProps {
-    onFiltersChange: (filters: { period: string; transactionId: string }) => void;
+    onFiltersChange: (filters: { period: string; category: string; transactionId: string }) => void;
 }
 
 function Filter({ onFiltersChange }: FilterProps) {
-    const { filters, setPeriod, setTransactionId, handleSearch, handleReset } = useTransactionFilters();
+    const { filters, setPeriod, setCategory, setTransactionId, handleSearch, handleReset } = useTransactionFilters();
 
     const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const period = e.target.value as 'all_time' | 'day' | 'week' | 'month' | 'year';
         setPeriod(period);
+    };
+
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const category = e.target.value as 'ALL' | 'ESIM' | 'VOUCHER' | 'STEAM' | 'TOPUP';
+        setCategory(category);
     };
 
     const handleTransactionIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +25,7 @@ function Filter({ onFiltersChange }: FilterProps) {
         handleSearch();
         onFiltersChange({
             period: filters.period,
+            category: filters.category,
             transactionId: filters.transactionId,
         });
     };
@@ -28,6 +34,7 @@ function Filter({ onFiltersChange }: FilterProps) {
         handleReset();
         onFiltersChange({
             period: 'all_time',
+            category: 'ALL',
             transactionId: '',
         });
     };
@@ -64,12 +71,16 @@ function Filter({ onFiltersChange }: FilterProps) {
                 <div>
                     <span className='font-medium text-[15px] pb-[8px] flex'>Категория</span>
                     <div className="relative">
-                        <select className="w-[320px] text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer">
-                            <option>eSIM</option>
-                            <option>Voucher</option>
-                            <option>Steam</option>
-                            <option>Topup</option>
-                            <option>Всё</option>
+                        <select
+                            value={filters.category}
+                            onChange={handleCategoryChange}
+                            className="w-[320px] text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
+                        >
+                            <option value="ALL">Всё</option>
+                            <option value="ESIM">eSIM</option>
+                            <option value="VOUCHER">Цифровые товары</option>
+                            <option value="STEAM">Steam</option>
+                            <option value="TOPUP">Пополнение</option>
                         </select>
                         <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
@@ -86,7 +97,7 @@ function Filter({ onFiltersChange }: FilterProps) {
                         onChange={handleTransactionIdChange}
                         onKeyPress={handleKeyPress}
                         placeholder="Введите ID транзакции"
-                        className="w-full outline-0 text-[14px] font-medium"
+                        className="w-full cursor-pointer outline-0 text-[14px] font-medium"
                     />
                 </div>
                 <button

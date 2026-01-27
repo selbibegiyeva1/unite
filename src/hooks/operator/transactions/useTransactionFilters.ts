@@ -1,15 +1,18 @@
 import { useState, useCallback } from 'react';
 
 export type PeriodValue = 'all_time' | 'day' | 'week' | 'month' | 'year';
+export type CategoryValue = 'ALL' | 'ESIM' | 'VOUCHER' | 'STEAM' | 'TOPUP';
 
 export interface TransactionFilters {
   period: PeriodValue;
+  category: CategoryValue;
   transactionId: string;
 }
 
 export interface UseTransactionFiltersReturn {
   filters: TransactionFilters;
   setPeriod: (period: PeriodValue) => void;
+  setCategory: (category: CategoryValue) => void;
   setTransactionId: (transactionId: string) => void;
   handleSearch: () => void;
   handleReset: () => void;
@@ -18,6 +21,7 @@ export interface UseTransactionFiltersReturn {
 
 const DEFAULT_FILTERS: TransactionFilters = {
   period: 'all_time',
+  category: 'ALL',
   transactionId: '',
 };
 
@@ -27,6 +31,10 @@ export function useTransactionFilters(): UseTransactionFiltersReturn {
 
   const setPeriod = useCallback((period: PeriodValue) => {
     setFilters((prev) => ({ ...prev, period }));
+  }, []);
+
+  const setCategory = useCallback((category: CategoryValue) => {
+    setFilters((prev) => ({ ...prev, category }));
   }, []);
 
   const setTransactionId = useCallback((transactionId: string) => {
@@ -45,6 +53,7 @@ export function useTransactionFilters(): UseTransactionFiltersReturn {
   return {
     filters,
     setPeriod,
+    setCategory,
     setTransactionId,
     handleSearch,
     handleReset,

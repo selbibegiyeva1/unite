@@ -5,12 +5,13 @@ import Filter from '../../components/transactions/Filter';
 function TransactionsOperator() {
     document.title = 'Unite Shop - Транзакции';
     
-    const [filters, setFilters] = useState<{ period: string; transactionId: string }>({
+    const [filters, setFilters] = useState<{ period: string; category: string; transactionId: string }>({
         period: 'all_time',
+        category: 'ALL',
         transactionId: '',
     });
 
-    const handleFiltersChange = (newFilters: { period: string; transactionId: string }) => {
+    const handleFiltersChange = (newFilters: { period: string; category: string; transactionId: string }) => {
         setFilters(newFilters);
     };
 
@@ -21,7 +22,11 @@ function TransactionsOperator() {
                 <div className='mb-5'>
                     <Filter onFiltersChange={handleFiltersChange} />
                 </div>
-                <Transactions period={filters.period} transactionId={filters.transactionId || undefined} />
+                <Transactions 
+                    period={filters.period} 
+                    category={filters.category !== 'ALL' ? filters.category : undefined}
+                    transactionId={filters.transactionId || undefined} 
+                />
             </div>
         </div>
     )
