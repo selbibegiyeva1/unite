@@ -7,6 +7,7 @@ interface TariffProps {
     selectedCodeForApi: string | null;
     selectedName: string | null;
     selectedFlagUrl: string | null;
+    onOpenRegionModal?: (countryCodes: string[]) => void;
 }
 
 function formatTraffic(traffic: number): string {
@@ -27,12 +28,13 @@ function formatDays(days: number): string {
     return `${days} дней`;
 }
 
-function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl }: TariffProps) {
+function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, onOpenRegionModal }: TariffProps) {
     const { data, isLoading, isError } = useEsimTariffs(activeTab, selectedCodeForApi);
 
     // The backend might return either a single object or an array of objects.
     let tariffs: EsimTariff[] = [];
     let coverageCount: number | null = null;
+    let regionCountryCodes: string[] = [];
 
     const normalize = (item: EsimTariffsResponse | undefined) => {
         if (!item) return;
@@ -40,9 +42,14 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl }
         if (Array.isArray(item.tarrifs)) {
             tariffs = tariffs.concat(item.tarrifs);
         }
-        // For regions the API returns an array of country codes - use it as coverage.
+        // For regions the API returns an array of country codes - use it as coverage/list.
         if (Array.isArray(item.country_code)) {
-            coverageCount = item.country_code.length;
+            const normalizedCodes = item.country_code
+                .map((code) => code.trim().toUpperCase())
+                .filter(Boolean);
+
+            coverageCount = normalizedCodes.length;
+            regionCountryCodes = normalizedCodes;
         }
     };
 
@@ -84,7 +91,14 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl }
                             />
                         </div>
                         {activeTab === 'regions' && coverageCount !== null && (
-                            <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
+                            <div
+                                className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium cursor-pointer"
+                                onClick={() => {
+                                    if (onOpenRegionModal && regionCountryCodes.length > 0) {
+                                        onOpenRegionModal(regionCountryCodes);
+                                    }
+                                }}
+                            >
                                 <p>Покрытие</p>
                                 <div className="flex items-center gap-2 cursor-pointer">
                                     <p>{coverageCount} стран</p>
@@ -92,12 +106,6 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl }
                                         <path d="M11.9999 11.9999H20.9999M20.9999 11.9999L17 8M20.9999 11.9999L17 15.9999M9 12H9.01M6 12H6.01M3 12H3.01" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
-                            </div>
-                        )}
-                        {activeTab === 'regions' && (
-                            <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
-                                <p>Оператор</p>
-                                <p>{tariff.operator}</p>
                             </div>
                         )}
                         {activeTab === 'countries' && (

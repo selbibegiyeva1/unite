@@ -3,6 +3,7 @@ import Country from '../../components/operator/esim/Country';
 import Tariff from '../../components/operator/esim/Tariff';
 import EsimFaq from '../../components/operator/esim/EsimFaq';
 import type { EsimTab } from '../../hooks/operator/esim/useEsimLocations';
+import RegionModal from '../../components/operator/esim/RegionModal';
 
 function EsimCategory() {
     document.title = 'Unite Shop - eSIM';
@@ -13,6 +14,8 @@ function EsimCategory() {
     const [selectedCodeForApi, setSelectedCodeForApi] = useState<string | null>('AF');
     const [selectedName, setSelectedName] = useState<string | null>(null);
     const [selectedFlagUrl, setSelectedFlagUrl] = useState<string | null>(null);
+    const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
+    const [regionCountryCodes, setRegionCountryCodes] = useState<string[]>([]);
 
     return (
         <div className='px-6 mt-[28px] pb-[100px]'>
@@ -23,6 +26,7 @@ function EsimCategory() {
                         activeTab={activeTab}
                         setActiveTab={(tab) => {
                             setActiveTab(tab);
+                            setIsRegionModalOpen(false);
                             // Set default selection when switching between tabs
                             if (tab === 'countries') {
                                 setSelectedCodeForApi('AF');
@@ -45,10 +49,19 @@ function EsimCategory() {
                         selectedCodeForApi={selectedCodeForApi}
                         selectedName={selectedName}
                         selectedFlagUrl={selectedFlagUrl}
+                        onOpenRegionModal={(codes) => {
+                            setRegionCountryCodes(codes);
+                            setIsRegionModalOpen(true);
+                        }}
                     />
                 </div>
                 <EsimFaq />
             </div>
+            <RegionModal
+                isOpen={isRegionModalOpen}
+                onClose={() => setIsRegionModalOpen(false)}
+                countryCodes={regionCountryCodes}
+            />
         </div>
     )
 }
