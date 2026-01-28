@@ -8,6 +8,7 @@ interface TariffProps {
     selectedName: string | null;
     selectedFlagUrl: string | null;
     onOpenRegionModal?: (countryCodes: string[]) => void;
+    onBuyTariff?: () => void;
 }
 
 function formatTraffic(traffic: number): string {
@@ -28,7 +29,7 @@ function formatDays(days: number): string {
     return `${days} дней`;
 }
 
-function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, onOpenRegionModal }: TariffProps) {
+function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, onOpenRegionModal, onBuyTariff }: TariffProps) {
     const { data, isLoading, isError } = useEsimTariffs(activeTab, selectedCodeForApi);
 
     // The backend might return either a single object or an array of objects.
@@ -124,7 +125,16 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                                 <b>Сумма</b>
                                 <b>{tariff.price_tmt} ТМТ</b>
                             </div>
-                            <button className="bg-[#2D85EA] hover:bg-[#2D85EA]/80 transition-all duration-300 text-white text-[15px] font-medium rounded-[8px] mt-6 w-full p-[11px] cursor-pointer">Купить</button>
+                            <button
+                                onClick={() => {
+                                    if (onBuyTariff) {
+                                        onBuyTariff();
+                                    }
+                                }}
+                                className="bg-[#2D85EA] hover:bg-[#2D85EA]/80 transition-all duration-300 text-white text-[15px] font-medium rounded-[8px] mt-6 w-full p-[11px] cursor-pointer"
+                            >
+                                Купить
+                            </button>
                         </div>
                     </div>
                 ))}

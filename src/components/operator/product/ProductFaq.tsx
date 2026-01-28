@@ -239,7 +239,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
     }
 
     return (
-        <div>
+        <div className='max-w-[1158px]'>
             <p className="text-[32px] font-bold mb-6">FAQ</p>
             <div className="flex flex-col gap-4">
                 {currentFaqs.map((faq, index) => {
