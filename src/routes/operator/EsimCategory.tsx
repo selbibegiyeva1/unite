@@ -4,6 +4,8 @@ import Tariff from '../../components/operator/esim/Tariff';
 import EsimFaq from '../../components/operator/esim/EsimFaq';
 import type { EsimTab } from '../../hooks/operator/esim/useEsimLocations';
 import RegionModal from '../../components/operator/esim/RegionModal';
+import EsimModal from '../../components/operator/esim/EsimModal';
+import { useEsimValidation } from '../../hooks/operator/esim/useEsimValidation';
 
 function EsimCategory() {
     document.title = 'Unite Shop - eSIM';
@@ -16,6 +18,20 @@ function EsimCategory() {
     const [selectedFlagUrl, setSelectedFlagUrl] = useState<string | null>(null);
     const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
     const [regionCountryCodes, setRegionCountryCodes] = useState<string[]>([]);
+    const [isEsimModalOpen, setIsEsimModalOpen] = useState(false);
+    const [formValues, setFormValues] = useState<Record<string, string>>({});
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<{ formFields: Record<string, boolean>; checkbox: boolean }>({
+        formFields: {},
+        checkbox: false,
+    });
+    const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+
+    // Validation hook
+    const { validateAndScroll, formRefs, checkboxRef } = useEsimValidation({
+        formValues,
+        isCheckboxChecked,
+    });
 
     return (
         <div className='px-6 mt-[28px] pb-[100px]'>
@@ -53,6 +69,9 @@ function EsimCategory() {
                             setRegionCountryCodes(codes);
                             setIsRegionModalOpen(true);
                         }}
+                        onBuyTariff={() => {
+                            setIsEsimModalOpen(true);
+                        }}
                     />
                 </div>
                 <EsimFaq />
@@ -61,6 +80,40 @@ function EsimCategory() {
                 isOpen={isRegionModalOpen}
                 onClose={() => setIsRegionModalOpen(false)}
                 countryCodes={regionCountryCodes}
+            />
+            <EsimModal
+                isOpen={isEsimModalOpen}
+                onClose={() => {
+                    setIsEsimModalOpen(false);
+                    setFormValues({});
+                    setIsCheckboxChecked(false);
+                    setValidationErrors({ formFields: {}, checkbox: false });
+                }}
+                formValues={formValues}
+                onFormChange={setFormValues}
+                isCheckboxChecked={isCheckboxChecked}
+                onCheckboxChange={setIsCheckboxChecked}
+                validationErrors={validationErrors}
+                formRefs={formRefs}
+                checkboxRef={checkboxRef}
+                onPayment={async () => {
+                    // Validate form
+                    const { isValid, errors } = validateAndScroll();
+                    setValidationErrors(errors);
+                    if (!isValid) {
+                        return;
+                    }
+                    
+                    // Handle payment
+                    setIsPaymentLoading(true);
+                    try {
+                        // TODO: Implement payment logic
+                        console.log('Processing payment...');
+                    } finally {
+                        setIsPaymentLoading(false);
+                    }
+                }}
+                isPaymentLoading={isPaymentLoading}
             />
         </div>
     )
