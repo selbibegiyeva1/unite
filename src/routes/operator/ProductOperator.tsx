@@ -142,61 +142,65 @@ function ProductOperator() {
                 </div>
             )}
             {!isLoading && !error && productForm && (
-                <div className='flex items-start gap-8'>
-                    <div className='flex flex-col gap-4 w-[1158px]'>
-                        <Modal
-                            isOpen={isModalOpen}
-                            onClose={() => setIsModalOpen(false)}
+                <div>
+                    <div className='flex items-start gap-8'>
+                        <div className='flex flex-col gap-4 w-[1158px]'>
+                            <Modal
+                                isOpen={isModalOpen}
+                                onClose={() => setIsModalOpen(false)}
+                                productForm={productForm}
+                                activeTab={activeTab}
+                                selectedRegion={selectedRegion}
+                                formValues={formValues}
+                                selectedNominal={selectedNominal}
+                                onPayment={handleModalPayment}
+                                isPaymentLoading={isPaymentLoading}
+                                paymentError={paymentError}
+                            />
+                            <Header productForm={productForm} activeTab={activeTab} setActiveTab={setActiveTab} />
+                            <Region
+                                productForm={productForm}
+                                activeTab={activeTab}
+                                selectedRegion={selectedRegion}
+                                onRegionChange={setSelectedRegion}
+                            />
+                            <Nominals
+                                productForm={productForm}
+                                selectedRegion={selectedRegion}
+                                activeTab={activeTab}
+                                selectedNominal={selectedNominal}
+                                onNominalChange={setSelectedNominal}
+                            />
+                            <Form
+                                productForm={productForm}
+                                activeTab={activeTab}
+                                formValues={formValues}
+                                onFormChange={setFormValues}
+                                validationErrors={validationErrors.formFields}
+                                formRefs={formRefs}
+                            />
+                        </div>
+                        <Total
                             productForm={productForm}
                             activeTab={activeTab}
                             selectedRegion={selectedRegion}
                             formValues={formValues}
                             selectedNominal={selectedNominal}
-                            onPayment={handleModalPayment}
+                            isCheckboxChecked={isCheckboxChecked}
+                            onCheckboxChange={setIsCheckboxChecked}
+                            checkboxError={validationErrors.checkbox}
+                            checkboxRef={checkboxRef}
+                            onPayment={handleOpenModal}
                             isPaymentLoading={isPaymentLoading}
                             paymentError={paymentError}
                         />
-                        <Header productForm={productForm} activeTab={activeTab} setActiveTab={setActiveTab} />
-                        <Region
-                            productForm={productForm}
-                            activeTab={activeTab}
-                            selectedRegion={selectedRegion}
-                            onRegionChange={setSelectedRegion}
-                        />
-                        <Nominals
-                            productForm={productForm}
-                            selectedRegion={selectedRegion}
-                            activeTab={activeTab}
-                            selectedNominal={selectedNominal}
-                            onNominalChange={setSelectedNominal}
-                        />
-                        <Form
-                            productForm={productForm}
-                            activeTab={activeTab}
-                            formValues={formValues}
-                            onFormChange={setFormValues}
-                            validationErrors={validationErrors.formFields}
-                            formRefs={formRefs}
-                        />
+                    </div>
+                    <div className='mt-6'>
                         <ProductFaq
                             productForm={productForm}
                             activeTab={activeTab}
                         />
                     </div>
-                    <Total
-                        productForm={productForm}
-                        activeTab={activeTab}
-                        selectedRegion={selectedRegion}
-                        formValues={formValues}
-                        selectedNominal={selectedNominal}
-                        isCheckboxChecked={isCheckboxChecked}
-                        onCheckboxChange={setIsCheckboxChecked}
-                        checkboxError={validationErrors.checkbox}
-                        checkboxRef={checkboxRef}
-                        onPayment={handleOpenModal}
-                        isPaymentLoading={isPaymentLoading}
-                        paymentError={paymentError}
-                    />
                 </div>
             )}
             {!groupName && !isLoading && (
