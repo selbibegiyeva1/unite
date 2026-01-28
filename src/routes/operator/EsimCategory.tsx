@@ -19,6 +19,7 @@ function EsimCategory() {
     const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
     const [regionCountryCodes, setRegionCountryCodes] = useState<string[]>([]);
     const [isEsimModalOpen, setIsEsimModalOpen] = useState(false);
+    const [selectedTariff, setSelectedTariff] = useState<{ tariff: import('../../services/authService').EsimTariff; activeTab: EsimTab; selectedName: string | null; coverageCount?: number | null } | null>(null);
     const [formValues, setFormValues] = useState<Record<string, string>>({});
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [validationErrors, setValidationErrors] = useState<{ formFields: Record<string, boolean>; checkbox: boolean }>({
@@ -69,7 +70,13 @@ function EsimCategory() {
                             setRegionCountryCodes(codes);
                             setIsRegionModalOpen(true);
                         }}
-                        onBuyTariff={() => {
+                        onBuyTariff={(tariff, coverageCount) => {
+                            setSelectedTariff({
+                                tariff,
+                                activeTab,
+                                selectedName,
+                                coverageCount: coverageCount ?? null
+                            });
                             setIsEsimModalOpen(true);
                         }}
                     />
@@ -85,10 +92,12 @@ function EsimCategory() {
                 isOpen={isEsimModalOpen}
                 onClose={() => {
                     setIsEsimModalOpen(false);
+                    setSelectedTariff(null);
                     setFormValues({});
                     setIsCheckboxChecked(false);
                     setValidationErrors({ formFields: {}, checkbox: false });
                 }}
+                selectedTariff={selectedTariff}
                 formValues={formValues}
                 onFormChange={setFormValues}
                 isCheckboxChecked={isCheckboxChecked}

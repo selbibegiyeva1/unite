@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
+import type { EsimTariff } from '../../../services/authService';
+import type { EsimTab } from '../../../hooks/operator/esim/useEsimLocations';
 
 interface EsimModalProps {
     isOpen: boolean;
     onClose: () => void;
+    selectedTariff: { tariff: EsimTariff; activeTab: EsimTab; selectedName: string | null; coverageCount?: number | null } | null;
     formValues: Record<string, string>;
     onFormChange: (values: Record<string, string>) => void;
     isCheckboxChecked: boolean;
@@ -15,7 +18,25 @@ interface EsimModalProps {
     paymentError?: string | null;
 }
 
-function EsimModal({ isOpen, onClose, formValues, onFormChange, isCheckboxChecked, onCheckboxChange, validationErrors, formRefs, checkboxRef, onPayment, isPaymentLoading }: EsimModalProps) {
+function formatTraffic(traffic: number): string {
+    if (traffic >= 1024) {
+        const gb = traffic / 1024;
+        return `${gb % 1 === 0 ? gb : gb.toFixed(1)} GB`;
+    }
+    return `${traffic} MB`;
+}
+
+function formatDays(days: number): string {
+    if (days === 1) {
+        return '1 день';
+    }
+    if (days >= 2 && days <= 4) {
+        return `${days} дня`;
+    }
+    return `${days} дней`;
+}
+
+function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, isCheckboxChecked, onCheckboxChange, validationErrors, formRefs, checkboxRef, onPayment, isPaymentLoading }: EsimModalProps) {
     const handleInputChange = (name: string, value: string) => {
         onFormChange({
             ...formValues,
@@ -55,22 +76,34 @@ function EsimModal({ isOpen, onClose, formValues, onFormChange, isCheckboxChecke
                 <div>
                     <p className="text-[24px] font-medium mb-[24px]">Покупка тарифа</p>
                     <div className="px-4 pt-[8px] pb-[24px] bg-[#F5F5F9] rounded-2xl">
-                        <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
-                            <p>Покрытие</p>
-                            <p>20 стран</p>
-                        </div>
-                        <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
-                            <p>Трафик</p>
-                            <p>3GB</p>
-                        </div>
-                        <div className="py-[18px] flex items-center justify-between font-medium">
-                            <p>Срок действия</p>
-                            <p className="text-[#00000099]">3 дней</p>
-                        </div>
-                        <div className="mt-8 flex items-center justify-between font-bold text-[18px]">
-                            <p>Сумма</p>
-                            <p>1000 ТМТ</p>
-                        </div>
+                        {selectedTariff && (
+                            <>
+                                {selectedTariff.activeTab === 'regions' && selectedTariff.coverageCount !== null && (
+                                    <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
+                                        <p>Покрытие</p>
+                                        <p>{selectedTariff.coverageCount} стран</p>
+                                    </div>
+                                )}
+                                {selectedTariff.activeTab === 'countries' && (
+                                    <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
+                                        <p>Страна</p>
+                                        <p>{selectedTariff.selectedName || selectedTariff.tariff.operator}</p>
+                                    </div>
+                                )}
+                                <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
+                                    <p>Трафик</p>
+                                    <p>{formatTraffic(selectedTariff.tariff.traffic)}</p>
+                                </div>
+                                <div className="py-[18px] flex items-center justify-between font-medium">
+                                    <p>Срок действия</p>
+                                    <p className="text-[#00000099]">{formatDays(selectedTariff.tariff.days)}</p>
+                                </div>
+                                <div className="mt-8 flex items-center justify-between font-bold text-[18px]">
+                                    <p>Сумма</p>
+                                    <p>{selectedTariff.tariff.price_tmt} ТМТ</p>
+                                </div>
+                            </>
+                        )}
                     </div>
                     <div className="flex items-center gap-2 my-4 text-[#F50100] text-[14px] font-medium">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,11 +147,11 @@ function EsimModal({ isOpen, onClose, formValues, onFormChange, isCheckboxChecke
                     <div className="mt-6 px-4 pt-4 pb-6 bg-[#F5F5F9] rounded-2xl">
                         <div className="flex items-center justify-between font-medium py-4.5 border-b border-[#00000026]">
                             <p>Стоимость тарифа</p>
-                            <p>221 ТМТ</p>
+                            <p>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
                         </div>
                         <div className="flex mt-4 items-center justify-between font-bold text-[18px]">
                             <p>Итого</p>
-                            <p>221 ТМТ</p>
+                            <p>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
                         </div>
                     </div>
 

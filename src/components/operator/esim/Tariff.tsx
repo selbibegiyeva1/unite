@@ -8,7 +8,7 @@ interface TariffProps {
     selectedName: string | null;
     selectedFlagUrl: string | null;
     onOpenRegionModal?: (countryCodes: string[]) => void;
-    onBuyTariff?: () => void;
+    onBuyTariff?: (tariff: EsimTariff, coverageCount?: number | null) => void;
 }
 
 function formatTraffic(traffic: number): string {
@@ -128,7 +128,7 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                             <button
                                 onClick={() => {
                                     if (onBuyTariff) {
-                                        onBuyTariff();
+                                        onBuyTariff(tariff, activeTab === 'regions' ? coverageCount : null);
                                     }
                                 }}
                                 className="bg-[#2D85EA] hover:bg-[#2D85EA]/80 transition-all duration-300 text-white text-[15px] font-medium rounded-[8px] mt-6 w-full p-[11px] cursor-pointer"
