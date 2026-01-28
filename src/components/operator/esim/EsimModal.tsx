@@ -60,6 +60,8 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
         };
     }, [isOpen, onClose]);
 
+    // Modal data commit
+
     return (
         <div
             className={`fixed inset-0 z-40 grid place-items-center overflow-auto bg-[#00000059] p-4 transition-opacity duration-200 ${
