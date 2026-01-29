@@ -1,4 +1,5 @@
 import { useTransactionFilters } from '../../../hooks/operator/transactions/useTransactionFilters';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface FilterProps {
     onFiltersChange: (filters: { period: string; category: string; transactionId: string }) => void;
@@ -6,6 +7,7 @@ interface FilterProps {
 
 function Filter({ onFiltersChange }: FilterProps) {
     const { filters, setPeriod, setCategory, setTransactionId, handleSearch, handleReset } = useTransactionFilters();
+    const { t } = useTranslation();
 
     const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const period = e.target.value as 'all_time' | 'day' | 'week' | 'month' | 'year';
@@ -47,21 +49,21 @@ function Filter({ onFiltersChange }: FilterProps) {
 
     return (
         <div className="mt-5 px-5 py-[32px] border border-[#00000026] rounded-[16px]">
-            <p className="font-medium text-[18px] mb-5">Фильтры</p>
+            <p className="font-medium text-[18px] mb-5">{t.transactions.filters.title}</p>
             <div className="flex items-end gap-4">
                 <div>
-                    <span className='font-medium text-[15px] pb-[8px] flex'>Дата</span>
+                    <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.dateLabel}</span>
                     <div className="relative">
                         <select
                             value={filters.period}
                             onChange={handlePeriodChange}
                             className="w-[320px] text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
                         >
-                            <option value="all_time">Всё</option>
-                            <option value="day">День</option>
-                            <option value="week">Неделя</option>
-                            <option value="month">Месяц</option>
-                            <option value="year">Год</option>
+                            <option value="all_time">{t.transactions.filters.dateAll}</option>
+                            <option value="day">{t.transactions.filters.dateDay}</option>
+                            <option value="week">{t.transactions.filters.dateWeek}</option>
+                            <option value="month">{t.transactions.filters.dateMonth}</option>
+                            <option value="year">{t.transactions.filters.dateYear}</option>
                         </select>
                         <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
@@ -69,18 +71,18 @@ function Filter({ onFiltersChange }: FilterProps) {
                     </div>
                 </div>
                 <div>
-                    <span className='font-medium text-[15px] pb-[8px] flex'>Категория</span>
+                    <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.categoryLabel}</span>
                     <div className="relative">
                         <select
                             value={filters.category}
                             onChange={handleCategoryChange}
                             className="w-[320px] text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
                         >
-                            <option value="ALL">Всё</option>
-                            <option value="ESIM">eSIM</option>
-                            <option value="VOUCHER">Цифровые товары</option>
-                            <option value="STEAM">Steam</option>
-                            <option value="TOPUP">Пополнение</option>
+                            <option value="ALL">{t.transactions.filters.categoryAll}</option>
+                            <option value="ESIM">{t.transactions.filters.categoryEsim}</option>
+                            <option value="VOUCHER">{t.transactions.filters.categoryVoucher}</option>
+                            <option value="STEAM">{t.transactions.filters.categorySteam}</option>
+                            <option value="TOPUP">{t.transactions.filters.categoryTopup}</option>
                         </select>
                         <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
@@ -96,7 +98,7 @@ function Filter({ onFiltersChange }: FilterProps) {
                         value={filters.transactionId}
                         onChange={handleTransactionIdChange}
                         onKeyPress={handleKeyPress}
-                        placeholder="Введите ID транзакции"
+                        placeholder={t.transactions.filters.idPlaceholder}
                         className="w-full cursor-pointer outline-0 text-[14px] font-medium"
                     />
                 </div>
@@ -104,13 +106,13 @@ function Filter({ onFiltersChange }: FilterProps) {
                     onClick={onSearch}
                     className="bg-[#2D85EA] text-white text-[15px] font-medium rounded-[8px] px-3 py-[8.75px] w-[120px] cursor-pointer"
                 >
-                    Поиск
+                    {t.transactions.filters.search}
                 </button>
                 <button
                     onClick={onReset}
                     className="text-[15px] font-medium text-[#2D85EA] h-[40px] cursor-pointer"
                 >
-                    Сбросить
+                    {t.transactions.filters.reset}
                 </button>
             </div>
         </div>
