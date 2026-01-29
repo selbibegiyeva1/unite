@@ -6,6 +6,7 @@ import { useUserInfo } from "../hooks/auth/useUserInfo";
 import { usePartnerMainInfo } from "../hooks/auth/usePartnerMainInfo";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import LanguageSwitcher from "./LanguageSwitcher";
 
 function Navbar() {
     const linkBaseClasses = "inline-flex flex-col items-start text-[14px] font-medium outline-0";
@@ -125,12 +126,7 @@ function Navbar() {
                         {formattedBalance}
                     </p>
 
-                    <button className="flex items-center gap-3 cursor-pointer p-1.5">
-                        <span className="text-[14px] font-medium">РУ</span>
-                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
-                        </svg>
-                    </button>
+                    <LanguageSwitcher />
                     <Link to='/help' className="flex items-center gap-3 cursor-pointer p-1.5">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 17H12.01M12 14C12.8906 12.0938 15 12.2344 15 10C15 8.5 14 7 12 7C10.4521 7 9.50325 7.89844 9.15332 9M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

@@ -1,5 +1,6 @@
 import { type FormEvent } from 'react';
 import { useSignIn } from '../../hooks/auth/useSignIn';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 function SignInForm() {
     const {
@@ -32,12 +33,7 @@ function SignInForm() {
                 <p className='text-[24px] leading-8 font-bold'>Unite Shop</p>
             </div>
             <div className='flex justify-center mb-[35.5px]'>
-                <div className='flex items-center gap-3 cursor-pointer'>
-                    <p className='text-[14px] font-medium'>РУ</p>
-                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
-                    </svg>
-                </div>
+                <LanguageSwitcher />
             </div>
             <center>
                 <h2 className='text-[24px] leading-8 mb-3 font-bold'>Личный кабинет</h2>
