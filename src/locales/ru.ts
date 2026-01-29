@@ -86,8 +86,8 @@ export const ru = {
     notFound: 'Товары не найдены',
   },
   services: {
-    title: 'Сервисы',
-    tabPrograms: 'Программы',
+    title: 'Продукты',
+    tabPrograms: 'Сервисы',
     tabGames: 'Игры',
     loadingGroups: 'Загружаем группы продуктов...',
     loadError: 'Не удалось загрузить группы продуктов!',
