@@ -1,7 +1,10 @@
 import { type FormEvent } from 'react';
 import { useSignIn } from '../../hooks/auth/useSignIn';
+import { useTranslation } from '../../hooks/useTranslation';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 function SignInForm() {
+    const { t } = useTranslation();
     const {
         username,
         password,
@@ -32,29 +35,24 @@ function SignInForm() {
                 <p className='text-[24px] leading-8 font-bold'>Unite Shop</p>
             </div>
             <div className='flex justify-center mb-[35.5px]'>
-                <div className='flex items-center gap-3 cursor-pointer'>
-                    <p className='text-[14px] font-medium'>РУ</p>
-                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
-                    </svg>
-                </div>
+                <LanguageSwitcher />
             </div>
             <center>
-                <h2 className='text-[24px] leading-8 mb-3 font-bold'>Личный кабинет</h2>
+                <h2 className='text-[24px] leading-8 mb-3 font-bold'>{t.signIn.title}</h2>
             </center>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <center>
-                    <p className='text-[#00000099] font-medium leading-6 mb-4 max-w-[309px]'>Войдите в личный кабинет чтобы начать работу.</p>
+                    <p className='text-[#00000099] font-medium leading-6 mb-4 max-w-[309px]'>{t.signIn.subtitle}</p>
                 </center>
                 <div className='flex flex-col gap-[8px]'>
-                    <span className='font-medium text-[15px]'>Логин</span>
+                    <span className='font-medium text-[15px]'>{t.signIn.loginLabel}</span>
                     <input
                         type="text"
                         className={`px-4 py-[12.5px] rounded-[8px] border outline-0 transition-colors ${errors.username
                             ? 'border-red-500 focus:border-red-500'
                             : 'border-[#00000026] focus:border-blue-500'
                             }`}
-                        placeholder="Введите логин"
+                        placeholder={t.signIn.loginPlaceholder}
                         value={username}
                         onChange={handleUsernameChange}
                         autoComplete="username"
@@ -65,14 +63,14 @@ function SignInForm() {
                     )}
                 </div>
                 <div className='flex flex-col gap-[8px]'>
-                    <span className='font-medium text-[15px]'>Пароль</span>
+                    <span className='font-medium text-[15px]'>{t.signIn.passwordLabel}</span>
                     <input
                         type="password"
                         className={`px-4 py-[12.5px] rounded-[8px] border outline-0 transition-colors ${errors.password
                             ? 'border-red-500 focus:border-red-500'
                             : 'border-[#00000026] focus:border-blue-500'
                             }`}
-                        placeholder="Введите пароль"
+                        placeholder={t.signIn.passwordPlaceholder}
                         value={password}
                         onChange={handlePasswordChange}
                         autoComplete="current-password"
@@ -87,13 +85,13 @@ function SignInForm() {
                     className="p-[13px] mt-[8px] bg-[#2D85EA] hover:bg-[#2D85EA]/80 text-white rounded-[8px] w-full cursor-pointer disabled:bg-[#2D85EA]/80 disabled:cursor-not-allowed transition-colors"
                     disabled={isLoading}
                 >
-                    {isLoading ? 'Загрузка...' : 'Войти'}
+                    {isLoading ? t.signIn.loading : t.signIn.submitButton}
                 </button>
                 <center>
-                    <p className='text-[#00000099] font-medium leading-6'>Самостоятельная регистрация недоступна. Доступ выдаёт поддержка</p>
+                    <p className='text-[#00000099] font-medium leading-6'>{t.signIn.registrationNote}</p>
                 </center>
                 <center>
-                    <p className='text-[#2D85EA] font-medium leading-6 mt-4'>Поддержка:+993 62 42-31-18</p>
+                    <p className='text-[#2D85EA] font-medium leading-6 mt-4'>{t.signIn.support} {t.signIn.supportPhone}</p>
                 </center>
             </form>
 
@@ -103,11 +101,11 @@ function SignInForm() {
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 3.93552C14.795 3.33671 13.4368 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 11.662 20.9814 11.3283 20.9451 11M21 5L12 14L9 11" stroke="#50A66A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                    <p>Вход выполнен</p>
+                    <p>{t.signIn.successMessage}</p>
                     <button
                         type="button"
                         onClick={closeSuccessAlert}
-                        aria-label="Закрыть уведомление"
+                        aria-label={t.signIn.closeNotification}
                         className='cursor-pointer ml-auto'
                     >
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -127,7 +125,7 @@ function SignInForm() {
                     <button
                         type="button"
                         onClick={clearError}
-                        aria-label="Закрыть уведомление об ошибке"
+                        aria-label={t.signIn.closeErrorNotification}
                         className='cursor-pointer ml-auto'
                     >
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
