@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useTranslation } from "../hooks/useTranslation";
 
 function Help() {
-    document.title = 'Unite Shop - Помощь';
-    
-    const [faqs] = useState([
+    const { t, lang } = useTranslation();
+    document.title = t.help.pageTitle;
+
+    const faqsRu = [
         {
             question: "Как изменить пароль или контактные данные?",
             content: (
@@ -26,7 +28,7 @@ function Help() {
             question: "Есть ли минимальная сумма для вывода?",
             content: (
                 <p className="mt-[14px] text-[#00000099] font-medium">
-                    Минимальной суммы нет. Выплаты производятся раз в месяц в установленную дату, независимо от накопленной суммы
+                    Минимальной суммы нет. Выплаты производятся раз в месяц в установленную дату, независимо от накопленной суммы.
                 </p>
             ),
         },
@@ -85,7 +87,96 @@ function Help() {
                 </div>
             ),
         },
-    ]);
+    ];
+
+    const faqsTm = [
+        {
+            question: "Paroly ýa-da habarlaşmak maglumatlaryny nähili üýtgetmeli?",
+            content: (
+                <p className="mt-[14px] text-[#00000099] font-medium">
+                    Guramaňyzyň administratory ýa-da biziň menejerimiz bilen habarlaşyň — olar maglumatlary täzelärler we/ýa-da parolyň çalşylmagyny
+                    gurarlar.
+                </p>
+            ),
+        },
+        {
+            question: "«Jemi gazanyldy», «Alynan» we «Alynmaga elýeterli» diýen bölümler näme diýmek?",
+            content: (
+                <ul className="mt-[14px] text-[#00000099] font-medium list-disc list-inside flex flex-col gap-[14px]">
+                    <li>Jemi gazanyldy — siziň satışlaryňyz boýunça hasaplanan umumy sylag (keshbek).</li>
+                    <li>Alynan — eýýäm alan (nagt ýa-da hasap/kartaňyza geçirilýän) pullaryňyzyň jemi.</li>
+                    <li>Alynmaga elýeterli — häzirki wagtda alyp bilýän möçberiňiz.</li>
+                </ul>
+            ),
+        },
+        {
+            question: "Pul almak üçin iň az möçber barmy?",
+            content: (
+                <p className="mt-[14px] text-[#00000099] font-medium">
+                    Ýok, iň az möçber kesgitlenmedik. Tölegler ýygy-ýygydan aýda bir gezek bellenen günde geçirilýär, ýygnanan
+                    möçbere garamazdan.
+                </p>
+            ),
+        },
+        {
+            question: "Gazanç baradaky maglumatlar näçe wagtda bir täzeilýär?",
+            content: (
+                <p className="mt-[14px] text-[#00000099] font-medium">
+                    Her gün, ýerli wagta görä 00:00-da täzeilýär. Günüň dowamynda görkezijiler öňünden bellik häsiýetli bolup biler.
+                </p>
+            ),
+        },
+        {
+            question: "Näme üçin «Alynmaga elýeterli» bölümindäki möçber «Jemi gazanyldy» bölüminden az?",
+            content: (
+                <p className="mt-[14px] text-[#00000099] font-medium">
+                    Sebäbi öňki döwürlerde eýýäm alan serişdeleriňiz bar — olar «Alynan» bölüminde görkezilýär we häzirki elýeterli
+                    möçbere goşulmaýar.
+                </p>
+            ),
+        },
+        {
+            question: "API açary işlänok bolsa näme etmeli?",
+            content: (
+                <div>
+                    <p className="mt-[14px] text-[#00000099] font-medium">
+                        Tehniki goldawa ýüz tutuň we meseläni mümkin boldugyça jikme-jik beýan ediň. Aşakdakylary bir wagtda ibermek peýdaly:
+                    </p>
+                    <ul className="mt-[14px] text-[#00000099] font-medium list-disc list-inside">
+                        <li>partner IDňiz/kompaniýanyň ady;</li>
+                        <li>sorgynyň mysaly (usul, sahypa başlyklary, görkezilen maglumatlar) we serweriň jogaby;</li>
+                        <li>screenshotlar/loglar.</li>
+                    </ul>
+                </div>
+            ),
+        },
+        {
+            question: "Goldaw hyzmaty haýsy wagtyň arasynda işleýär?",
+            content: (
+                <p className="mt-[14px] text-[#00000099] font-medium">
+                    Duşenbe–Anna: 09:00–18:00. <br />Şenbe: 09:00–13:00.
+                </p>
+            ),
+        },
+        {
+            question: "Müşderiniň satyn alşy bilen bagly näsazlyk ýüze çyksa näme etmeli?",
+            content: (
+                <div>
+                    <p className="mt-[14px] text-[#00000099] font-medium">
+                        Mümkin boldugyça köp maglumat ýygnaň we goldaw hyzmatyna ýüz tutuň. Hökmany görkezmeli maglumatlar:
+                    </p>
+                    <ul className="mt-[14px] text-[#00000099] font-medium list-disc list-inside">
+                        <li>tranzaksiýanyň ID-si;</li>
+                        <li>operasiýanyň senesi we wagty;</li>
+                        <li>haryt/kategoriýa we möçberi;</li>
+                        <li>müşderiniň näsazlyk baradaky gysgaça beýanlamasy.</li>
+                    </ul>
+                </div>
+            ),
+        },
+    ];
+
+    const faqs = lang === 'tm' ? faqsTm : faqsRu;
 
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -97,16 +188,24 @@ function Help() {
         <div className='px-6 mt-[28px] pb-[100px]'>
             <div className='w-[1680px] m-auto'>
                 <center>
-                    <p className="text-[36px] font-bold">Нужна помощь?</p>
+                    <p className="text-[36px] font-bold">{t.help.heading}</p>
                 </center>
                 <center>
-                    <p className="mt-4 text-[#00000099] font-medium max-w-[317px] leading-6">Проверьте ответы ниже или напишите нам — мы рядом.</p>
+                    <p className="mt-4 text-[#00000099] font-medium max-w-[317px] leading-6">
+                        {t.help.subheading}
+                    </p>
                 </center>
                 <div className="flex items-center gap-3 flex-wrap justify-center pt-[32px]">
-                    <b className="mr-[20px]">Контакты:</b>
-                    <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">Email: esim@unite-venture.com</p>
-                    <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">Telegram: @unite_esim</p>
-                    <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">Поддержка:+99362 42 31 18</p>
+                    <b className="mr-[20px]">{t.help.contactsLabel}</b>
+                    <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">
+                        {t.help.contacts.email}
+                    </p>
+                    <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">
+                        {t.help.contacts.telegram}
+                    </p>
+                    <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">
+                        {t.help.contacts.support}
+                    </p>
                 </div>
                 <div className='w-[672px] m-auto mt-[24px]'>
                     <p className="mb-[30px] font-bold text-[18px]">FAQ</p>

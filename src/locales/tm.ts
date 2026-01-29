@@ -140,6 +140,17 @@ export const tm = {
     toBeCredited: 'Hasaba geçirilmeli',
     totalToDebit: 'Jemi tutuljak',
   },
+  help: {
+    pageTitle: 'Unite Shop - Kömek',
+    heading: 'Kömek gerekmi?',
+    subheading: 'Aşakdaky jogaplary gözden geçiriň ýa-da bize ýazanyňyzda — biz ýanyňyzda.',
+    contactsLabel: 'Habarlaşmak üçin:',
+    contacts: {
+      email: 'Email: esim@unite-venture.com',
+      telegram: 'Telegram: @unite_esim',
+      support: 'Goldaw:+99362 42 31 18',
+    },
+  },
   esim: {
     category: {
       pageTitle: 'Unite Shop - eSIM',

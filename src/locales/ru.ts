@@ -139,6 +139,17 @@ export const ru = {
     toBeCredited: 'К зачислению',
     totalToDebit: 'Итого к списанию',
   },
+  help: {
+    pageTitle: 'Unite Shop - Помощь',
+    heading: 'Нужна помощь?',
+    subheading: 'Проверьте ответы ниже или напишите нам — мы рядом.',
+    contactsLabel: 'Контакты:',
+    contacts: {
+      email: 'Email: esim@unite-venture.com',
+      telegram: 'Telegram: @unite_esim',
+      support: 'Поддержка:+99362 42 31 18',
+    },
+  },
   esim: {
     category: {
       pageTitle: 'Unite Shop - eSIM',
