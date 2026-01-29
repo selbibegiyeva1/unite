@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useProductSearch } from "../../hooks/operator/product/useProductSearch";
+import { useProductSearch } from "../../../hooks/operator/product/useProductSearch";
+import { useTranslation } from "../../../hooks/useTranslation";
 
 function Search() {
     const {
@@ -15,10 +16,11 @@ function Search() {
         handleInputFocus,
         handleProductSelect,
     } = useProductSearch();
+    const { t } = useTranslation();
 
     return (
-        <div>
-            <p className="font-medium text-[18px] mb-5">Поиск по товарам</p>
+        <div className="px-5 py-[32px] border border-[#00000026] rounded-[16px]">
+            <p className="font-medium text-[18px] mb-5">{t.search.title}</p>
             <div className="flex items-center gap-2">
                 <div ref={searchRef} className="relative w-full">
                     <div className="flex items-center gap-1.5 w-full border-[1.5px] border-[#00000026] rounded-[8px] px-4 h-[45px] focus-within:border-[#2D85EA] transition-colors">
@@ -28,7 +30,7 @@ function Search() {
                         <input
                             ref={inputRef}
                             type="text"
-                            placeholder="Поиск по товарам"
+                            placeholder={t.search.placeholder}
                             value={searchQuery}
                             onChange={handleInputChange}
                             onFocus={handleInputFocus}
@@ -62,7 +64,7 @@ function Search() {
                                 ))
                             ) : (
                                 <div className="px-4 py-3 text-[14px] text-[#00000099]">
-                                    Товары не найдены
+                                    {t.search.notFound}
                                 </div>
                             )}
                         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useEsimLocations } from '../../../hooks/operator/esim/useEsimLocations';
 import type { EsimTab } from '../../../hooks/operator/esim/useEsimLocations';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface CountryProps {
     activeTab: EsimTab;
@@ -17,6 +18,7 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
 
     const [search, setSearch] = useState('');
     const { data, isLoading, isError } = useEsimLocations(activeTab);
+    const { t } = useTranslation();
     const [selectedCodeForApi, setSelectedCodeForApi] = useState<string | null>(null);
     const searchQuery = search.trim().toLowerCase();
 
@@ -75,7 +77,7 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
 
     return (
         <div className="p-6 border border-[#00000026] rounded-[16px]">
-            <p className="font-bold text-[24px]">Страны</p>
+            <p className="font-bold text-[24px]">{t.esim.country.title}</p>
             <div className="flex items-center gap-2.5 my-5">
                 <button
                     type="button"
@@ -85,7 +87,7 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
                     }}
                     className={`${baseBtn} ${activeTab === 'countries' ? activeClasses : inactiveClasses}`}
                 >
-                    Страны
+                    {t.esim.country.tabCountries}
                 </button>
                 <button
                     type="button"
@@ -95,7 +97,7 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
                     }}
                     className={`${baseBtn} ${activeTab === 'regions' ? activeClasses : inactiveClasses}`}
                 >
-                    Регионы
+                    {t.esim.country.tabRegions}
                 </button>
             </div>
 
@@ -105,7 +107,11 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
                 </svg>
                 <input
                     type="text"
-                    placeholder={activeTab === 'countries' ? 'Название страны' : 'Название региона'}
+                    placeholder={
+                        activeTab === 'countries'
+                            ? t.esim.country.searchCountryPlaceholder
+                            : t.esim.country.searchRegionPlaceholder
+                    }
                     className="outline-0 font-medium py-[15px] w-full"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -114,15 +120,15 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
 
             <div className='flex flex-col h-[264.25px] overflow-auto transactions-table-scroll'>
                 {isLoading && (
-                    <p className="text-sm text-[#00000099]">Загрузка...</p>
+                    <p className="text-sm text-[#00000099]">{t.esim.country.loading}</p>
                 )}
 
                 {isError && (
-                    <p className="text-sm text-red-500">Не удалось загрузить данные. Попробуйте позже.</p>
+                    <p className="text-sm text-red-500">{t.esim.country.loadError}</p>
                 )}
 
                 {!isLoading && !isError && data && filteredData.length === 0 && (
-                    <p className="text-sm text-[#00000099]">Ничего не найдено!</p>
+                    <p className="text-sm text-[#00000099]">{t.esim.country.empty}</p>
                 )}
 
                 {!isLoading && !isError && filteredData.map((item) => {
@@ -161,7 +167,7 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
                                     <p>{name}</p>
                                 </div>
                                 <p className='text-[#00000099] text-[14px]'>
-                                    {item.tariff_count} тарифов
+                                    {item.tariff_count} {t.esim.country.tariffsSuffix}
                                 </p>
                             </div>
                         );

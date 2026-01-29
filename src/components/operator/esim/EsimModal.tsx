@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import type { EsimTariff } from '../../../services/authService';
 import type { EsimTab } from '../../../hooks/operator/esim/useEsimLocations';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface EsimModalProps {
     isOpen: boolean;
@@ -37,6 +38,7 @@ function formatDays(days: number): string {
 }
 
 function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, isCheckboxChecked, onCheckboxChange, validationErrors, formRefs, checkboxRef, onPayment, isPaymentLoading, paymentError }: EsimModalProps) {
+    const { t } = useTranslation();
     const handleInputChange = (name: string, value: string) => {
         onFormChange({
             ...formValues,
@@ -76,32 +78,32 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
                 onClick={(e) => e.stopPropagation()}
             >
                 <div>
-                    <p className="text-[24px] font-medium mb-[24px]">Покупка тарифа</p>
+                    <p className="text-[24px] font-medium mb-[24px]">{t.esim.modal.title}</p>
                     <div className="px-4 pt-[8px] pb-[24px] bg-[#F5F5F9] rounded-2xl">
                         {selectedTariff && (
                             <>
                                 {selectedTariff.activeTab === 'regions' && selectedTariff.coverageCount !== null && (
                                     <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
-                                        <p>Покрытие</p>
-                                        <p>{selectedTariff.coverageCount} стран</p>
+                                        <p>{t.esim.modal.coverage}</p>
+                                        <p>{selectedTariff.coverageCount} {t.esim.modal.coverageSuffix}</p>
                                     </div>
                                 )}
                                 {selectedTariff.activeTab === 'countries' && (
                                     <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
-                                        <p>Страна</p>
+                                        <p>{t.esim.modal.countryLabel}</p>
                                         <p>{selectedTariff.selectedName || selectedTariff.tariff.operator}</p>
                                     </div>
                                 )}
                                 <div className="py-[18px] border-b flex items-center justify-between border-[#00000026] font-medium">
-                                    <p>Трафик</p>
+                                    <p>{t.esim.modal.traffic}</p>
                                     <p>{formatTraffic(selectedTariff.tariff.traffic)}</p>
                                 </div>
                                 <div className="py-[18px] flex items-center justify-between font-medium">
-                                    <p>Срок действия</p>
+                                    <p>{t.esim.modal.validity}</p>
                                     <p className="text-[#00000099]">{formatDays(selectedTariff.tariff.days)}</p>
                                 </div>
                                 <div className="mt-8 flex items-center justify-between font-bold text-[18px]">
-                                    <p>Сумма</p>
+                                    <p>{t.esim.modal.amount}</p>
                                     <p>{selectedTariff.tariff.price_tmt} ТМТ</p>
                                 </div>
                             </>
@@ -111,48 +113,50 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 16H12.01M12 8V12M9 4H15L20 9V15L15 20H9L4 15V9L9 4Z" stroke="#F50100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        <p>Товар возврату не подлежит</p>
+                        <p>{t.esim.modal.nonRefundableNote}</p>
                     </div>
-                    <p className="text-[14px] font-medium w-[440px]">После оплаты вы получите письмо со ссылкой QR/Link для установки eSIM</p>
+                    <p className="text-[14px] font-medium w-[440px]">
+                        {t.esim.modal.afterPaymentNote}
+                    </p>
                 </div>
                 <div className="px-6 pt-6 pb-9.5 border border-[#00000026] rounded-3xl">
                     <div className="flex items-center justify-between mb-[24px]">
-                        <p className="text-[24px] font-medium">Данные клиента</p>
+                        <p className="text-[24px] font-medium">{t.esim.modal.clientDataTitle}</p>
                         <svg onClick={onClose} className="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 6L18 18M18 6L6 18" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
                     <div className="flex flex-col gap-5">
                         <div>
-                            <span className="text-[15px] font-medium mb-2 block">Электронный адрес</span>
+                            <span className="text-[15px] font-medium mb-2 block">{t.esim.modal.emailLabel}</span>
                             <input
                                 ref={(el) => { formRefs.current['email'] = el; }}
                                 type="email"
                                 value={formValues['email'] || ''}
                                 onChange={(e) => handleInputChange('email', e.target.value)}
                                 className={`w-full font-medium outline-0 rounded-[10px] px-4 py-[12.5px] border border-[#00000026] ${validationErrors.formFields['email'] ? 'border-red-500' : ''}`}
-                                placeholder="Введите электронный адрес"
+                                placeholder={t.esim.modal.emailPlaceholder}
                             />
                         </div>
                         <div>
-                            <span className="text-[15px] font-medium mb-2 block">Номер телефона</span>
+                            <span className="text-[15px] font-medium mb-2 block">{t.esim.modal.phoneLabel}</span>
                             <input
                                 ref={(el) => { formRefs.current['phone'] = el; }}
                                 type="tel"
                                 value={formValues['phone'] || ''}
                                 onChange={(e) => handleInputChange('phone', e.target.value)}
                                 className={`w-full font-medium outline-0 rounded-[10px] px-4 py-[12.5px] border border-[#00000026] ${validationErrors.formFields['phone'] ? 'border-red-500' : ''}`}
-                                placeholder="Введите номер телефона клиента"
+                                placeholder={t.esim.modal.phonePlaceholder}
                             />
                         </div>
                     </div>
                     <div className="mt-6 px-4 pt-4 pb-6 bg-[#F5F5F9] rounded-2xl">
                         <div className="flex items-center justify-between font-medium py-4.5 border-b border-[#00000026]">
-                            <p>Стоимость тарифа</p>
+                            <p>{t.esim.modal.tariffCost}</p>
                             <p>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
                         </div>
                         <div className="flex mt-4 items-center justify-between font-bold text-[18px]">
-                            <p>Итого</p>
+                            <p>{t.esim.modal.total}</p>
                             <p>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
                         </div>
                     </div>
@@ -186,7 +190,7 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
                                 )}
                             </svg>
                         </div>
-                        <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
+                        <p className="text-[14px] font-medium">{t.esim.modal.checkboxText}</p>
                     </div>
 
                     {paymentError && (
@@ -200,7 +204,7 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
                         disabled={isPaymentLoading}
                         className={`mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer ${isPaymentLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        {isPaymentLoading ? 'Обработка...' : 'Оплатить'}
+                        {isPaymentLoading ? t.esim.modal.processing : t.esim.modal.pay}
                     </button>
                 </div>
             </div>

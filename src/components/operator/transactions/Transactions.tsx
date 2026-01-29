@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTransactions } from '../../../hooks/operator/transactions/useTransactions';
+import { useTranslation } from '../../../hooks/useTranslation';
 import Copied from './Copied';
 
 interface Transaction {
@@ -26,6 +27,7 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [showCopied, setShowCopied] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const { t } = useTranslation();
     const { data, isLoading, error, refetch } = useTransactions({
         page: currentPage,
         perPage: 8,
@@ -147,23 +149,23 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
     };
 
     const getStatusText = (status: Transaction['status']) => {
-        if (status === 'success') return 'Успешно';
-        if (status === 'pending') return 'В обработке';
-        return 'Ошибка';
+        if (status === 'success') return t.transactions.statusSuccess;
+        if (status === 'pending') return t.transactions.statusPending;
+        return t.transactions.statusFailed;
     };
 
     return (
         <div>
             <div className="p-5 border border-[#00000026] rounded-[16px] h-[665px] flex flex-col">
                 <div className="flex items-center justify-between">
-                    <p className="font-medium text-[18px]">История транзакции</p>
+                    <p className="font-medium text-[18px]">{t.transactions.title}</p>
 
                     {/* Refresh */}
                     <button
                         onClick={handleRefresh}
                         disabled={isRefreshing || isLoading}
                         className="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-300 hover:scale-105"
-                        title="Обновить"
+                        title={t.transactions.refreshTitle}
                     >
                         <svg
                             width="40"
@@ -183,15 +185,15 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
                     <table className="w-full">
                         <thead>
                             <tr className="grid grid-cols-9 gap-[30px] text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
-                                <td className="text-left">Дата</td>
-                                <td>Почта</td>
-                                <td>ID Транзакции</td>
-                                <td>Оператор</td>
-                                <td>Категория</td>
-                                <td>Описание</td>
-                                <td>Сумма</td>
-                                <td>Статус</td>
-                                <td className="text-right">Ссылка</td>
+                                <td className="text-left">{t.transactions.date}</td>
+                                <td>{t.transactions.email}</td>
+                                <td>{t.transactions.transactionId}</td>
+                                <td>{t.transactions.operator}</td>
+                                <td>{t.transactions.category}</td>
+                                <td>{t.transactions.description}</td>
+                                <td>{t.transactions.amount}</td>
+                                <td>{t.transactions.status}</td>
+                                <td className="text-right">{t.transactions.link}</td>
                             </tr>
                         </thead>
                     </table>
@@ -201,15 +203,15 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
                 <div className="flex-1 overflow-y-auto transactions-table-scroll">
                     {isLoading ? (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-[#00000099]">Загрузка...</p>
+                            <p className="text-[#00000099]">{t.transactions.loading}</p>
                         </div>
                     ) : error ? (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-[#ED2428]">Ошибка загрузки данных</p>
+                            <p className="text-[#ED2428]">{t.transactions.loadError}</p>
                         </div>
                     ) : transactions.length === 0 ? (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-[#00000099]">Нет транзакций</p>
+                            <p className="text-[#00000099]">{t.transactions.empty}</p>
                         </div>
                     ) : (
                         <table className="w-full">
@@ -221,7 +223,7 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
                                         <td
                                             onClick={() => handleCopyTransactionId(transaction.transactionId)}
                                             className="text-[#2D85EA] cursor-pointer truncate min-w-0 hover:underline"
-                                            title="Нажмите, чтобы скопировать"
+                                            title={t.transactions.copyHint}
                                         >
                                             {transaction.transactionId}
                                         </td>
@@ -234,7 +236,7 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
                                             {getStatusText(transaction.status)}
                                         </td>
                                         <td className="text-right text-[#2D85EA]">
-                                            <a href={transaction.link} target="_blank" rel="noopener noreferrer">QR/Инструкция</a>
+                                            <a href={transaction.link} target="_blank" rel="noopener noreferrer">{t.transactions.qrInstruction}</a>
                                         </td>
                                     </tr>
                                 ))}

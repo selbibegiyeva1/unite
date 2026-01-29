@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLogout } from '../hooks/auth/useLogout';
 import { useUserInfo } from '../hooks/auth/useUserInfo';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface SidebarProps {
     click: () => void;
@@ -8,6 +9,7 @@ interface SidebarProps {
 }
 
 function Sidebar({ click, isSidebarOpen }: SidebarProps) {
+    const { t } = useTranslation();
     const { handleLogout, isLoading } = useLogout();
     const { data, isLoading: isUserLoading, error: userError } = useUserInfo();
 
@@ -44,7 +46,7 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center justify-between">
-                    <p className="font-bold text-[18px]">Мой профиль</p>
+                    <p className="font-bold text-[18px]">{t.sidebar.title}</p>
                     <svg onClick={click} className="cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 6L18 18M18 6L6 18" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
@@ -52,37 +54,37 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
 
                 <div className="my-5 flex flex-col gap-[14px]">
                     {isUserLoading && (
-                        <span className="text-[14px] text-[#00000099]">Загружаем данные профиля...</span>
+                        <span className="text-[14px] text-[#00000099]">{t.sidebar.loading}</span>
                     )}
 
                     {userError && !isUserLoading && (
                         <span className="text-[14px] text-red-500">
-                            Не удалось загрузить профиль. Попробуйте позже.
+                            {t.sidebar.loadError}
                         </span>
                     )}
 
                     {user && (
                         <>
                             <div className="flex flex-col gap-[8px]">
-                                <span className="text-[15px] font-medium">Email</span>
+                                <span className="text-[15px] font-medium">{t.sidebar.emailLabel}</span>
                                 <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
                                     {user.email}
                                 </span>
                             </div>
                             <div className="flex flex-col gap-[8px]">
-                                <span className="text-[15px] font-medium">Никнейм</span>
+                                <span className="text-[15px] font-medium">{t.sidebar.nicknameLabel}</span>
                                 <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
                                     {user.username}
                                 </span>
                             </div>
                             <div className="flex flex-col gap-[8px]">
-                                <span className="text-[15px] font-medium">Полное имя</span>
+                                <span className="text-[15px] font-medium">{t.sidebar.fullNameLabel}</span>
                                 <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
                                     {user.full_name}
                                 </span>
                             </div>
                             <div className="flex flex-col gap-[8px]">
-                                <span className="text-[15px] font-medium">Роль</span>
+                                <span className="text-[15px] font-medium">{t.sidebar.roleLabel}</span>
                                 <span className="px-4 py-[12.5px] rounded-[8px] border border-[#00000026]">
                                     {user.role}
                                 </span>
@@ -96,7 +98,7 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
                     onClick={handleLogout}
                     disabled={isLoading}
                 >
-                    {isLoading ? 'Выходим...' : 'Выйти'}
+                    {isLoading ? t.sidebar.loggingOut : t.sidebar.logout}
                 </button>
             </div>
         </div>

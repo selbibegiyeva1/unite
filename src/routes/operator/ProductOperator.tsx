@@ -11,11 +11,13 @@ import Form from '../../components/operator/product/Form';
 import ProductFaq from '../../components/operator/product/ProductFaq';
 import Total from '../../components/operator/product/Total';
 import Modal from '../../components/operator/product/Modal';
+import { useTranslation } from '../../hooks/useTranslation';
 
 function ProductOperator() {
     const [searchParams] = useSearchParams();
     const groupName = searchParams.get('group');
     const { data: productForm, isLoading, error } = useProductGroupForm(groupName);
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState<'popolnenie' | 'voucher'>('popolnenie');
     const [selectedRegion, setSelectedRegion] = useState<string>('');
     const [formValues, setFormValues] = useState<Record<string, string>>({});
@@ -115,20 +117,20 @@ function ProductOperator() {
     // Update document title with loading state
     useEffect(() => {
         if (isLoading) {
-            document.title = 'Загрузка...';
+            document.title = t.productOperator.loadingTitle;
         } else if (productForm?.group) {
-            document.title = 'Unite Shop - ' + productForm.group;
+            document.title = `Unite Shop - ${productForm.group}`;
         } else {
             document.title = 'Unite Shop';
         }
-    }, [isLoading, productForm?.group]);
+    }, [isLoading, productForm?.group, t.productOperator.loadingTitle]);
 
     return (
         <div className='mt-[28px] pb-[100px] w-[1680px] m-auto'>
             {isLoading && (
                 <div className='flex items-start gap-8'>
                     <div className='flex flex-col gap-4 w-[1158px]'>
-                        <p className="text-[14px] text-[#00000099]">Загружаем информацию о продукте...</p>
+                        <p className="text-[14px] text-[#00000099]">{t.productOperator.loadingProduct}</p>
                     </div>
                 </div>
             )}
@@ -136,7 +138,7 @@ function ProductOperator() {
                 <div className='flex items-start gap-8'>
                     <div className='flex flex-col gap-4 w-[1158px]'>
                         <p className="text-red-500 text-[14px]">
-                            Не удалось загрузить информацию о продукте.
+                            {t.productOperator.loadError}
                         </p>
                     </div>
                 </div>
@@ -206,7 +208,7 @@ function ProductOperator() {
             {!groupName && !isLoading && (
                 <div className='flex items-start gap-8'>
                     <div className='flex flex-col gap-4 w-[1158px]'>
-                        <p className="text-[14px] text-[#00000099]">Выберите продукт для просмотра деталей.</p>
+                        <p className="text-[14px] text-[#00000099]">{t.productOperator.noGroupSelected}</p>
                     </div>
                 </div>
             )}

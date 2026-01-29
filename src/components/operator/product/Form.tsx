@@ -1,6 +1,7 @@
 import { type ProductGroupForm } from '../../../services/authService';
 import { useSteamRate } from '../../../hooks/operator/product/useSteamRate';
 import { useSteamInfo } from '../../../hooks/operator/product/useSteamInfo';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface FormProps {
     productForm: ProductGroupForm;
@@ -12,6 +13,7 @@ interface FormProps {
 }
 
 function Form({ productForm, activeTab, formValues, onFormChange, validationErrors, formRefs }: FormProps) {
+    const { t } = useTranslation();
     const handleInputChange = (name: string, value: string) => {
         onFormChange({
             ...formValues,
@@ -42,8 +44,8 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
     // Validate amount against min/max
     const amountValue = parseFloat(formValues.amount || '0');
     const amountRangeError = isSteamPopolnenie && steamInfo && formValues.amount
-        ? (amountValue < steamInfo.steam_min_amount_tmt || amountValue > steamInfo.steam_max_amount_tmt)
-            ? `Сумма должна быть от ${steamInfo.steam_min_amount_tmt} до ${steamInfo.steam_max_amount_tmt} ТМТ`
+            ? (amountValue < steamInfo.steam_min_amount_tmt || amountValue > steamInfo.steam_max_amount_tmt)
+            ? t.productForm.steamAmountRange(steamInfo.steam_min_amount_tmt, steamInfo.steam_max_amount_tmt)
             : null
         : null;
 
@@ -102,7 +104,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                             onChange={(e) => handleInputChange(field.name, e.target.value)}
                             className={`${inputClasses} appearance-none cursor-pointer`}
                         >
-                            <option value="">Выберите {field.label}</option>
+                            <option value="">{t.productForm.selectPrefix} {field.label}</option>
                             {options.map((option, index) => (
                                 <option key={index} value={option.value}>
                                     {option.name}
@@ -139,22 +141,22 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
 
         return (
             <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
-                <p className="text-[24px] font-bold">Пополнение аккаунта</p>
+                <p className="text-[24px] font-bold">{t.productForm.topupAccountTitle}</p>
 
                 <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-8">
                     <div>
                         <div className='pb-4 flex items-center gap-2.5'>
-                            <span className="text-[14px] font-medium flex">Где искать</span>
+                            <span className="text-[14px] font-medium flex">{t.productForm.steamWhereToFind}</span>
                             <div className='relative group'>
                                 {/* Hover here */}
                                 <img src="/product/help.png" className='w-[28px] cursor-pointer' alt="help" />
                                 {/* Display this on hover */}
                                 <div className='absolute shadow-2xl border text-black border-[#00000026] rounded-[32px] text-left top-[50px] z-10 left-[-50px] text-[14px] w-[600px] bg-white p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>
-                                    <p className='font-medium text-[32px]'>Как найти свой логин в Steam?</p>
+                                    <p className='font-medium text-[32px]'>{t.productForm.steamLoginTitle}</p>
 
                                     <ul className='mt-4 mb-6 list-disc text-[14px] list-inside flex flex-col gap-2 marker:text-[#2D85EA]'>
-                                        <li>Откройте клиент Steam.Нажмите на имя пользователя в правом углу главной страницы</li>
-                                        <li>В выпадающем меню выберите пункт “Об аккаунте”</li>
+                                        <li>{t.productForm.steamLoginStep1}</li>
+                                        <li>{t.productForm.steamLoginStep2}</li>
                                     </ul>
 
                                     <img src="/product/steam.png" alt="steam" className='w-full' />
@@ -166,7 +168,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                             type="text"
                             value={formValues.login || ''}
                             onChange={(e) => handleInputChange('login', e.target.value)}
-                            placeholder="Введите логин в Steam"
+                            placeholder={t.productForm.steamLoginPlaceholder}
                             className={`${inputClasses} ${loginError ? 'border-2 border-red-500' : ''}`}
                         />
                     </div>
@@ -177,12 +179,12 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                             type="email"
                             value={formValues.email || ''}
                             onChange={(e) => handleInputChange('email', e.target.value)}
-                            placeholder="Введите свою почту"
+                            placeholder={t.productForm.steamEmailPlaceholder}
                             className={`${inputClasses} ${emailError ? 'border-2 border-red-500' : ''}`}
                         />
                     </div>
                     <div>
-                        <span className="text-[14px] font-medium pb-4 flex">Сумма пополнения в ТМТ</span>
+                        <span className="text-[14px] font-medium pb-4 flex">{t.productForm.steamAmountLabel}</span>
                         <div
                             className={`${inputClasses} ${amountError ? 'border-2 border-red-500' : ''}`}
                             style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "53px" }}
@@ -192,7 +194,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                                 type="number"
                                 value={formValues.amount || ''}
                                 onChange={(e) => handleInputChange('amount', e.target.value)}
-                                placeholder={steamInfo ? `от ${steamInfo.steam_min_amount_tmt} ТМТ` : "от 350 ТМТ"}
+                                placeholder={steamInfo ? t.productForm.steamAmountPlaceholder(steamInfo.steam_min_amount_tmt) : t.productForm.steamAmountPlaceholder(350)}
                                 className='w-full text-[14px] font-medium outline-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
                             />
                             <div className='flex items-center gap-[4px]'>
@@ -219,7 +221,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                         )}
                     </div>
                     <div>
-                        <span className="text-[14px] font-medium pb-4 flex">К зачислению в Steam</span>
+                        <span className="text-[14px] font-medium pb-4 flex">{t.productForm.steamCreditedLabel}</span>
                         <input
                             type="text"
                             value={formValues.credited ? `~${formValues.credited} $` : ''}
@@ -242,7 +244,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
 
     return (
         <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
-            <p className="text-[24px] font-bold">Пополнение аккаунта</p>
+            <p className="text-[24px] font-bold">{t.productForm.topupAccountTitle}</p>
 
             <div className={`mt-4 grid ${gridCols} gap-x-4 gap-y-8`}>
                 {formFields.map((field) => (

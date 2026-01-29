@@ -1,5 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface NominalsProps {
     productForm: ProductGroupForm;
@@ -14,6 +15,7 @@ function Nominals({ productForm, selectedRegion, activeTab, selectedNominal, onN
     const baseBtn = 'font-bold px-[15px] py-[10px] rounded-[10px] cursor-pointer transition-colors';
     const activeClasses = 'bg-[#2D85EA] text-white border-2 border-[#2D85EA]';
     const inactiveClasses = 'bg-white border-2 border-[#00000026] text-black';
+    const { t } = useTranslation();
 
     // Get nominals filtered by selected region
     const nominals = useMemo(() => {
@@ -91,7 +93,7 @@ function Nominals({ productForm, selectedRegion, activeTab, selectedNominal, onN
 
     return (
         <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
-            <p className="text-[24px] font-bold">Выберите номинал</p>
+            <p className="text-[24px] font-bold">{t.productNominals.title}</p>
 
             <div className="mt-4 flex flex-wrap gap-3.5">
                 {nominals.map((nominal) => (

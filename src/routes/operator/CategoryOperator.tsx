@@ -1,13 +1,15 @@
-import Search from "../../components/operator/Search";
-import Services from "../../components/operator/Services";
+import Search from "../../components/operator/products/Search";
+import Services from "../../components/operator/products/Services";
+import { useTranslation } from "../../hooks/useTranslation";
 
 function CategoryOperator() {
-    document.title = 'Unite Shop - Продукты';
+    const { t } = useTranslation();
+    document.title = t.categoryOperator.pageTitle;
     return (
         <div className='px-6 mt-[28px]'>
             <div className='w-[1680px] m-auto'>
-                <p className='text-[36px] font-bold'>Цифровые товары</p>
-                <div className="mt-5 px-5 py-[32px] border border-[#00000026] rounded-[16px]">
+                <p className='text-[36px] font-bold'>{t.categoryOperator.heading}</p>
+                <div className="mt-5">
                     <Search />
                 </div>
                 <div className="mt-[24px]">

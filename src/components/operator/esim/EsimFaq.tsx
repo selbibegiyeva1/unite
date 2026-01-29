@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 function EsimFaq() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const { lang } = useTranslation();
 
     const toggleFaq = (index: number) => {
         setOpenIndex((prev) => (prev === index ? null : index));
     };
 
-    const faqs = [
+    const faqsRu = [
         {
             question: 'Что такое eSIM?',
             content: (
@@ -109,6 +111,114 @@ function EsimFaq() {
             ),
         },
     ];
+
+    const faqsTm = [
+        {
+            question: 'eSIM näme?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    eSIM — daşary ýurt operatorynyň profiline gatnaşmak üçin ulanylýan sanly QR‑kod bolup,
+                    diňe ýurdumyzyň daşynda işe girizilýär.
+                    <br /><br />
+                    Bu haryt diňe <b>safari wagtynda mobil internet ulanyşyny üpjün edýär, ses jaňlaryny / SMS‑leri goşmaýar
+                        we ýerli nomer bermeýär</b> hem-de Türkmenistanyň içinde işlemýär.
+                </p>
+            ),
+        },
+        {
+            question: 'eSIM haýsy enjamlar bilen işleýär?',
+            content: (
+                <div className="text-[#00000099] font-medium">
+                    <p>
+                        eSIM häzirki zaman iPhone, iPad we Android enjamlarynda goldanylýar.
+                    </p>
+                    <br />
+                    <p>
+                        Enjamyňyz eSIM goldaýandygyny barlamak üçin jaň ediş ýagdaýynda
+                        <span className="font-bold"> *#06# </span> giriziň.
+                        Eger sanlaryň arasynda <span className="font-bold">EID</span> görseňiz — eSIM gurup bolýar.
+                    </p>
+                    <br />
+                    <p className="font-bold">
+                        Möhüm: satyn almazdan öň enjamyňyzyň eSIM bilen işleýändigine göz ýetirmegiň
+                        jogapkärçiligi müşderiniň we satuw nokadynyň üzerine alynýar.
+                    </p>
+                </div>
+            ),
+        },
+        {
+            question: 'Satyn alan eSIM üçin puluňy yzyna alyp bolýarmy?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Bagyşlaň, mümkin däl. eSIM yzyna gaýtarylmaýan haryt.
+                </p>
+            ),
+        },
+        {
+            question: 'Tölegden soň eSIM‑i nähili alaryn?',
+            content: (
+                <div className="text-[#00000099] font-medium">
+                    <p>
+                        Üstünlikli tölegden soň eSIM gurmak üçin QR‑kod we aktiwasiýa görkezmesi
+                        forma doldurylanda görkezilen e‑mail salgysyna 3–15 minut dowamynda iberiler.
+                    </p>
+                    <br />
+                    <p className="font-bold">
+                        Möhüm: e‑mail salgysyny dogry girizmek üçin müşderi hem, satuw nokady hem jogapkär.
+                        <br />
+                        Eger adresde ýalňyşlyk goýberilse, ulgam habary nädogry poçta iberer
+                        we bu tehniki näsazlyk hasap edilmeýär.
+                    </p>
+                </div>
+            ),
+        },
+        {
+            question: 'QR‑kodly hat gelmedik bolsa näme etmeli?',
+            content: (
+                <div className="text-[#00000099] font-medium">
+                    <p>
+                        Ilki bilen poçtanyň «Spam», «Promosiýalar» we «Habarlar» bukjalaryny barlaň. <br />
+                        <br />Poçta salgysynyň ýalňyşsyz girizilendigine göz ýetiriň.
+                    </p>
+                    <br />
+                    <b>
+                        Eger poçta salgysyny girizmekde ýalňyşlyk goýberilen bolsa, satuw nokady
+                        woucher‑i müşderä eltip, kody elden berip biler. <br />Tranzaksiýalar taryhynda
+                        satyjy üçin QR / görkezme almak boýunça aýratyn
+                        <span className="text-[#2D85EA]"> «QR/Görkezme»</span> baglanyşygy elýeterli bolýar.
+                    </b>
+                </div>
+            ),
+        },
+        {
+            question: 'eSIM‑iň hereket möhleti haçandan başlanýar?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    eSIM görkezilen ýurtda goldanylýan operatoryň toruna birinji gezek
+                    birikenden soň işe başlaýar.
+                </p>
+            ),
+        },
+        {
+            question: 'Ulgam kod eýýäm aktiw diýse näme etmeli?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Hatda görkezilen goldaw hyzmatyna ýüz tutuň. Kody üpjünçiden barlarys
+                    we problema tassyk bolnanda täze kod bilen çalyşarys.
+                </p>
+            ),
+        },
+        {
+            question: 'Men eSIM‑i Türkmenistanyň içinde ulanyp bilerinmi?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Ýok, mümkin däl. eSIM diňe onuň üçin niýetlenen ýurduň we operatoryň torunda işleýär.
+                </p>
+            ),
+        },
+    ];
+
+    const faqs = lang === 'tm' ? faqsTm : faqsRu;
 
     if (faqs.length === 0) {
         return null;

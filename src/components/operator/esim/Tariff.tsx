@@ -1,6 +1,7 @@
 import type { EsimTab } from '../../../hooks/operator/esim/useEsimLocations';
 import { useEsimTariffs } from '../../../hooks/operator/esim/useEsimLocations';
 import type { EsimTariff, EsimTariffsResponse } from '../../../services/authService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface TariffProps {
     activeTab: EsimTab;
@@ -19,18 +20,19 @@ function formatTraffic(traffic: number): string {
     return `${traffic} MB`;
 }
 
-function formatDays(days: number): string {
+function formatDays(days: number, labels: { one: string; few: string; many: string }): string {
     if (days === 1) {
-        return '1 день';
+        return `1 ${labels.one}`;
     }
     if (days >= 2 && days <= 4) {
-        return `${days} дня`;
+        return `${days} ${labels.few}`;
     }
-    return `${days} дней`;
+    return `${days} ${labels.many}`;
 }
 
 function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, onOpenRegionModal, onBuyTariff }: TariffProps) {
     const { data, isLoading, isError } = useEsimTariffs(activeTab, selectedCodeForApi);
+    const { t } = useTranslation();
 
     // The backend might return either a single object or an array of objects.
     let tariffs: EsimTariff[] = [];
@@ -62,22 +64,22 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
 
     return (
         <div>
-            <p className="font-bold text-[32px]">Тарифы</p>
+            <p className="font-bold text-[32px]">{t.esim.tariff.title}</p>
 
             {selectedCodeForApi && isLoading && (
-                <p className="mt-6.5 text-sm text-[#00000099]">Загрузка тарифов...</p>
+                <p className="mt-6.5 text-sm text-[#00000099]">{t.esim.tariff.loading}</p>
             )}
 
             {selectedCodeForApi && isError && (
                 <p className="mt-6.5 text-sm text-red-500">
-                    Не удалось загрузить тарифы. Попробуйте позже.
+                    {t.esim.tariff.loadError}
                 </p>
             )}
 
             <div className="mt-6.5 grid grid-cols-4 gap-8">
                 {selectedCodeForApi && !isLoading && !isError && tariffs.length === 0 && (
                     <p className="text-sm text-[#00000099]">
-                        Для выбранного направления тарифы отсутствуют.
+                        {t.esim.tariff.empty}
                     </p>
                 )}
 
@@ -100,9 +102,9 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                                     }
                                 }}
                             >
-                                <p>Покрытие</p>
+                                <p>{t.esim.tariff.coverage}</p>
                                 <div className="flex items-center gap-2 cursor-pointer">
-                                    <p>{coverageCount} стран</p>
+                                    <p>{coverageCount} {t.esim.tariff.coverageSuffix}</p>
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.9999 11.9999H20.9999M20.9999 11.9999L17 8M20.9999 11.9999L17 15.9999M9 12H9.01M6 12H6.01M3 12H3.01" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
@@ -111,18 +113,18 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                         )}
                         {activeTab === 'countries' && (
                             <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
-                                <p>Страна</p>
+                                <p>{t.esim.tariff.countryLabel}</p>
                                 <p>{selectedName ?? tariff.operator}</p>
                             </div>
                         )}
                         <div className="flex items-center justify-between gap-2 py-[18px] font-medium">
-                            <p>Срок действия</p>
-                            <p className="text-[#00000099]">{formatDays(tariff.days)}</p>
+                            <p>{t.esim.tariff.validity}</p>
+                            <p className="text-[#00000099]">{formatDays(tariff.days, t.esim.day)}</p>
                         </div>
 
                         <div className="mt-6">
                             <div className="flex items-center justify-between gap-2 text-[22px]">
-                                <b>Сумма</b>
+                                <b>{t.esim.tariff.amount}</b>
                                 <b>{tariff.price_tmt} ТМТ</b>
                             </div>
                             <button
@@ -131,9 +133,9 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                                         onBuyTariff(tariff, activeTab === 'regions' ? coverageCount : null);
                                     }
                                 }}
-                                className="bg-[#2D85EA] hover:bg-[#2D85EA]/80 transition-all duration-300 text-white text-[15px] font-medium rounded-[8px] mt-6 w-full p-[11px] cursor-pointer"
+                                className="bg-[#2D85EA] outline-0 hover:bg-[#2D85EA]/80 transition-all duration-300 text-white text-[15px] font-medium rounded-[8px] mt-6 w-full p-[11px] cursor-pointer"
                             >
-                                Купить
+                                {t.esim.tariff.buy}
                             </button>
                         </div>
                     </div>

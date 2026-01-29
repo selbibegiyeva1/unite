@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useEsimLocations } from '../../../hooks/operator/esim/useEsimLocations';
 import authService, { type EsimCountry, type EsimTariffsResponse } from '../../../services/authService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface RegionModalProps {
     isOpen: boolean;
@@ -39,6 +40,7 @@ function RegionModal({ isOpen, onClose, countryCodes }: RegionModalProps) {
     const { data, isLoading, isError } = useEsimLocations('countries');
     const [search, setSearch] = useState('');
     const [extraInfo, setExtraInfo] = useState<Record<string, { nameRu: string; flagUrl: string; tariffCount: number }>>({});
+    const { t } = useTranslation();
 
     // When modal opens, fetch extra info for codes that are NOT present in the countries list
     useEffect(() => {
@@ -130,7 +132,7 @@ function RegionModal({ isOpen, onClose, countryCodes }: RegionModalProps) {
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center justify-between">
-                    <p className="text-[24px] font-medium">Сервис доступен в следующих странах</p>
+                    <p className="text-[24px] font-medium">{t.esim.regionModal.title}</p>
                     <svg
                         width="24"
                         height="24"
@@ -149,7 +151,7 @@ function RegionModal({ isOpen, onClose, countryCodes }: RegionModalProps) {
                     </svg>
                     <input
                         type="text"
-                        placeholder="Поиск страны"
+                        placeholder={t.esim.regionModal.searchPlaceholder}
                         className="outline-0 font-medium py-[15px] w-full"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -158,15 +160,15 @@ function RegionModal({ isOpen, onClose, countryCodes }: RegionModalProps) {
 
                 <div className="mt-4 flex flex-col h-[472.5px] overflow-auto transactions-table-scroll">
                     {isLoading && (
-                        <p className="text-sm text-[#00000099]">Загрузка стран...</p>
+                        <p className="text-sm text-[#00000099]">{t.esim.regionModal.loadingCountries}</p>
                     )}
 
                     {isError && !isLoading && (
-                        <p className="text-sm text-red-500">Не удалось загрузить список стран. Попробуйте позже.</p>
+                        <p className="text-sm text-red-500">{t.esim.regionModal.loadError}</p>
                     )}
 
                     {!isLoading && !isError && filteredCountries.length === 0 && (
-                        <p className="text-sm text-[#00000099]">Страны для выбранного региона не найдены.</p>
+                        <p className="text-sm text-[#00000099]">{t.esim.regionModal.empty}</p>
                     )}
 
                     {!isLoading && !isError && filteredCountries.map(({ code, country, extra }) => (
@@ -184,9 +186,9 @@ function RegionModal({ isOpen, onClose, countryCodes }: RegionModalProps) {
                             </div>
                             <p className='text-[#00000099] text-[14px]'>
                                 {country
-                                    ? `${country.tariff_count} тарифов`
+                                    ? `${country.tariff_count} ${t.esim.regionModal.tariffsSuffix}`
                                     : extra
-                                        ? `${extra.tariffCount} тарифов`
+                                        ? `${extra.tariffCount} ${t.esim.regionModal.tariffsSuffix}`
                                         : '—'}
                             </p>
                         </div>

@@ -1,4 +1,5 @@
 import { type ProductGroupForm } from '../../../services/authService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface RegionProps {
     productForm: ProductGroupForm;
@@ -16,6 +17,7 @@ function Region({ productForm, activeTab, selectedRegion, onRegionChange }: Regi
     // Find the region field
     const regionField = fields?.find(field => field.name === 'region');
     const regionOptions = regionField?.options || [];
+    const { t } = useTranslation();
 
     // Check if selected region is СНГ
     const selectedRegionOption = regionOptions
@@ -28,7 +30,7 @@ function Region({ productForm, activeTab, selectedRegion, onRegionChange }: Regi
 
     return (
         <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
-            <p className="text-[24px] font-bold">Выберите регион</p>
+            <p className="text-[24px] font-bold">{t.productRegion.title}</p>
 
             <div className="relative mt-4">
                 <select
@@ -36,7 +38,7 @@ function Region({ productForm, activeTab, selectedRegion, onRegionChange }: Regi
                     onChange={(e) => onRegionChange(e.target.value)}
                     className="appearance-none w-full text-[14px] font-medium cursor-pointer outline-0 rounded-[10px] p-4 bg-[#F5F5F9]"
                 >
-                    <option value="">Выберите регион</option>
+                    <option value="">{t.productRegion.placeholder}</option>
                     {regionOptions
                         .filter((option): option is { name: string; value: string } =>
                             'name' in option && 'value' in option && typeof option.value === 'string'
@@ -56,7 +58,9 @@ function Region({ productForm, activeTab, selectedRegion, onRegionChange }: Regi
                             <img src="/product/help.png" className='w-[28px] cursor-pointer' alt="help" />
 
                             {/* Display this on hover */}
-                            <span className='absolute shadow-2xl border text-black border-[#00000026] rounded-[16px] leading-5 text-left top-[50px] z-10 left-[-50px] font-medium text-[14px] w-[300px] bg-white px-4 py-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>Азербайджан, Армения, Беларусь, Казахстан, Киргизия, Молдова, Таджикистан, Туркменистан, Узбекистан</span>
+                            <span className='absolute shadow-2xl border text-black border-[#00000026] rounded-[16px] leading-5 text-left top-[50px] z-10 left-[-50px] font-medium text-[14px] w-[300px] bg-white px-4 py-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>
+                                {t.productRegion.sngTooltip}
+                            </span>
                         </div>
                     </div>
                 )}

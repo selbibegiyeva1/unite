@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ModalProps {
     isOpen: boolean;
@@ -16,6 +17,7 @@ interface ModalProps {
 
 function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formValues, selectedNominal, onPayment, isPaymentLoading, paymentError }: ModalProps) {
     const [isModalCheckboxChecked, setIsModalCheckboxChecked] = useState(false);
+    const { t } = useTranslation();
 
     // Close modal on ESC key press
     useEffect(() => {
@@ -84,7 +86,7 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center justify-between">
-                    <p className="text-[24px] font-medium">Оплата</p>
+                    <p className="text-[24px] font-medium">{t.productTotal.title}</p>
                     <svg 
                         width="24" 
                         height="24" 
@@ -103,7 +105,7 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                         {/* Region */}
                         {regionName && (
                             <div className={`flex items-center justify-between py-4 ${(productForm.group === 'Steam' && activeTab === 'popolnenie') ? (formValues.login || formValues.email || formValues.amount ? 'border-b border-[#0000001A]' : '') : (formFields.length > 0 ? 'border-b border-[#0000001A]' : '')}`}>
-                                <p className="font-medium whitespace-nowrap">Регион</p>
+                                <p className="font-medium whitespace-nowrap">{t.productTotal.regionLabel}</p>
                                 <p className="font-medium ml-4">{regionName}</p>
                             </div>
                         )}
@@ -114,19 +116,19 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                             <>
                                 {formValues.login && (
                                     <div className={`flex items-center justify-between py-4 ${(formValues.email || formValues.amount) ? 'border-b border-[#0000001A]' : ''}`}>
-                                        <p className="font-medium whitespace-nowrap">Введите логин в Steam</p>
+                                        <p className="font-medium whitespace-nowrap">{t.productForm.steamLoginPlaceholder}</p>
                                         <p className="font-medium ml-4">{formValues.login}</p>
                                     </div>
                                 )}
                                 {formValues.email && (
                                     <div className={`flex items-center justify-between py-4 ${formValues.amount ? 'border-b border-[#0000001A]' : ''}`}>
-                                        <p className="font-medium whitespace-nowrap">Введите свою почту</p>
+                                        <p className="font-medium whitespace-nowrap">{t.productForm.steamEmailPlaceholder}</p>
                                         <p className="font-medium ml-4 truncate min-w-0 max-w-[200px] text-right">{formValues.email}</p>
                                     </div>
                                 )}
                                 {formValues.amount && (
                                     <div className="flex items-center justify-between py-4">
-                                        <p className="font-medium whitespace-nowrap">Сумма пополнения в ТМТ</p>
+                                        <p className="font-medium whitespace-nowrap">{t.productForm.steamAmountLabel}</p>
                                         <p className="font-medium ml-4">{formValues.amount} TMT</p>
                                     </div>
                                 )}
@@ -149,9 +151,9 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
 
                     <div className='flex items-center gap-2.5 my-4'>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 16H12.01M12 8V12M9 4H15L20 9V15L15 20H9L4 15V9L9 4Z" stroke="#F50100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 16H12.01M12 8V12M9 4H15L20 9V15L15 20H9L4 15V9L9 4Z" stroke="#F50100" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
-                        <p className='text-[#F50100] text-[14px] font-medium'>Товар возврату не подлежит</p>
+                        <p className='text-[#F50100] text-[14px] font-medium'>{t.esim.modal.nonRefundableNote}</p>
                     </div>
 
                     <div className='bg-[#F5F5F9] rounded-[16px] px-4 pt-4 pb-6'>
@@ -159,14 +161,14 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                         {productForm.group === 'Steam' && activeTab === 'popolnenie' ? (
                             // For Steam, show "К зачислению в Steam"
                             <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                                <p className="font-medium whitespace-nowrap">К зачислению в Steam</p>
+                                <p className="font-medium whitespace-nowrap">{t.productTotal.steamCredited}</p>
                                 <p className="font-medium ml-4">{formValues.credited || '-'}$</p>
                             </div>
                         ) : (
                             // For other products, show "К зачислению" if creditedProduct exists
                             creditedProduct && (
                                 <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                                    <p className="font-medium whitespace-nowrap">К зачислению</p>
+                                    <p className="font-medium whitespace-nowrap">{t.productTotal.toBeCredited}</p>
                                     <p className="font-medium text-right ml-4">{creditedProduct}</p>
                                 </div>
                             )
@@ -174,7 +176,7 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
 
                         {/* Итого к списанию */}
                         <div className="flex items-center justify-between py-4 text-[18px]">
-                            <p className="font-bold whitespace-nowrap">Итого к списанию</p>
+                            <p className="font-bold whitespace-nowrap">{t.productTotal.totalToDebit}</p>
                             <p className="font-bold ml-4">{totalAmount} TMT</p>
                         </div>
                     </div>
@@ -210,7 +212,7 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                             )}
                         </svg>
                     </div>
-                    <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
+                    <p className="text-[14px] font-medium">{t.esim.modal.checkboxText}</p>
                 </div>
 
                 {paymentError && (
@@ -221,13 +223,13 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                     disabled={isPaymentLoading || !isModalCheckboxChecked}
                     className={`mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer ${(isPaymentLoading || !isModalCheckboxChecked) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                    {isPaymentLoading ? 'Обработка...' : 'Оплатить'}
+                    {isPaymentLoading ? t.esim.modal.processing : t.esim.modal.pay}
                 </button>
                 <button
                     onClick={onClose}
                     className="mt-3 w-full text-[14px] font-medium bg-[#F5F5F9] text-black p-[11px] rounded-[8px] cursor-pointer"
                 >
-                    Отмена
+                    {t.esim.modal.cancel ?? 'Отмена'}
                 </button>
             </div>
         </div>

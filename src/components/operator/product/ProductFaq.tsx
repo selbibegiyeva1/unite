@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { type ProductGroupForm } from '../../../services/authService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface ProductFaqProps {
     productForm: ProductGroupForm;
@@ -8,13 +9,14 @@ interface ProductFaqProps {
 
 function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const { lang } = useTranslation();
 
     const toggleFaq = (index: number) => {
         setOpenIndex((prev) => (prev === index ? null : index));
     };
 
-    // FAQ data for Steam product on 'popolnenie' tab
-    const steamTopupFaqs = [
+    // FAQ data for Steam product on 'popolnenie' tab (Russian)
+    const steamTopupFaqsRu = [
         {
             question: "Что такое логин Steam?",
             content: (
@@ -129,8 +131,132 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         },
     ];
 
-    // FAQ data for 'voucher' tab (any product)
-    const voucherFaqs = [
+    // FAQ data for Steam product on 'popolnenie' tab (Turkmen)
+    const steamTopupFaqsTm = [
+        {
+            question: 'Steam logini näme?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Bu Steam-e girmek üçin ulanýan harplaryň, sanlaryň we «_» nyşanynyň birleşmesidir.
+                        <br />
+                        Eger login nädogry girizilseňiz, serişdeler şol logini bolan başga bir ulanyjynyň hasabyna gider.
+                    </p>
+                    <br />
+                    <p className="text-[#00000099] font-bold">
+                        Möhüm: satuw nokady hem-de müşderi Steam loginiň dogry görkezilmegine jogapkärçilik edýär.
+                    </p>
+                </div>
+            ),
+        },
+        {
+            question: 'Steam hasabymyň sebitini nädip bilmeli?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Hasabyňyzyň sebitini Steam saýty ýa-da goýbermesi (mobil goşundy hem bolup biler) arkaly barlap bilersiňiz:
+                    </p>
+                    <ol className="text-[#00000099] font-medium list-decimal list-inside">
+                        <li>Sag ýok burçda profil adyňyza basyň.</li>
+                        <li>Açylan menýuda «Hasap barada ...» diýen bölümi saýlaň.</li>
+                        <li>«Ýurt» diýen meýdany tapyň.</li>
+                        <li>Şol ýerde häzirki sebitiňiz görkeziler.</li>
+                    </ol>
+                </div>
+            ),
+        },
+        {
+            question: 'Haýsy ýurtlaryň Steam hasaplaryny dolduryp bolýar?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Iň pes komissiýa bilen oýun balansyny aşakdaky ýurtlaryň ulanyjylary üçin dolduryp bolýar:
+                    </p>
+                    <br />
+                    <ul className="text-[#00000099] font-medium list-disc list-inside">
+                        <li>Russiýa</li>
+                        <li>Türkmenistan</li>
+                        <li>Azerbaýjan</li>
+                        <li>Ermenistan</li>
+                        <li>Belarus</li>
+                        <li>Gazagystan</li>
+                        <li>Gyrgyzystan</li>
+                        <li>Moldowa</li>
+                        <li>Täjigistan</li>
+                        <li>Özbegistan</li>
+                    </ul>
+                </div>
+            ),
+        },
+        {
+            question: 'Täze Steam hasabyny nähili doldurmaly?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Ilkinji gezek täze hasaby dolduranyňyzda Steam dükanynyň sebitini tötänleýin üýtgetmek howpy bar. Mysal üçin, Gazagystan saýlanyp biler we bahalar tenňede görkeziler.
+                    </p>
+                    <br />
+                    <p className="text-[#00000099] font-medium">
+                        Munuň öňüni almak üçin, aşakdaky görkezmelere eýeriň:
+                    </p>
+                    <ol className="text-[#00000099] font-medium list-decimal list-inside">
+                        <li>
+                            Steam hasabyňa brauzer ýa-da programma arkaly giriň. VPN ulanmaň — başga sebit saýlanyp, bahalar
+                            başga walýutada görkezilip bilner.
+                        </li>
+                        <li>
+                            Hasaba azyndan iki mugt oýny goşuň. Mysal üçin, PUBG we Dota 2. Oýunlary smartfonuňyzdaky Steam
+                            kitaplygynyň üsti bilen hem goşup bilersiňiz.
+                        </li>
+                        <li>Goşulan oýunlarda azyndan 2–3 sagat oýnaň.</li>
+                        <li>Hasaby iň az 100 manada çenli dolduryň.</li>
+                    </ol>
+                </div>
+            ),
+        },
+        {
+            question: 'Hasaby doldurgandan soň puly yzyna gaýtarıp bolýarmy?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Gynansak-da, bolmaýar. Pul Steam hamana dessine geçýär.
+                </p>
+            ),
+        },
+        {
+            question: 'Steam oýun hamany näçe wagtda doldurylýar?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Pul adatda 15 minudyň dowamynda Steam-a geçýär. Seýrek ýagdaýlarda — 2 sagada çenli dowam edip biler.
+                    </p>
+                    <br />
+                    <p className="text-[#00000099] font-medium">
+                        Eger birnäçe sagadyň dowamynda pul gelmese, hatda görkezilen goldaw hyzmatyna ýazyp bilersiňiz. Tölegi
+                        barlarys we kömek etmäge synanyşarys.
+                    </p>
+                </div>
+            ),
+        },
+        {
+            question: 'Steam doldurylanda logini ýalňyş girizsem, puly yzyna alyp bilerminem?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Eger girizilen login eýýäm bar bolsa, serişdeleri yzyna gaýtarmak mümkin bolmaz.
+                </p>
+            ),
+        },
+        {
+            question: 'Töleg tehniki sebäplere görä ýatyrylandygy barada ýazsa näme etmeli?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Töleg hyzmatynyň täzelemegi sebäpli wagtlaýyn tehniki näsazlyk bolup biler. Biraz wagt soň gaýtadan synanyşyň.
+                </p>
+            ),
+        },
+    ];
+
+    // FAQ data for 'voucher' tab (any product) (Russian)
+    const voucherFaqsRu = [
         {
             question: "Что такое ваучер?",
             content: (
@@ -219,6 +345,114 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
             ),
         },
     ];
+
+    // FAQ data for 'voucher' tab (any product) (Turkmen)
+    const voucherFaqsTm = [
+        {
+            question: 'Voucher näme?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Voucher — sanlardan we harpdan ybarat özboluşly kombinasiýa. Voucheriň pul bahasy bar we ol işjeňleşdirilende
+                    oýun hamanyna geçirilýär.
+                </p>
+            ),
+        },
+        {
+            question: 'Sebit boýunça çäklendirmeler barmy?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Hawa, her bir voucher belli bir sebite baglanan.
+                    <br />
+                    Satyn alanyňyzda sebit öňünden görkezilýär.
+                    <br />
+                    <br />
+                    Eger müşderi sebit saýlanylşynda ýalňyşsa, kody çalşyp bolmaýar — üns bilen saýlaň.
+                </p>
+            ),
+        },
+        {
+            question: 'Tölegden soň voucheri nädip alaryn?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Töleg üstünlikli tamamlanylandan soň, voucher we ony işjeňleşdirmegiň görkezmesi 3–15 minutyň dowamynda
+                        forma doldurylanda görkezilen e-mail salgyňa iberiler.
+                    </p>
+                    <br />
+                    <p className="text-[#00000099] font-bold">
+                        Möhüm: satuw nokady hem-de müşderi e-mail salgyň dogry görkezilmegine jogapkär.{' '}
+                        <br />
+                        Eger salgyda ýalňyşlyk goýberilse, ulgam voucheri nädogry poçta salgysyna iberer we bu tehniki näsazlyk
+                        hasaplanmaýar.
+                    </p>
+                </div>
+            ),
+        },
+        {
+            question: 'Voucher bilen hat gelmedik bolsa näme etmeli?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Ilki bilen poçtaňyzda «Spam», «Promosiýalar» we «Bölşedişler» ýaly bukjalary barlaň.
+                        <br />
+                        <br />
+                        Poçta salgysynyň nädogry girizilmedigine göz ýetiriň.
+                    </p>
+                    <br />
+                    <p className="text-[#00000099] font-medium">
+                        Eger forma doldurylanda poçta nädogry ýazylan bolsa, satuw nokady voucheri müşderä el bilen berip
+                        biler.
+                        <br />
+                        Tranzaksiýa taryhynyň içinde aýratyn <span className="text-[#2D85EA]">«QR/Görkezme»</span> diýen
+                        baglanyşyk elýeterli bolýar, şonuň üsti bilen satyjy işjeňleşdiriş koduny alyp, müşderä ýetirip biler.
+                    </p>
+                </div>
+            ),
+        },
+        {
+            question: 'Satyn alnan voucheriň puluny yzyna gaýtaryp bolýarmy?',
+            content: (
+                <div>
+                    <p className="text-[#00000099] font-medium">
+                        Gynansak-da, ýok. Voucher yzyna gaýtarylmaýar.
+                    </p>
+                    <br />
+                    <p className="text-[#00000099] font-medium">
+                        Eger voucher işlemeýän bolsa, biz barlag geçireris we tassyklanan ýagdaýynda täze, işjeň kod bereris.
+                    </p>
+                </div>
+            ),
+        },
+        {
+            question: 'Voucher näçe wagt hereketde bolýar?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Möhlet çäklendirilmedik — ony islendik wagtda işjeňleşdirip bilersiňiz.
+                </p>
+            ),
+        },
+        {
+            question: 'Ulgam kod eýýäm işjeňleşdirildi diýip ýazsa näme etmeli?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Hatda görkezilen goldaw hyzmatyna ýüz tutuň. Biz kody üpjünçiden barlarys we mesele tassyk edilse, ony täze
+                    koda çalyşarys.
+                </p>
+            ),
+        },
+        {
+            question: 'Voucheri sowgat hökmünde satyn alyp bolýarmy?',
+            content: (
+                <p className="text-[#00000099] font-medium">
+                    Hawa, alyjy üçin islendik e-mail salgysyny görkezmek ýa-da kody özüňiz hat arkaly iberip bilersiňiz.
+                </p>
+            ),
+        },
+    ];
+
+    // Choose language-specific FAQ sets
+    const steamTopupFaqs = lang === 'tm' ? steamTopupFaqsTm : steamTopupFaqsRu;
+    const voucherFaqs = lang === 'tm' ? voucherFaqsTm : voucherFaqsRu;
 
     // Determine which FAQs to show
     const isSteam = productForm.group === 'Steam';
