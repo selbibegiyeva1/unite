@@ -7,9 +7,11 @@ import RegionModal from '../../components/operator/esim/RegionModal';
 import EsimModal from '../../components/operator/esim/EsimModal';
 import { useEsimValidation } from '../../hooks/operator/esim/useEsimValidation';
 import authService from '../../services/authService';
+import { useTranslation } from '../../hooks/useTranslation';
 
 function EsimCategory() {
-    document.title = 'Unite Shop - eSIM';
+    const { t } = useTranslation();
+    document.title = t.esim.category.pageTitle;
     const [activeTab, setActiveTab] = useState<EsimTab>('countries');
     // Defaults:
     // - countries: Afghanistan -> AF
@@ -39,7 +41,7 @@ function EsimCategory() {
     return (
         <div className='px-6 mt-[28px] pb-[100px]'>
             <div className='w-[1680px] m-auto'>
-                <p className='text-[36px] font-bold'>e-SIM</p>
+                <p className='text-[36px] font-bold'>{t.esim.category.heading}</p>
                 <div className='mt-8 mb-[56px]'>
                     <Country
                         activeTab={activeTab}
