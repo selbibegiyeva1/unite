@@ -96,6 +96,49 @@ export const ru = {
     pageTitle: 'Unite Shop - Продукты',
     heading: 'Цифровые товары',
   },
+  productOperator: {
+    loadingTitle: 'Загрузка...',
+    loadingProduct: 'Загружаем информацию о продукте...',
+    loadError: 'Не удалось загрузить информацию о продукте.',
+    noGroupSelected: 'Выберите продукт для просмотра деталей.',
+  },
+  productRegion: {
+    title: 'Выберите регион',
+    placeholder: 'Выберите регион',
+    sngTooltip:
+      'Азербайджан, Армения, Беларусь, Казахстан, Киргизия, Молдова, Таджикистан, Туркменистан, Узбекистан',
+  },
+  productNominals: {
+    title: 'Выберите номинал',
+  },
+  productHeader: {
+    topupTab: 'Пополнение',
+    voucherTab: 'Ваучер',
+    voucherTooltip:
+      'Ваучер — уникальная комбинация из цифр и букв. У ваучера есть денежный номинал, который зачисляется на игровой кошелёк при активации.',
+  },
+  productForm: {
+    topupAccountTitle: 'Пополнение аккаунта',
+    steamWhereToFind: 'Где искать',
+    steamLoginTitle: 'Как найти свой логин в Steam?',
+    steamLoginStep1: 'Откройте клиент Steam. Нажмите на имя пользователя в правом углу главной страницы.',
+    steamLoginStep2: 'В выпадающем меню выберите пункт «Об аккаунте».',
+    steamLoginPlaceholder: 'Введите логин в Steam',
+    steamEmailPlaceholder: 'Введите свою почту',
+    steamAmountLabel: 'Сумма пополнения в ТМТ',
+    steamAmountPlaceholder: (min: number) => `от ${min} ТМТ`,
+    steamCreditedLabel: 'К зачислению в Steam',
+    steamAmountRange: (min: number, max: number) =>
+      `Сумма должна быть от ${min} до ${max} ТМТ`,
+    selectPrefix: 'Выберите',
+  },
+  productTotal: {
+    title: 'Оплата',
+    regionLabel: 'Регион',
+    steamCredited: 'К зачислению в Steam',
+    toBeCredited: 'К зачислению',
+    totalToDebit: 'Итого к списанию',
+  },
   esim: {
     category: {
       pageTitle: 'Unite Shop - eSIM',
@@ -151,6 +194,7 @@ export const ru = {
       processing: 'Обработка...',
       voucherError: 'Не удалось получить ссылку на ваучер',
       genericError: 'Произошла ошибка при обработке платежа',
+      cancel: 'Отмена',
     },
     regionModal: {
       title: 'Сервис доступен в следующих странах',

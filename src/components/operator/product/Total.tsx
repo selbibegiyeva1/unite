@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { type ProductGroupForm, type ProductIdOption } from '../../../services/authService';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 interface TotalProps {
     productForm: ProductGroupForm;
@@ -17,6 +18,7 @@ interface TotalProps {
 }
 
 function Total({ productForm, activeTab, selectedRegion, formValues, selectedNominal, isCheckboxChecked, onCheckboxChange, checkboxError, checkboxRef, onPayment, isPaymentLoading }: TotalProps) {
+    const { t } = useTranslation();
 
     // Get the appropriate fields based on active tab
     const fields = activeTab === 'voucher'
@@ -56,13 +58,13 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
 
     return (
         <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl w-[490px]">
-            <p className="text-[24px] font-medium">Оплата</p>
+            <p className="text-[24px] font-medium">{t.productTotal.title}</p>
 
             <div className="my-6">
                 {/* Region */}
                 {regionName && (
                     <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                        <p className="font-medium whitespace-nowrap">Регион</p>
+                        <p className="font-medium whitespace-nowrap">{t.productTotal.regionLabel}</p>
                         <p className="font-medium ml-4">{regionName}</p>
                     </div>
                 )}
@@ -71,20 +73,8 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 {productForm.group === 'Steam' && activeTab === 'popolnenie' ? (
                     // Static fields for Steam - always show all fields
                     <>
-                        {/* <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                            <p className="font-medium whitespace-nowrap">Введите логин в Steam</p>
-                            <p className="font-medium ml-4">{formValues.login || '-'}</p>
-                        </div>
                         <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                            <p className="font-medium whitespace-nowrap">Введите свою почту</p>
-                            <p className="font-medium ml-4">{formValues.email || '-'}</p>
-                        </div> */}
-                        {/* <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                            <p className="font-medium whitespace-nowrap">Сумма пополнения в ТМТ</p>
-                            <p className="font-medium ml-4">{formValues.amount ? `${formValues.amount} TMT` : '-'}</p>
-                        </div> */}
-                        <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                            <p className="font-medium whitespace-nowrap">К зачислению в Steam</p>
+                            <p className="font-medium whitespace-nowrap">{t.productTotal.steamCredited}</p>
                             <p className="font-medium ml-4">{formValues.credited || '-'}$</p>
                         </div>
                     </>
@@ -105,14 +95,14 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 {/* К зачислению */}
                 {creditedProduct && (
                     <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                        <p className="font-medium whitespace-nowrap">К зачислению</p>
+                        <p className="font-medium whitespace-nowrap">{t.productTotal.toBeCredited}</p>
                         <p className="font-medium text-right ml-4">{creditedProduct}</p>
                     </div>
                 )}
 
                 {/* Итого к списанию */}
                 <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                    <p className="font-medium whitespace-nowrap">Итого к списанию</p>
+                    <p className="font-medium whitespace-nowrap">{t.productTotal.totalToDebit}</p>
                     <p className="font-medium ml-4">{totalAmount} TMT</p>
                 </div>
             </div>
@@ -146,15 +136,15 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                         )}
                     </svg>
                 </div>
-                <p className="text-[14px] font-medium">Я потдверждаю, что правильно указал все данные</p>
+                <p className="text-[14px] font-medium">{t.esim.modal.checkboxText}</p>
             </div>
 
             <button
                 onClick={onPayment}
                 disabled={isPaymentLoading}
-                className={`mt-6 w-full text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer ${isPaymentLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`mt-6 w-full outline-0 text-[14px] font-medium bg-[#2D85EA] text-white p-[11px] rounded-[8px] cursor-pointer ${isPaymentLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-                {isPaymentLoading ? 'Обработка...' : 'Оплатить'}
+                {isPaymentLoading ? t.esim.modal.processing : t.esim.modal.pay}
             </button>
         </div>
     )

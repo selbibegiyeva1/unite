@@ -96,6 +96,50 @@ export const tm = {
     pageTitle: 'Unite Shop - Produktlar',
     heading: 'Sanly harytlar',
   },
+  productOperator: {
+    loadingTitle: 'Ýüklenýär...',
+    loadingProduct: 'Produkt barada maglumat ýüklenýär...',
+    loadError: 'Produkt barada maglumat ýüklemek başa barmady.',
+    noGroupSelected: 'Maglumatlary görmek üçin produkt saýlaň.',
+  },
+  productRegion: {
+    title: 'Sebit saýlaň',
+    placeholder: 'Sebit saýlaň',
+    sngTooltip:
+      'Azerbaýjan, Ermenistan, Belarus, Gazagystan, Gyrgyzystan, Moldova, Täjigistan, Türkmenisatn, Özbegistan',
+  },
+  productNominals: {
+    title: 'Nominallary saýlaň',
+  },
+  productHeader: {
+    topupTab: 'Täzeden doldurmak',
+    voucherTab: 'Voucher',
+    voucherTooltip:
+      'Voucher — sanlardan we harpdan ybarat özboluşly kombinasiýa. Voucheriň mukdary bar we ol hereket wagtynda oýun hasabyna geçirilýär.',
+  },
+  productForm: {
+    topupAccountTitle: 'Hasaby täzeden doldurmak',
+    steamWhereToFind: 'Nireden tapmaly',
+    steamLoginTitle: 'Steam üçin logini nädip tapmaly?',
+    steamLoginStep1:
+      'Steam müşderisini açyň. Baş sahypanyň sag ýok burçundaky ulanyjy adyňyza basyň.',
+    steamLoginStep2: 'Açylan menýudan «Hasap barada» bölegini saýlaň.',
+    steamLoginPlaceholder: 'Steam üçin logini giriziň',
+    steamEmailPlaceholder: 'Poçtaňyzy giriziň',
+    steamAmountLabel: 'TMT boýunça dolduryş mukdary',
+    steamAmountPlaceholder: (min: number) => `${min} TMT-den başlap`,
+    steamCreditedLabel: 'Steam-da hasaba geçirilmeli',
+    steamAmountRange: (min: number, max: number) =>
+      `Mukdar ${min} bilen ${max} TMT aralygynda bolmaly`,
+    selectPrefix: 'Saýlaň',
+  },
+  productTotal: {
+    title: 'Töleg',
+    regionLabel: 'Sebit',
+    steamCredited: 'Steam-da hasaba geçirilmeli',
+    toBeCredited: 'Hasaba geçirilmeli',
+    totalToDebit: 'Jemi tutuljak',
+  },
   esim: {
     category: {
       pageTitle: 'Unite Shop - eSIM',
@@ -151,6 +195,7 @@ export const tm = {
       processing: 'Gaýtadan işlenýär...',
       voucherError: 'Voucher salgysyny almak başa barmady',
       genericError: 'Tölegi işlemekde näsazlyk ýüze çykdy',
+      cancel: 'Goýbolsun etmek',
     },
     regionModal: {
       title: 'Hyzmat aşakdaky ýurtlarda elýeterli',
