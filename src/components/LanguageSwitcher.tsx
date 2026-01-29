@@ -1,40 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage, type LanguageCode } from '../contexts/LanguageContext';
+import { useTranslation } from '../hooks/useTranslation';
 
-type LanguageCode = 'ru' | 'tm';
-
-const STORAGE_KEY = 'unite_lang';
-
-const LANGUAGE_LABELS: Record<LanguageCode, { short: string; full: string }> = {
-  ru: { short: 'РУ', full: 'Русский' },
-  tm: { short: 'ТМ', full: 'Туркменский' },
+const SHORT_LABELS: Record<LanguageCode, string> = {
+  ru: 'РУ',
+  tm: 'ТМ',
 };
 
-function getInitialLanguage(): LanguageCode {
-  if (typeof window === 'undefined') {
-    return 'ru';
-  }
-
-  const stored = window.localStorage.getItem(STORAGE_KEY) as LanguageCode | null;
-  if (stored === 'ru' || stored === 'tm') {
-    return stored;
-  }
-
-  return 'ru';
-}
-
 function LanguageSwitcher() {
-  const [language, setLanguage] = useState<LanguageCode>(getInitialLanguage);
+  const { lang: language, setLang } = useLanguage();
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    window.localStorage.setItem(STORAGE_KEY, language);
-    document.documentElement.lang = language === 'ru' ? 'ru-RU' : 'tk-TM';
-  }, [language]);
+  const fullLabels: Record<LanguageCode, string> = {
+    ru: t.languageSwitcher.russian,
+    tm: t.languageSwitcher.turkmen,
+  };
 
   // Close on ESC and outside click (like Sidebar)
   useEffect(() => {
@@ -62,11 +44,11 @@ function LanguageSwitcher() {
   }, [isOpen]);
 
   const handleSelect = (code: LanguageCode) => {
-    setLanguage(code);
+    setLang(code);
     setIsOpen(false);
   };
 
-  const current = LANGUAGE_LABELS[language];
+  const currentShort = SHORT_LABELS[language];
 
   return (
     <div ref={rootRef} className="relative">
@@ -75,7 +57,7 @@ function LanguageSwitcher() {
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center justify-around gap-3 outline-0 w-[70px] cursor-pointer py-1.5 px-3 rounded-[8px] hover:bg-[#0000000d] transition-colors"
       >
-        <span className="text-[14px] font-medium">{current.short}</span>
+        <span className="text-[14px] font-medium">{currentShort}</span>
         <svg
           width="10"
           height="6"
@@ -97,8 +79,7 @@ function LanguageSwitcher() {
         }`}
       >
         <div className="flex flex-col">
-          {(['tm', 'ru'] as LanguageCode[]).map((code) => {
-            const labels = LANGUAGE_LABELS[code];
+          {(['ru', 'tm'] as LanguageCode[]).map((code) => {
             const isActive = code === language;
 
             return (
@@ -110,7 +91,7 @@ function LanguageSwitcher() {
                   isActive ? 'bg-[#EEF3FF]' : 'bg-white'
                 }`}
               >
-                {labels.full}
+                {fullLabels[code]}
               </button>
             );
           })}

@@ -1,6 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import SignIn from "./routes/auth/SignIn";
@@ -15,8 +16,9 @@ import TransactionsOperator from "./routes/operator/TransactionsOperator";
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes>
+    <LanguageProvider>
+      <AuthProvider>
+        <Routes>
         <Route path="/" element={<SignIn />} />
 
         <Route element={<ProtectedRoute />}>
@@ -24,8 +26,6 @@ function App() {
           <Route path="/operator/home" element={<HomeOperator />} />
           <Route path="/operator/product" element={<ProductOperator />} />
           <Route path="/operator/products" element={<CategoryOperator />} />
-
-          {/* Esim branch commit */}
           <Route path="/operator/esim" element={<EsimCategory />} />
           <Route path="/operator/transactions" element={<TransactionsOperator />} />
           
@@ -34,7 +34,8 @@ function App() {
           <Route path="/help" element={<Help />} />
         </Route>
       </Routes>
-    </AuthProvider>
+      </AuthProvider>
+    </LanguageProvider>
   );
 }
 
