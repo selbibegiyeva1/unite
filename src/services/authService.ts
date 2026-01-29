@@ -115,6 +115,12 @@ export interface TopupPaymentRequest {
   [key: string]: string | number; // Dynamic fields
 }
 
+export interface EsimPaymentRequest {
+  tariff_name: string;
+  client_email: string;
+  client_phone: string;
+}
+
 export interface OrderHistoryItem {
   datetime: string;
   email: string;
@@ -327,6 +333,14 @@ export const authService = {
   async buyTopup(payload: TopupPaymentRequest): Promise<PaymentResponse> {
     const response = await apiClient.post<PaymentResponse>(
       '/products/topup/buy',
+      payload
+    );
+    return response.data;
+  },
+
+  async buyEsim(payload: EsimPaymentRequest): Promise<PaymentResponse> {
+    const response = await apiClient.post<PaymentResponse>(
+      '/products/esim/buy',
       payload
     );
     return response.data;
