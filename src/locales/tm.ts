@@ -1,4 +1,7 @@
 export const tm = {
+  common: {
+    processing: 'İşlenýär...',
+  },
   languageSwitcher: {
     russian: 'Rusça',
     turkmen: 'Türkmençe',

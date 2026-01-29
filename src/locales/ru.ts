@@ -1,4 +1,7 @@
 export const ru = {
+  common: {
+    processing: 'Обработка...',
+  },
   languageSwitcher: {
     russian: 'Русский',
     turkmen: 'Туркменский',

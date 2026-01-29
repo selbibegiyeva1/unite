@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navbar from './Navbar';
+import Loading from './Loading';
 
 interface ProtectedRouteProps {
   children?: React.ReactNode;
@@ -11,11 +12,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen flex-col">
-        <div className="flex flex-1 items-center justify-center">
-          <div>Loading...</div>
-        </div>
-      </div>
+      <Loading />
     );
   }
 
