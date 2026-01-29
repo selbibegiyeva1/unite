@@ -86,8 +86,8 @@ export const tm = {
     notFound: 'Haryt tapylmady',
   },
   services: {
-    title: 'Hyzmatlar',
-    tabPrograms: 'Programmalar',
+    title: 'Harytlar',
+    tabPrograms: 'Hyzmatlar',
     tabGames: 'Oýunlar',
     loadingGroups: 'Haryt toparlary ýüklenýär...',
     loadError: 'Haryt toparlaryny ýüklemek başa barmady!',
