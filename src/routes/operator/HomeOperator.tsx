@@ -1,18 +1,20 @@
 import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { usePartnerMainInfo } from '../../hooks/auth/usePartnerMainInfo';
+import { useTranslation } from '../../hooks/useTranslation';
 
 import Transactions from '../../components/operator/transactions/Transactions';
 
 function HomeOperator() {
     const { user } = useAuth();
     const { data: partnerMain } = usePartnerMainInfo();
+    const { t } = useTranslation();
     
     if (!user) {
-        return <div>Loading...</div>;
+        return <div>{t.homeOperator.loadingUser}</div>;
     }
 
-    document.title = 'Unite Shop - Главная';
+    document.title = t.homeOperator.pageTitle;
 
     const formattedBalance =
         partnerMain?.balance !== undefined
@@ -24,32 +26,32 @@ function HomeOperator() {
             <div className='w-[1680px] m-auto'>
                 <div className="flex justify-between mb-6">
                     <div>
-                        <h1 className="text-[26px] font-bold">Основные разделы</h1>
+                        <h1 className="text-[26px] font-bold">{t.homeOperator.mainSections}</h1>
 
                         <div className='mt-4 flex gap-4'>
                             <Link to="/operator/product?group=Steam">
                                 <div className="overflow-hidden rounded-[24px]">
                                     <img src="/home/1.png" alt="home" className='max-w-[200px] transition-transform duration-200 hover:scale-105' />
                                 </div>
-                                <b className='pt-3 flex justify-center'>Steam</b>
+                                <b className='pt-3 flex justify-center'>{t.homeOperator.steam}</b>
                             </Link>
                             <Link to="/operator/products">
                                 <div className="overflow-hidden rounded-[24px]">
                                     <img src="/home/2.png" alt="home" className='max-w-[200px] transition-transform duration-200 hover:scale-105' />
                                 </div>
-                                <b className='pt-3 flex justify-center'>Игры</b>
+                                <b className='pt-3 flex justify-center'>{t.homeOperator.games}</b>
                             </Link>
                             <Link to="/operator/products">
                                 <div className="overflow-hidden rounded-[24px]">
                                     <img src="/home/3.png" alt="home" className='max-w-[200px] transition-transform duration-200 hover:scale-105' />
                                 </div>
-                                <b className='pt-3 flex justify-center'>Сервисы</b>
+                                <b className='pt-3 flex justify-center'>{t.homeOperator.services}</b>
                             </Link>
                             <Link to="/operator/esim">
                                 <div className="overflow-hidden rounded-[24px]">
                                     <img src="/home/4.png" alt="home" className='max-w-[200px] transition-transform duration-200 hover:scale-105' />
                                 </div>
-                                <b className='pt-3 flex justify-center'>eSIM</b>
+                                <b className='pt-3 flex justify-center'>{t.homeOperator.esim}</b>
                             </Link>
                         </div>
                     </div>
@@ -58,23 +60,23 @@ function HomeOperator() {
                             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.9974 6.66667H24.9409C25.7087 6.66667 26.1901 7.49615 25.8091 8.16281L21.9066 14.9923C21.5505 15.6154 20.8878 16 20.1701 16H10.6641M10.6641 16L8.28698 19.8033C7.8707 20.4694 8.34954 21.3333 9.13498 21.3333H23.9974M10.6641 16L5.21685 5.10557C4.87806 4.428 4.18554 4 3.42799 4H2.66406M10.6641 26.6667C10.6641 27.403 10.0671 28 9.33073 28C8.59435 28 7.9974 27.403 7.9974 26.6667C7.9974 25.9303 8.59435 25.3333 9.33073 25.3333C10.0671 25.3333 10.6641 25.9303 10.6641 26.6667ZM23.9974 26.6667C23.9974 27.403 23.4004 28 22.6641 28C21.9277 28 21.3307 27.403 21.3307 26.6667C21.3307 25.9303 21.9277 25.3333 22.6641 25.3333C23.4004 25.3333 23.9974 25.9303 23.9974 26.6667Z" stroke="#5682FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <p className='text-[18px] font-medium'>Баланс</p>
+                            <p className='text-[18px] font-medium'>{t.homeOperator.balance}</p>
                         </div>
                         <div className='mt-6 text-[20px] font-medium'>
                             <div className='flex items-center justify-between'>
-                                <p>Доступно</p>
+                                <p>{t.homeOperator.available}</p>
                                 <p>{formattedBalance}</p>
                             </div>
                             <div className='flex items-center justify-between mt-4'>
-                                <p>Режим</p>
-                                <p>Депозит</p>
+                                <p>{t.homeOperator.mode}</p>
+                                <p>{t.homeOperator.modeDeposit}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className='mt-7 mb-6 border w-[552px] border-[#00000026] p-8 text-[24px] rounded-[24px]'>
-                    <b>Сегодня по операциям</b>
+                    <b>{t.homeOperator.todayOperations}</b>
                 </div>
 
                 <Transactions period="day" />

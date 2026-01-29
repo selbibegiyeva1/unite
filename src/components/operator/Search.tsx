@@ -17,7 +17,7 @@ function Search() {
     } = useProductSearch();
 
     return (
-        <div>
+        <div className="px-5 py-[32px] border border-[#00000026] rounded-[16px]">
             <p className="font-medium text-[18px] mb-5">Поиск по товарам</p>
             <div className="flex items-center gap-2">
                 <div ref={searchRef} className="relative w-full">
