@@ -80,7 +80,24 @@ export const ru = {
       heading: 'Транзакции',
     },
   },
+  search: {
+    title: 'Поиск по товарам',
+    placeholder: 'Поиск по товарам',
+    notFound: 'Товары не найдены',
+  },
+  services: {
+    title: 'Сервисы',
+    tabPrograms: 'Программы',
+    tabGames: 'Игры',
+    loadingGroups: 'Загружаем группы продуктов...',
+    loadError: 'Не удалось загрузить группы продуктов!',
+  },
+  categoryOperator: {
+    pageTitle: 'Unite Shop - Продукты',
+    heading: 'Цифровые товары',
+  },
   signIn: {
+    pageTitle: 'Unite Shop - Вход',
     title: 'Личный кабинет',
     subtitle: 'Войдите в личный кабинет чтобы начать работу.',
     loginLabel: 'Логин',

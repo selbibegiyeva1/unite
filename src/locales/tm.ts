@@ -80,7 +80,24 @@ export const tm = {
       heading: 'Tranzaksiýalar',
     },
   },
+  search: {
+    title: 'Harytlar boýunça gözleg',
+    placeholder: 'Harytlar boýunça gözleg',
+    notFound: 'Haryt tapylmady',
+  },
+  services: {
+    title: 'Hyzmatlar',
+    tabPrograms: 'Programmalar',
+    tabGames: 'Oýunlar',
+    loadingGroups: 'Haryt toparlary ýüklenýär...',
+    loadError: 'Haryt toparlaryny ýüklemek başa barmady!',
+  },
+  categoryOperator: {
+    pageTitle: 'Unite Shop - Produktlar',
+    heading: 'Sanly harytlar',
+  },
   signIn: {
+    pageTitle: 'Unite Shop - Giriş',
     title: 'Şahsy kabinet',
     subtitle: 'Işe başlamak üçin şahsy kabinetiňize giriň.',
     loginLabel: 'Login',
