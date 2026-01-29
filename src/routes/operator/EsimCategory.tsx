@@ -6,6 +6,7 @@ import type { EsimTab } from '../../hooks/operator/esim/useEsimLocations';
 import RegionModal from '../../components/operator/esim/RegionModal';
 import EsimModal from '../../components/operator/esim/EsimModal';
 import { useEsimValidation } from '../../hooks/operator/esim/useEsimValidation';
+import authService from '../../services/authService';
 
 function EsimCategory() {
     document.title = 'Unite Shop - eSIM';
@@ -27,6 +28,7 @@ function EsimCategory() {
         checkbox: false,
     });
     const [isPaymentLoading, setIsPaymentLoading] = useState(false);
+    const [paymentError, setPaymentError] = useState<string | null>(null);
 
     // Validation hook
     const { validateAndScroll, formRefs, checkboxRef } = useEsimValidation({
@@ -96,6 +98,7 @@ function EsimCategory() {
                     setFormValues({});
                     setIsCheckboxChecked(false);
                     setValidationErrors({ formFields: {}, checkbox: false });
+                    setPaymentError(null);
                 }}
                 selectedTariff={selectedTariff}
                 formValues={formValues}
@@ -113,16 +116,39 @@ function EsimCategory() {
                         return;
                     }
                     
+                    // Ensure we have selected tariff
+                    if (!selectedTariff) {
+                        return;
+                    }
+                    
+                    // Clear previous errors
+                    setPaymentError(null);
+                    
                     // Handle payment
                     setIsPaymentLoading(true);
                     try {
-                        // TODO: Implement payment logic
-                        console.log('Processing payment...');
+                        const response = await authService.buyEsim({
+                            tariff_name: selectedTariff.tariff.name,
+                            client_email: formValues['email'] || '',
+                            client_phone: formValues['phone'] || '',
+                        });
+                        
+                        // Redirect to voucher URL
+                        if (response.voucher) {
+                            window.location.href = response.voucher;
+                        } else {
+                            setPaymentError('Не удалось получить ссылку на ваучер');
+                        }
+                    } catch (error: any) {
+                        console.error('Payment error:', error);
+                        const errorMessage = error?.response?.data?.message || error?.message || 'Произошла ошибка при обработке платежа';
+                        setPaymentError(errorMessage);
                     } finally {
                         setIsPaymentLoading(false);
                     }
                 }}
                 isPaymentLoading={isPaymentLoading}
+                paymentError={paymentError}
             />
         </div>
     )
