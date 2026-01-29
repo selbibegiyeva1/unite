@@ -1,39 +1,42 @@
+import { lazy, Suspense } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Loading from "./components/Loading";
 
 import SignIn from "./routes/auth/SignIn";
-import Help from "./routes/Help";
+const Help = lazy(() => import("./routes/Help"));
 
-import HomeDirector from "./routes/director/HomeDirector";
-import HomeOperator from "./routes/operator/HomeOperator";
-import ProductOperator from "./routes/operator/ProductOperator";
-import CategoryOperator from "./routes/operator/CategoryOperator";
-import EsimCategory from "./routes/operator/EsimCategory";
-import TransactionsOperator from "./routes/operator/TransactionsOperator";
+const HomeDirector = lazy(() => import("./routes/director/HomeDirector"));
+const HomeOperator = lazy(() => import("./routes/operator/HomeOperator"));
+const ProductOperator = lazy(() => import("./routes/operator/ProductOperator"));
+const CategoryOperator = lazy(() => import("./routes/operator/CategoryOperator"));
+const EsimCategory = lazy(() => import("./routes/operator/EsimCategory"));
+const TransactionsOperator = lazy(() => import("./routes/operator/TransactionsOperator"));
 
 function App() {
   return (
     <LanguageProvider>
       <AuthProvider>
-        <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={<SignIn />} />
+            <Route element={<ProtectedRoute />}>
+              {/* operator */}
+              <Route path="/operator/home" element={<HomeOperator />} />
+              <Route path="/operator/product" element={<ProductOperator />} />
+              <Route path="/operator/products" element={<CategoryOperator />} />
+              <Route path="/operator/esim" element={<EsimCategory />} />
+              <Route path="/operator/transactions" element={<TransactionsOperator />} />
 
-        <Route element={<ProtectedRoute />}>
-          {/* operator */}
-          <Route path="/operator/home" element={<HomeOperator />} />
-          <Route path="/operator/product" element={<ProductOperator />} />
-          <Route path="/operator/products" element={<CategoryOperator />} />
-          <Route path="/operator/esim" element={<EsimCategory />} />
-          <Route path="/operator/transactions" element={<TransactionsOperator />} />
-          
-          {/* director */}
-          <Route path="/director/home" element={<HomeDirector />} />
-          <Route path="/help" element={<Help />} />
-        </Route>
-      </Routes>
+              {/* director */}
+              <Route path="/director/home" element={<HomeDirector />} />
+              <Route path="/help" element={<Help />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </AuthProvider>
     </LanguageProvider>
   );
