@@ -35,13 +35,13 @@ function HomeOperator() {
                                 </div>
                                 <b className='pt-3 flex justify-center'>{t.homeOperator.steam}</b>
                             </Link>
-                            <Link to="/operator/products">
+                            <Link to="/operator/products?tab=games">
                                 <div className="overflow-hidden rounded-[24px] max-w-[200px] max-2lg:max-w-[180px] max-1md:max-w-full">
                                     <img src="/home/2.png" alt="home" className='w-full transition-transform duration-200 hover:scale-105' />
                                 </div>
                                 <b className='pt-3 flex justify-center'>{t.homeOperator.games}</b>
                             </Link>
-                            <Link to="/operator/products">
+                            <Link to="/operator/products?tab=programs">
                                 <div className="overflow-hidden rounded-[24px] max-w-[200px] max-2lg:max-w-[180px] max-1md:max-w-full">
                                     <img src="/home/3.png" alt="home" className='w-full transition-transform duration-200 hover:scale-105' />
                                 </div>
