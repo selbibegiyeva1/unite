@@ -4,7 +4,7 @@ import { useProductGroups } from "../../../hooks/operator/product/useProductGrou
 import { useTranslation } from "../../../hooks/useTranslation";
 
 function Services() {
-    const [activeTab, setActiveTab] = useState<'programs' | 'games'>('programs');
+    const [activeTab, setActiveTab] = useState<'programs' | 'games'>('games');
     const { data: groups, isLoading, error } = useProductGroups();
     const { t } = useTranslation();
 
