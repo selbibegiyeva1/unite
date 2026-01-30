@@ -178,7 +178,7 @@ function RegionModal({ isOpen, onClose, countryCodes }: RegionModalProps) {
                         >
                             <div className="flex items-center gap-2">
                                 <img
-                                    src={country?.flag_url ?? extra?.flagUrl ?? '/esim/AU2.png'}
+                                    src={country?.flag_url ?? extra?.flagUrl ?? ''}
                                     alt={country?.country_name.ru ?? extra?.nameRu ?? code}
                                     className="w-[38px]"
                                 />
