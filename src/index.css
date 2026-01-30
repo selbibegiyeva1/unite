@@ -22,6 +22,14 @@
     .transaction td {
         @apply h-fit;
     }
+
+    .menu {
+        @apply flex flex-col gap-8 pb-[100px] mt-[33px];   
+
+        li {
+            @apply font-bold text-[24px];
+        }
+    }
 }
 
 /* Transactions table custom scrollbar */
