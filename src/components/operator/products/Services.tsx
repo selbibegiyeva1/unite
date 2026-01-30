@@ -1,10 +1,21 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useProductGroups } from "../../../hooks/operator/product/useProductGroups";
 import { useTranslation } from "../../../hooks/useTranslation";
 
+type TabType = 'programs' | 'games';
+
 function Services() {
-    const [activeTab, setActiveTab] = useState<'programs' | 'games'>('games');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabParam = searchParams.get('tab');
+    const activeTab: TabType = useMemo(() => {
+        if (tabParam === 'programs' || tabParam === 'games') return tabParam;
+        return 'games';
+    }, [tabParam]);
+
+    const setActiveTab = (tab: TabType) => {
+        setSearchParams({ tab });
+    };
     const { data: groups, isLoading, error } = useProductGroups();
     const { t } = useTranslation();
 
@@ -21,7 +32,7 @@ function Services() {
 
     return (
         <div className="pb-[100px]">
-            <p className="mb-8 text-[32px] font-bold">{t.services.title}</p>
+            <p className="mb-8 text-[32px] font-bold">{activeTab === 'games' ? t.services.tabGames : t.services.tabPrograms}</p>
             <div className="flex gap-2.5">
                 <button
                     type="button"
