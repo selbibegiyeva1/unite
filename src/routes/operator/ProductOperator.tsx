@@ -126,92 +126,94 @@ function ProductOperator() {
     }, [isLoading, productForm?.group, t.productOperator.loadingTitle]);
 
     return (
-        <div className='mt-[28px] pb-[100px] w-[1680px] m-auto'>
-            {isLoading && (
-                <div className='flex items-start gap-8'>
-                    <div className='flex flex-col gap-4 w-[1158px]'>
-                        <p className="text-[14px] text-[#00000099]">{t.productOperator.loadingProduct}</p>
+        <div className='min-w-0 overflow-x-hidden px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4'>
+            <div className='mt-[28px] pb-[100px] w-full min-w-0 max-w-[1680px] m-auto'>
+                {isLoading && (
+                    <div className='flex flex-col lg:flex-row items-start gap-8'>
+                        <div className='flex flex-col gap-4 w-full max-w-[1158px] min-w-0'>
+                            <p className="text-[14px] text-[#00000099]">{t.productOperator.loadingProduct}</p>
+                        </div>
                     </div>
-                </div>
-            )}
-            {error && !isLoading && (
-                <div className='flex items-start gap-8'>
-                    <div className='flex flex-col gap-4 w-[1158px]'>
-                        <p className="text-red-500 text-[14px]">
-                            {t.productOperator.loadError}
-                        </p>
+                )}
+                {error && !isLoading && (
+                    <div className='flex flex-col lg:flex-row items-start gap-8'>
+                        <div className='flex flex-col gap-4 w-full max-w-[1158px] min-w-0'>
+                            <p className="text-red-500 text-[14px]">
+                                {t.productOperator.loadError}
+                            </p>
+                        </div>
                     </div>
-                </div>
-            )}
-            {!isLoading && !error && productForm && (
-                <div>
-                    <div className='flex items-start gap-8'>
-                        <div className='flex flex-col gap-4 w-[1158px]'>
-                            <Modal
-                                isOpen={isModalOpen}
-                                onClose={() => setIsModalOpen(false)}
+                )}
+                {!isLoading && !error && productForm && (
+                    <div>
+                        <div className='flex items-start gap-8 max-slg:flex-col'>
+                            <div className='flex flex-col gap-4 w-full max-w-[1158px] min-w-0'>
+                                <Modal
+                                    isOpen={isModalOpen}
+                                    onClose={() => setIsModalOpen(false)}
+                                    productForm={productForm}
+                                    activeTab={activeTab}
+                                    selectedRegion={selectedRegion}
+                                    formValues={formValues}
+                                    selectedNominal={selectedNominal}
+                                    onPayment={handleModalPayment}
+                                    isPaymentLoading={isPaymentLoading}
+                                    paymentError={paymentError}
+                                />
+                                <Header productForm={productForm} activeTab={activeTab} setActiveTab={setActiveTab} />
+                                <Region
+                                    productForm={productForm}
+                                    activeTab={activeTab}
+                                    selectedRegion={selectedRegion}
+                                    onRegionChange={setSelectedRegion}
+                                />
+                                <Nominals
+                                    productForm={productForm}
+                                    selectedRegion={selectedRegion}
+                                    activeTab={activeTab}
+                                    selectedNominal={selectedNominal}
+                                    onNominalChange={setSelectedNominal}
+                                />
+                                <Form
+                                    productForm={productForm}
+                                    activeTab={activeTab}
+                                    formValues={formValues}
+                                    onFormChange={setFormValues}
+                                    validationErrors={validationErrors.formFields}
+                                    formRefs={formRefs}
+                                />
+                            </div>
+                            <Total
                                 productForm={productForm}
                                 activeTab={activeTab}
                                 selectedRegion={selectedRegion}
                                 formValues={formValues}
                                 selectedNominal={selectedNominal}
-                                onPayment={handleModalPayment}
+                                isCheckboxChecked={isCheckboxChecked}
+                                onCheckboxChange={setIsCheckboxChecked}
+                                checkboxError={validationErrors.checkbox}
+                                checkboxRef={checkboxRef}
+                                onPayment={handleOpenModal}
                                 isPaymentLoading={isPaymentLoading}
                                 paymentError={paymentError}
                             />
-                            <Header productForm={productForm} activeTab={activeTab} setActiveTab={setActiveTab} />
-                            <Region
+                        </div>
+                        <div className='mt-6'>
+                            <ProductFaq
                                 productForm={productForm}
                                 activeTab={activeTab}
-                                selectedRegion={selectedRegion}
-                                onRegionChange={setSelectedRegion}
-                            />
-                            <Nominals
-                                productForm={productForm}
-                                selectedRegion={selectedRegion}
-                                activeTab={activeTab}
-                                selectedNominal={selectedNominal}
-                                onNominalChange={setSelectedNominal}
-                            />
-                            <Form
-                                productForm={productForm}
-                                activeTab={activeTab}
-                                formValues={formValues}
-                                onFormChange={setFormValues}
-                                validationErrors={validationErrors.formFields}
-                                formRefs={formRefs}
                             />
                         </div>
-                        <Total
-                            productForm={productForm}
-                            activeTab={activeTab}
-                            selectedRegion={selectedRegion}
-                            formValues={formValues}
-                            selectedNominal={selectedNominal}
-                            isCheckboxChecked={isCheckboxChecked}
-                            onCheckboxChange={setIsCheckboxChecked}
-                            checkboxError={validationErrors.checkbox}
-                            checkboxRef={checkboxRef}
-                            onPayment={handleOpenModal}
-                            isPaymentLoading={isPaymentLoading}
-                            paymentError={paymentError}
-                        />
                     </div>
-                    <div className='mt-6'>
-                        <ProductFaq
-                            productForm={productForm}
-                            activeTab={activeTab}
-                        />
+                )}
+                {!groupName && !isLoading && (
+                    <div className='flex flex-col lg:flex-row items-start gap-8'>
+                        <div className='flex flex-col gap-4 w-full max-w-[1158px] min-w-0'>
+                            <p className="text-[14px] text-[#00000099]">{t.productOperator.noGroupSelected}</p>
+                        </div>
                     </div>
-                </div>
-            )}
-            {!groupName && !isLoading && (
-                <div className='flex items-start gap-8'>
-                    <div className='flex flex-col gap-4 w-[1158px]'>
-                        <p className="text-[14px] text-[#00000099]">{t.productOperator.noGroupSelected}</p>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     )
 }

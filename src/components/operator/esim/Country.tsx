@@ -166,7 +166,7 @@ function Country({ activeTab, setActiveTab, onSelectLocation }: CountryProps) {
                                     <img src={imageUrl} alt={name} className='w-[36px]' />
                                     <p>{name}</p>
                                 </div>
-                                <p className='text-[#00000099] text-[14px]'>
+                                <p className='text-[#00000099] text-[14px] text-right text-nowrap'>
                                     {item.tariff_count} {t.esim.country.tariffsSuffix}
                                 </p>
                             </div>

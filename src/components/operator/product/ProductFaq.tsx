@@ -20,7 +20,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Что такое логин Steam?",
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Это комбинация букв, цифр и знака «_», которую вы указываете при входе в Steam. 
                         <br />Если вы введете неверный логин — деньги уйдут другому пользователю с этим логином.
@@ -35,7 +35,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Как узнать регион своего аккаунта Steam?",
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Вы можете проверить регион своего аккаунта через сайт или приложение Steam (также мобильное):
                     </p>
@@ -51,7 +51,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Аккаунты Steam каких стран можно пополнить?",
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Пополнение игрового баланса с минимальной комиссией доступно для пользователей следующих стран:
                     </p>
@@ -74,7 +74,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Как пополнить новый аккаунт Steam?",
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         При первом пополнении нового аккаунта есть риск сменить страну магазина Steam. Он может стать, к примеру, казахстанским, то цены везде будут в тенге.
                     </p>
@@ -94,7 +94,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Можно ли вернуть деньги после пополнения?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     К сожалению, это невозможно. Средства зачисляются на Steam-кошелёк мгновенно.
                 </p>
             ),
@@ -102,7 +102,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Как быстро зачисляются деньги на игровой кошелек Steam?",
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Деньги поступят в Стим в течение 15 минут. В редких случаях — до 2 часов.
                     </p>
@@ -116,7 +116,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Можно ли вернуть деньги, если ошибся в логине при пополнении Steam?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Если введенный логин существует — деньги вернуть не получится.
                 </p>
             ),
@@ -124,7 +124,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Если платёж отменен по техническим причинам?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Проведение платежа может быть недоступно по техническим причинам при обновлении сервиса, попробуйте выполнить операцию позже.
                 </p>
             ),
@@ -136,7 +136,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Steam logini näme?',
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Bu Steam-e girmek üçin ulanýan harplaryň, sanlaryň we «_» nyşanynyň birleşmesidir.
                         <br />
@@ -152,7 +152,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Steam hasabymyň sebitini nädip bilmeli?',
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Hasabyňyzyň sebitini Steam saýty ýa-da goýbermesi (mobil goşundy hem bolup biler) arkaly barlap bilersiňiz:
                     </p>
@@ -168,7 +168,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Haýsy ýurtlaryň Steam hasaplaryny dolduryp bolýar?',
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Iň pes komissiýa bilen oýun balansyny aşakdaky ýurtlaryň ulanyjylary üçin dolduryp bolýar:
                     </p>
@@ -191,7 +191,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Täze Steam hasabyny nähili doldurmaly?',
             content: (
-                <div>
+                <div className='text-[14px]'>
                     <p className="text-[#00000099] font-medium">
                         Ilkinji gezek täze hasaby dolduranyňyzda Steam dükanynyň sebitini tötänleýin üýtgetmek howpy bar. Mysal üçin, Gazagystan saýlanyp biler we bahalar tenňede görkeziler.
                     </p>
@@ -217,7 +217,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Hasaby doldurgandan soň puly yzyna gaýtarıp bolýarmy?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Gynansak-da, bolmaýar. Pul Steam hamana dessine geçýär.
                 </p>
             ),
@@ -226,11 +226,11 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
             question: 'Steam oýun hamany näçe wagtda doldurylýar?',
             content: (
                 <div>
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Pul adatda 15 minudyň dowamynda Steam-a geçýär. Seýrek ýagdaýlarda — 2 sagada çenli dowam edip biler.
                     </p>
                     <br />
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Eger birnäçe sagadyň dowamynda pul gelmese, hatda görkezilen goldaw hyzmatyna ýazyp bilersiňiz. Tölegi
                         barlarys we kömek etmäge synanyşarys.
                     </p>
@@ -240,7 +240,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Steam doldurylanda logini ýalňyş girizsem, puly yzyna alyp bilerminem?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Eger girizilen login eýýäm bar bolsa, serişdeleri yzyna gaýtarmak mümkin bolmaz.
                 </p>
             ),
@@ -248,7 +248,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Töleg tehniki sebäplere görä ýatyrylandygy barada ýazsa näme etmeli?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Töleg hyzmatynyň täzelemegi sebäpli wagtlaýyn tehniki näsazlyk bolup biler. Biraz wagt soň gaýtadan synanyşyň.
                 </p>
             ),
@@ -260,7 +260,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Что такое ваучер?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Ваучер — уникальная комбинация из цифр и букв. У ваучера есть денежный номинал, который зачисляется на игровой кошелек при активации.
                 </p>
             ),
@@ -268,7 +268,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Есть ли ограничения по региону?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Да, каждый ваучер привязан к определённому региону. 
                     <br />При покупке регион указывается заранее. 
                     <br /><br />
@@ -279,12 +279,12 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Как я получу ваучер после оплаты?",
             content: (
-                <div>
-                    <p className="text-[#00000099] font-medium">
+                <div className='text-[14px]'>
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         После успешной оплаты, ваучер и инструкция по активации придет в течение 3-15 минут на ваш е-mail указанный при заполнении.
                     </p>
                     <br />
-                    <p className="text-[#00000099] font-bold">
+                    <p className="text-[#00000099] font-bold text-[14px]">
                         Важно: точка продаж и клиент несут ответственность за корректность указания email. <br />Если была допущена ошибка в написании адреса, система отправит ваучер на неверную почту, и это не является техническим сбоем.
                     </p>
                 </div>
@@ -293,13 +293,13 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Что делать, если не пришло письмо с ваучером?",
             content: (
-                <div>
-                    <p className="text-[#00000099] font-medium">
+                <div className='text-[14px]'>
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Первоначально проверьте в почте папку «Спам», «Промоакции» и «Рассылки». 
                         <br /><br />Убедитесь, что адрес почты был указан без ошибок.
                     </p>
                     <br />
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Если была допущена ошибка в указании почты при оформлении, точка продаж может вручить ваучер клиенту лично и передать код вручную. 
                         <br />В истории транзакции будет доступна отдельная ссылка <span className="text-[#2D85EA]">"QR/Инструкция"</span>, по которому продавец может получить код активации и выдать его клиенту.
                     </p>
@@ -310,11 +310,11 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
             question: "Можно ли вернуть деньги за ваучер после покупки?",
             content: (
                 <div>
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         К сожалению, нет. Ваучер невозвратный.
                     </p>
                     <br />
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Если ваучер окажется недействительным, мы проведём проверку и предоставим новый рабочий код.
                     </p>
                 </div>
@@ -323,7 +323,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Как долго действует ваучер?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Срок действия не ограничен — вы можете активировать его в любое время.
                 </p>
             ),
@@ -331,7 +331,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Что делать, если система пишет, что код уже активирован?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Обратитесь в поддержку указанную в письме. Мы проверим код у поставщика и при подтверждении проблемы заменим его на новый.
                 </p>
             ),
@@ -339,7 +339,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: "Можно ли купить ваучер в подарок?",
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Да, вы можете указать любой еmail получателя или переслать письмо с кодом вручную.
                 </p>
             ),
@@ -351,7 +351,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Voucher näme?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Voucher — sanlardan we harpdan ybarat özboluşly kombinasiýa. Voucheriň pul bahasy bar we ol işjeňleşdirilende
                     oýun hamanyna geçirilýär.
                 </p>
@@ -360,7 +360,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Sebit boýunça çäklendirmeler barmy?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Hawa, her bir voucher belli bir sebite baglanan.
                     <br />
                     Satyn alanyňyzda sebit öňünden görkezilýär.
@@ -373,13 +373,13 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Tölegden soň voucheri nädip alaryn?',
             content: (
-                <div>
-                    <p className="text-[#00000099] font-medium">
+                <div className='text-[14px]'>
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Töleg üstünlikli tamamlanylandan soň, voucher we ony işjeňleşdirmegiň görkezmesi 3–15 minutyň dowamynda
                         forma doldurylanda görkezilen e-mail salgyňa iberiler.
                     </p>
                     <br />
-                    <p className="text-[#00000099] font-bold">
+                    <p className="text-[#00000099] font-bold text-[14px]">
                         Möhüm: satuw nokady hem-de müşderi e-mail salgyň dogry görkezilmegine jogapkär.{' '}
                         <br />
                         Eger salgyda ýalňyşlyk goýberilse, ulgam voucheri nädogry poçta salgysyna iberer we bu tehniki näsazlyk
@@ -391,15 +391,15 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Voucher bilen hat gelmedik bolsa näme etmeli?',
             content: (
-                <div>
-                    <p className="text-[#00000099] font-medium">
+                <div className='text-[14px]'>
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Ilki bilen poçtaňyzda «Spam», «Promosiýalar» we «Bölşedişler» ýaly bukjalary barlaň.
                         <br />
                         <br />
                         Poçta salgysynyň nädogry girizilmedigine göz ýetiriň.
                     </p>
                     <br />
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Eger forma doldurylanda poçta nädogry ýazylan bolsa, satuw nokady voucheri müşderä el bilen berip
                         biler.
                         <br />
@@ -413,11 +413,11 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
             question: 'Satyn alnan voucheriň puluny yzyna gaýtaryp bolýarmy?',
             content: (
                 <div>
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Gynansak-da, ýok. Voucher yzyna gaýtarylmaýar.
                     </p>
                     <br />
-                    <p className="text-[#00000099] font-medium">
+                    <p className="text-[#00000099] font-medium text-[14px]">
                         Eger voucher işlemeýän bolsa, biz barlag geçireris we tassyklanan ýagdaýynda täze, işjeň kod bereris.
                     </p>
                 </div>
@@ -426,7 +426,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Voucher näçe wagt hereketde bolýar?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Möhlet çäklendirilmedik — ony islendik wagtda işjeňleşdirip bilersiňiz.
                 </p>
             ),
@@ -434,7 +434,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Ulgam kod eýýäm işjeňleşdirildi diýip ýazsa näme etmeli?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Hatda görkezilen goldaw hyzmatyna ýüz tutuň. Biz kody üpjünçiden barlarys we mesele tassyk edilse, ony täze
                     koda çalyşarys.
                 </p>
@@ -443,7 +443,7 @@ function ProductFaq({ productForm, activeTab }: ProductFaqProps) {
         {
             question: 'Voucheri sowgat hökmünde satyn alyp bolýarmy?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] font-medium text-[14px]">
                     Hawa, alyjy üçin islendik e-mail salgysyny görkezmek ýa-da kody özüňiz hat arkaly iberip bilersiňiz.
                 </p>
             ),

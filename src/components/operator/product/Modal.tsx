@@ -80,7 +80,7 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
             onClick={onClose}
         >
             <div
-                className={`p-8 border-[1.5px] border-[#00000026] rounded-4xl w-[490px] bg-white transform transition-transform duration-200 ${
+                className={`p-8 max-1md:p-6 border-[1.5px] border-[#00000026] rounded-4xl w-full max-w-[600px] bg-white transform transition-transform duration-200 ${
                     isOpen ? "translate-y-0" : "translate-y-2"
                 }`}
                 onClick={(e) => e.stopPropagation()}
@@ -117,19 +117,19 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                                 {formValues.login && (
                                     <div className={`flex items-center justify-between py-4 ${(formValues.email || formValues.amount) ? 'border-b border-[#0000001A]' : ''}`}>
                                         <p className="font-medium whitespace-nowrap">{t.productForm.steamLoginPlaceholder}</p>
-                                        <p className="font-medium ml-4">{formValues.login}</p>
+                                        <p className="font-medium ml-4 line-clamp-3">{formValues.login}</p>
                                     </div>
                                 )}
                                 {formValues.email && (
                                     <div className={`flex items-center justify-between py-4 ${formValues.amount ? 'border-b border-[#0000001A]' : ''}`}>
                                         <p className="font-medium whitespace-nowrap">{t.productForm.steamEmailPlaceholder}</p>
-                                        <p className="font-medium ml-4 truncate min-w-0 max-w-[200px] text-right">{formValues.email}</p>
+                                        <p className="font-medium ml-4 truncate min-w-0 max-w-[200px] text-right text-ellipsis overflow-hidden line-clamp-3">{formValues.email}</p>
                                     </div>
                                 )}
                                 {formValues.amount && (
                                     <div className="flex items-center justify-between py-4">
                                         <p className="font-medium whitespace-nowrap">{t.productForm.steamAmountLabel}</p>
-                                        <p className="font-medium ml-4">{formValues.amount} TMT</p>
+                                        <p className="font-medium ml-4 line-clamp-3">{formValues.amount} TMT</p>
                                     </div>
                                 )}
                             </>
@@ -142,7 +142,7 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                                 return (
                                     <div key={field.name} className={`flex items-center justify-between py-4 ${!isLast ? 'border-b border-[#0000001A]' : ''}`}>
                                         <p className="font-medium">{field.label}</p>
-                                        <p className="font-medium ml-4">{value || '-'}</p>
+                                        <p className="font-medium ml-4 text-right truncate min-w-0 max-w-[180px] text-ellipsis overflow-hidden line-clamp-3">{value || '-'}</p>
                                     </div>
                                 );
                             })
@@ -177,7 +177,7 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                         {/* Итого к списанию */}
                         <div className="flex items-center justify-between py-4 text-[18px]">
                             <p className="font-bold whitespace-nowrap">{t.productTotal.totalToDebit}</p>
-                            <p className="font-bold ml-4">{totalAmount} TMT</p>
+                            <p className="font-bold ml-4 text-right">{totalAmount} TMT</p>
                         </div>
                     </div>
 

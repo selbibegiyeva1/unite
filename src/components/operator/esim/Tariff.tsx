@@ -76,7 +76,7 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                 </p>
             )}
 
-            <div className="mt-6.5 grid grid-cols-4 gap-8">
+            <div className="mt-6.5 grid grid-cols-4 gap-8 max-2lg:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1">
                 {selectedCodeForApi && !isLoading && !isError && tariffs.length === 0 && (
                     <p className="text-sm text-[#00000099]">
                         {t.esim.tariff.empty}
@@ -114,18 +114,18 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                         {activeTab === 'countries' && (
                             <div className="flex items-center justify-between gap-2 py-[18px] border-b border-[#00000026] font-medium">
                                 <p>{t.esim.tariff.countryLabel}</p>
-                                <p>{selectedName ?? tariff.operator}</p>
+                                <p className='text-right'>{selectedName ?? tariff.operator}</p>
                             </div>
                         )}
                         <div className="flex items-center justify-between gap-2 py-[18px] font-medium">
                             <p>{t.esim.tariff.validity}</p>
-                            <p className="text-[#00000099]">{formatDays(tariff.days, t.esim.day)}</p>
+                            <p className="text-[#00000099] text-right">{formatDays(tariff.days, t.esim.day)}</p>
                         </div>
 
                         <div className="mt-6">
                             <div className="flex items-center justify-between gap-2 text-[22px]">
                                 <b>{t.esim.tariff.amount}</b>
-                                <b>{tariff.price_tmt} ТМТ</b>
+                                <b className='text-right'>{tariff.price_tmt} ТМТ</b>
                             </div>
                             <button
                                 onClick={() => {

@@ -17,22 +17,22 @@ function Header({ productForm, activeTab, setActiveTab }: HeaderProps) {
     const inactiveClasses = 'bg-white border-2 border-[#00000026] text-black';
 
     return (
-        <div className='px-8 py-11 border-[1.5px] border-[#00000026] rounded-4xl'>
-            <div className='flex items-start gap-[29px]'>
+        <div className='px-8 py-11 border-[1.5px] border-[#00000026] rounded-4xl max-lg:p-8'>
+            <div className='flex items-start gap-[29px] max-xsm:flex-col'>
                 <img
                     src={productForm.icon}
                     alt="image"
-                    className='w-[160px] rounded-[24px]'
+                    className='w-[160px] rounded-[24px] max-1lg:max-w-[140px] max-xsm:w-full max-xsm:max-w-full'
                 />
                 <div>
                     <p className="text-[24px] font-bold">{productForm.group}</p>
                     <p className="text-[14px] text-[#00000099] py-[18px]">{productForm.short_info}</p>
-                    <div className='flex items-center gap-2.5'>
+                    <div className='flex items-center gap-2.5 max-slg:flex-wrap max-xsm:flex-col'>
                         {productForm.forms?.topup_fields !== null && productForm.forms?.topup_fields !== undefined && (
                             <button
                                 type="button"
                                 onClick={() => setActiveTab('popolnenie')}
-                                className={`${baseBtn} ${activeTab === 'popolnenie' ? activeClasses : inactiveClasses}`}
+                                className={`${baseBtn} ${activeTab === 'popolnenie' ? activeClasses : inactiveClasses} max-xsm:w-full max-xsm:justify-center`}
                             >
                                 {t.productHeader.topupTab}
                             </button>
@@ -41,13 +41,13 @@ function Header({ productForm, activeTab, setActiveTab }: HeaderProps) {
                             <button
                                 type="button"
                                 onClick={() => setActiveTab('voucher')}
-                                className={`${baseBtn} ${activeTab === 'voucher' ? activeClasses : inactiveClasses}`}
+                                className={`${baseBtn} ${activeTab === 'voucher' ? activeClasses : inactiveClasses} max-xsm:w-full max-xsm:justify-center`}
                             >
                                 {t.productHeader.voucherTab}
                                 <div className='relative group'>
 
                                     {/* Hover here */}
-                                    <img src="/product/help.png" className='w-[28px]' alt="help" />
+                                    <img src="/product/help.png" className='w-[28px]' style={{maxWidth: '28px'}} alt="help" />
 
                                     {/* Display this on hover */}
                                     <span className='absolute shadow-2xl border text-black border-[#00000026] rounded-[16px] leading-5 text-left top-[50px] z-10 left-[-50px] font-medium text-[14px] w-[300px] bg-white px-4 py-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>

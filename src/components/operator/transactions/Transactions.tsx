@@ -180,45 +180,39 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
                     </button>
                 </div>
 
-                {/* Header row (not scrollable) */}
-                <div className="mt-3.5">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="grid grid-cols-9 gap-[30px] text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
-                                <td className="text-left">{t.transactions.date}</td>
-                                <td>{t.transactions.email}</td>
-                                <td>{t.transactions.transactionId}</td>
-                                <td>{t.transactions.operator}</td>
-                                <td>{t.transactions.category}</td>
-                                <td>{t.transactions.description}</td>
-                                <td>{t.transactions.amount}</td>
-                                <td>{t.transactions.status}</td>
-                                <td className="text-right">{t.transactions.link}</td>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-
-                {/* Scroll only table body */}
-                <div className="flex-1 overflow-y-auto transactions-table-scroll">
+                {/* Header and body scroll together (vertical + horizontal at 1lg) */}
+                <div className="flex-1 min-h-0 overflow-y-auto overflow-x-auto transactions-table-scroll mt-3.5">
                     {isLoading ? (
-                        <div className="flex items-center justify-center h-full">
+                        <div className="flex items-center justify-center h-full min-h-[200px]">
                             <p className="text-[#00000099]">{t.transactions.loading}</p>
                         </div>
                     ) : error ? (
-                        <div className="flex items-center justify-center h-full">
+                        <div className="flex items-center justify-center h-full min-h-[200px]">
                             <p className="text-[#ED2428]">{t.transactions.loadError}</p>
                         </div>
                     ) : transactions.length === 0 ? (
-                        <div className="flex items-center justify-center h-full">
+                        <div className="flex items-center justify-center h-full min-h-[200px]">
                             <p className="text-[#00000099]">{t.transactions.empty}</p>
                         </div>
                     ) : (
-                        <table className="w-full">
+                        <table className="w-full max-1lg:min-w-[1200px]">
+                            <thead>
+                                <tr className="grid grid-cols-9 gap-[30px] text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
+                                    <td className="text-left">{t.transactions.date}</td>
+                                    <td>{t.transactions.email}</td>
+                                    <td>{t.transactions.transactionId}</td>
+                                    <td>{t.transactions.operator}</td>
+                                    <td>{t.transactions.category}</td>
+                                    <td>{t.transactions.description}</td>
+                                    <td>{t.transactions.amount}</td>
+                                    <td>{t.transactions.status}</td>
+                                    <td className="text-right">{t.transactions.link}</td>
+                                </tr>
+                            </thead>
                             <tbody className="text-[#00000099] text-[12px]">
                                 {transactions.map((transaction) => (
                                     <tr key={transaction.id} className="transaction grid grid-cols-9 gap-[30px] items-center text-center px-2.5 py-3 mb-[20px] rounded-[6px] text-black">
-                                        <td className="flex itemms-right">{transaction.date}</td>
+                                        <td className="flex text-left">{transaction.date}</td>
                                         <td className="truncate min-w-0">{transaction.email}</td>
                                         <td
                                             onClick={() => handleCopyTransactionId(transaction.transactionId)}

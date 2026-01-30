@@ -50,70 +50,74 @@ function Filter({ onFiltersChange }: FilterProps) {
     return (
         <div className="mt-5 px-5 py-[32px] border border-[#00000026] rounded-[16px]">
             <p className="font-medium text-[18px] mb-5">{t.transactions.filters.title}</p>
-            <div className="flex items-end gap-4">
-                <div>
-                    <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.dateLabel}</span>
-                    <div className="relative">
-                        <select
-                            value={filters.period}
-                            onChange={handlePeriodChange}
-                            className="w-[320px] text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
-                        >
-                            <option value="all_time">{t.transactions.filters.dateAll}</option>
-                            <option value="day">{t.transactions.filters.dateDay}</option>
-                            <option value="week">{t.transactions.filters.dateWeek}</option>
-                            <option value="month">{t.transactions.filters.dateMonth}</option>
-                            <option value="year">{t.transactions.filters.dateYear}</option>
-                        </select>
-                        <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
+            <div className="flex items-end gap-4 max-0lg:flex-col max-0lg:items-start">
+                <div className="flex items-end gap-4 max-1md:grid max-1md:grid-cols-1 max-1md:w-full">
+                    <div className="max-1md:w-full">
+                        <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.dateLabel}</span>
+                        <div className="relative">
+                            <select
+                                value={filters.period}
+                                onChange={handlePeriodChange}
+                                className="w-[320px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
+                            >
+                                <option value="all_time">{t.transactions.filters.dateAll}</option>
+                                <option value="day">{t.transactions.filters.dateDay}</option>
+                                <option value="week">{t.transactions.filters.dateWeek}</option>
+                                <option value="month">{t.transactions.filters.dateMonth}</option>
+                                <option value="year">{t.transactions.filters.dateYear}</option>
+                            </select>
+                            <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div className="max-1md:w-full">
+                        <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.categoryLabel}</span>
+                        <div className="relative max-1md:w-full">
+                            <select
+                                value={filters.category}
+                                onChange={handleCategoryChange}
+                                className="w-[320px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
+                            >
+                                <option value="ALL">{t.transactions.filters.categoryAll}</option>
+                                <option value="ESIM">{t.transactions.filters.categoryEsim}</option>
+                                <option value="VOUCHER">{t.transactions.filters.categoryVoucher}</option>
+                                <option value="STEAM">{t.transactions.filters.categorySteam}</option>
+                                <option value="TOPUP">{t.transactions.filters.categoryTopup}</option>
+                            </select>
+                            <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div className="w-[240px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full flex items-center gap-2 text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.1524 11.1572L15.8281 15.833M7.91146 12.4997C10.4428 12.4997 12.4948 10.4476 12.4948 7.91634C12.4948 5.38504 10.4428 3.33301 7.91146 3.33301C5.38015 3.33301 3.32812 5.38504 3.32812 7.91634C3.32812 10.4476 5.38015 12.4997 7.91146 12.4997Z" stroke="black" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
+                        <input
+                            type="text"
+                            value={filters.transactionId}
+                            onChange={handleTransactionIdChange}
+                            onKeyPress={handleKeyPress}
+                            placeholder={t.transactions.filters.idPlaceholder}
+                            className="w-full cursor-pointer outline-0 text-[14px] font-medium"
+                        />
                     </div>
                 </div>
-                <div>
-                    <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.categoryLabel}</span>
-                    <div className="relative">
-                        <select
-                            value={filters.category}
-                            onChange={handleCategoryChange}
-                            className="w-[320px] text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
-                        >
-                            <option value="ALL">{t.transactions.filters.categoryAll}</option>
-                            <option value="ESIM">{t.transactions.filters.categoryEsim}</option>
-                            <option value="VOUCHER">{t.transactions.filters.categoryVoucher}</option>
-                            <option value="STEAM">{t.transactions.filters.categorySteam}</option>
-                            <option value="TOPUP">{t.transactions.filters.categoryTopup}</option>
-                        </select>
-                        <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
-                        </svg>
-                    </div>
+                <div className="flex items-end gap-4">
+                    <button
+                        onClick={onSearch}
+                        className="bg-[#2D85EA] text-white text-[15px] font-medium rounded-[8px] px-3 py-[8.75px] w-[120px] cursor-pointer"
+                    >
+                        {t.transactions.filters.search}
+                    </button>
+                    <button
+                        onClick={onReset}
+                        className="text-[15px] font-medium text-[#2D85EA] h-[40px] cursor-pointer"
+                    >
+                        {t.transactions.filters.reset}
+                    </button>
                 </div>
-                <div className="w-[240px] flex items-center gap-2 text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.1524 11.1572L15.8281 15.833M7.91146 12.4997C10.4428 12.4997 12.4948 10.4476 12.4948 7.91634C12.4948 5.38504 10.4428 3.33301 7.91146 3.33301C5.38015 3.33301 3.32812 5.38504 3.32812 7.91634C3.32812 10.4476 5.38015 12.4997 7.91146 12.4997Z" stroke="black" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <input
-                        type="text"
-                        value={filters.transactionId}
-                        onChange={handleTransactionIdChange}
-                        onKeyPress={handleKeyPress}
-                        placeholder={t.transactions.filters.idPlaceholder}
-                        className="w-full cursor-pointer outline-0 text-[14px] font-medium"
-                    />
-                </div>
-                <button
-                    onClick={onSearch}
-                    className="bg-[#2D85EA] text-white text-[15px] font-medium rounded-[8px] px-3 py-[8.75px] w-[120px] cursor-pointer"
-                >
-                    {t.transactions.filters.search}
-                </button>
-                <button
-                    onClick={onReset}
-                    className="text-[15px] font-medium text-[#2D85EA] h-[40px] cursor-pointer"
-                >
-                    {t.transactions.filters.reset}
-                </button>
             </div>
         </div>
     )
