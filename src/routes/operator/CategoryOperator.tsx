@@ -6,8 +6,8 @@ function CategoryOperator() {
     const { t } = useTranslation();
     document.title = t.categoryOperator.pageTitle;
     return (
-        <div className='px-6 mt-[28px]'>
-            <div className='w-[1680px] m-auto'>
+        <div className='px-20 mt-[28px] max-1lg:px-15 max-md:px-8 max-sm:px-4'>
+            <div className='max-w-[1680px] m-auto'>
                 <p className='text-[36px] font-bold'>{t.categoryOperator.heading}</p>
                 <div className="mt-5">
                     <Search />
