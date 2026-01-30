@@ -72,7 +72,7 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
             onClick={onClose}
         >
             <div
-                className={`bg-white p-8 rounded-3xl w-[1160px] grid grid-cols-2 gap-[26px] transform transition-transform duration-200 ${
+                className={`w-full max-w-[1160px] bg-white p-8 max-1md:p-6 rounded-3xl grid grid-cols-1 lg:grid-cols-2 gap-[26px] transform transition-transform duration-200 ${
                     isOpen ? "translate-y-0" : "translate-y-2"
                 }`}
                 onClick={(e) => e.stopPropagation()}
@@ -115,7 +115,7 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
                         </svg>
                         <p>{t.esim.modal.nonRefundableNote}</p>
                     </div>
-                    <p className="text-[14px] font-medium w-[440px]">
+                    <p className="text-[14px] font-medium w-full max-w-[440px]">
                         {t.esim.modal.afterPaymentNote}
                     </p>
                 </div>
@@ -153,11 +153,11 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
                     <div className="mt-6 px-4 pt-4 pb-6 bg-[#F5F5F9] rounded-2xl">
                         <div className="flex items-center justify-between font-medium py-4.5 border-b border-[#00000026]">
                             <p>{t.esim.modal.tariffCost}</p>
-                            <p>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
+                            <p className='text-right text-nowrap'>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
                         </div>
                         <div className="flex mt-4 items-center justify-between font-bold text-[18px]">
                             <p>{t.esim.modal.total}</p>
-                            <p>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
+                            <p className='text-right text-nowrap'>{selectedTariff ? `${selectedTariff.tariff.price_tmt} ТМТ` : '-'}</p>
                         </div>
                     </div>
 

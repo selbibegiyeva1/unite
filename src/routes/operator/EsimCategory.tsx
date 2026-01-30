@@ -39,8 +39,8 @@ function EsimCategory() {
     });
 
     return (
-        <div className='px-6 mt-[28px] pb-[100px]'>
-            <div className='w-[1680px] m-auto'>
+        <div className='px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4 mt-[28px] pb-[100px]'>
+            <div className='max-w-[1680px] m-auto'>
                 <p className='text-[36px] font-bold'>{t.esim.category.heading}</p>
                 <div className='mt-8 mb-[56px]'>
                     <Country

@@ -13,7 +13,7 @@ function EsimFaq() {
         {
             question: 'Что такое eSIM?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     Это цифровой QR‑код для установки профиля eSIM иностранных операторов только за рубежом.
                     <br /><br />
                     Продукт предоставляет <b>мобильный интернет‑доступ в поездках, не включает голос/звонки и SMS,
@@ -24,7 +24,7 @@ function EsimFaq() {
         {
             question: 'С какими устройствами работает eSIM?',
             content: (
-                <div className="text-[#00000099] font-medium">
+                <div className="text-[#00000099] text-[14px] font-medium">
                     <p>
                         eSIM поддерживается на современных устройствах iPhone, iPad и Android.
                     </p>
@@ -44,7 +44,7 @@ function EsimFaq() {
         {
             question: 'Можно ли вернуть деньги за eSIM после покупки?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     К сожалению, нет. eSIM невозвратный.
                 </p>
             ),
@@ -52,7 +52,7 @@ function EsimFaq() {
         {
             question: 'Как я получу eSIM после оплаты?',
             content: (
-                <div className="text-[#00000099] font-medium">
+                <div className="text-[#00000099] text-[14px] font-medium">
                     <p>
                         После успешной оплаты QR‑код и инструкция по активации придут в течение 3–15 минут
                         на e‑mail, указанный при заполнении.
@@ -70,7 +70,7 @@ function EsimFaq() {
         {
             question: 'Что делать, если не пришло письмо с QR‑кодом?',
             content: (
-                <div className="text-[#00000099] font-medium">
+                <div className="text-[#00000099] text-[14px] font-medium">
                     <p>
                         Первоначально проверьте в почте папку «Спам», «Промоакции» и «Рассылки». <br />
                         <br />Убедитесь, что адрес почты был указан без ошибок.
@@ -88,7 +88,7 @@ function EsimFaq() {
         {
             question: 'С какого момента отсчитывается срок действия eSIM?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     eSIM начинает работать с момента подключения к поддерживаемой сети.
                 </p>
             ),
@@ -96,7 +96,7 @@ function EsimFaq() {
         {
             question: 'Что делать, если система пишет, что код уже активирован?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     Обратитесь в поддержку, указанную в письме. Мы проверим код у поставщика и при подтверждении
                     проблемы заменим его на новый.
                 </p>
@@ -105,7 +105,7 @@ function EsimFaq() {
         {
             question: 'В Туркменистане я могу использовать eSIM?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     Нет, это невозможно. eSIM работает только в той стране, для которой она была выпущена.
                 </p>
             ),
@@ -116,7 +116,7 @@ function EsimFaq() {
         {
             question: 'eSIM näme?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     eSIM — daşary ýurt operatorynyň profiline gatnaşmak üçin ulanylýan sanly QR‑kod bolup,
                     diňe ýurdumyzyň daşynda işe girizilýär.
                     <br /><br />
@@ -128,7 +128,7 @@ function EsimFaq() {
         {
             question: 'eSIM haýsy enjamlar bilen işleýär?',
             content: (
-                <div className="text-[#00000099] font-medium">
+                <div className="text-[#00000099] text-[14px] font-medium">
                     <p>
                         eSIM häzirki zaman iPhone, iPad we Android enjamlarynda goldanylýar.
                     </p>
@@ -149,7 +149,7 @@ function EsimFaq() {
         {
             question: 'Satyn alan eSIM üçin puluňy yzyna alyp bolýarmy?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     Bagyşlaň, mümkin däl. eSIM yzyna gaýtarylmaýan haryt.
                 </p>
             ),
@@ -157,7 +157,7 @@ function EsimFaq() {
         {
             question: 'Tölegden soň eSIM‑i nähili alaryn?',
             content: (
-                <div className="text-[#00000099] font-medium">
+                <div className="text-[#00000099] text-[14px] font-medium">
                     <p>
                         Üstünlikli tölegden soň eSIM gurmak üçin QR‑kod we aktiwasiýa görkezmesi
                         forma doldurylanda görkezilen e‑mail salgysyna 3–15 minut dowamynda iberiler.
@@ -175,7 +175,7 @@ function EsimFaq() {
         {
             question: 'QR‑kodly hat gelmedik bolsa näme etmeli?',
             content: (
-                <div className="text-[#00000099] font-medium">
+                <div className="text-[#00000099] text-[14px] font-medium">
                     <p>
                         Ilki bilen poçtanyň «Spam», «Promosiýalar» we «Habarlar» bukjalaryny barlaň. <br />
                         <br />Poçta salgysynyň ýalňyşsyz girizilendigine göz ýetiriň.
@@ -193,7 +193,7 @@ function EsimFaq() {
         {
             question: 'eSIM‑iň hereket möhleti haçandan başlanýar?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     eSIM görkezilen ýurtda goldanylýan operatoryň toruna birinji gezek
                     birikenden soň işe başlaýar.
                 </p>
@@ -202,7 +202,7 @@ function EsimFaq() {
         {
             question: 'Ulgam kod eýýäm aktiw diýse näme etmeli?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     Hatda görkezilen goldaw hyzmatyna ýüz tutuň. Kody üpjünçiden barlarys
                     we problema tassyk bolnanda täze kod bilen çalyşarys.
                 </p>
@@ -211,7 +211,7 @@ function EsimFaq() {
         {
             question: 'Men eSIM‑i Türkmenistanyň içinde ulanyp bilerinmi?',
             content: (
-                <p className="text-[#00000099] font-medium">
+                <p className="text-[#00000099] text-[14px] font-medium">
                     Ýok, mümkin däl. eSIM diňe onuň üçin niýetlenen ýurduň we operatoryň torunda işleýär.
                 </p>
             ),
