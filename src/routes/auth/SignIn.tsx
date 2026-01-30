@@ -6,7 +6,7 @@ function SignIn() {
     document.title = t.signIn.pageTitle;
 
     return (
-        <div className="px-[16px] pt-[32px] pb-[100px] h-full">
+        <div className="px-[24px] pt-[32px] pb-[100px] h-full max-xsm:pt-[80px]">
             <SignInForm />
         </div>
     )

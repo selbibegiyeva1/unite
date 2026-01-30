@@ -40,7 +40,7 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
             onClick={click}
         >
             <div
-                className={`bg-white w-[400px] px-[18px] pt-[18px] pb-[32px] rounded-[16px] transform transition-transform duration-200 ${
+                className={`bg-white w-[400px] max-1md:w-full px-[18px] pt-[18px] pb-[32px] rounded-[16px] transform transition-transform duration-200 ${
                     isSidebarOpen ? "translate-y-0" : "translate-y-2"
                 }`}
                 onClick={(e) => e.stopPropagation()}
