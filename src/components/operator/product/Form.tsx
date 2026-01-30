@@ -151,8 +151,8 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
                                 {/* Hover here */}
                                 <img src="/product/help.png" className='w-[28px] cursor-pointer' alt="help" />
                                 {/* Display this on hover */}
-                                <div className='absolute shadow-2xl border text-black border-[#00000026] rounded-[32px] text-left top-[50px] z-10 left-[-50px] text-[14px] w-[600px] bg-white p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>
-                                    <p className='font-medium text-[32px]'>{t.productForm.steamLoginTitle}</p>
+                                <div className='absolute shadow-2xl border text-black border-[#00000026] rounded-[32px] text-left top-[50px] z-10 left-[-50px] max-1md:w-[425px] max-1md:left-[-130px] text-[14px] w-[600px] bg-white p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>
+                                    <p className='font-medium text-[32px] max-1md:text-[24px] leading-10'>{t.productForm.steamLoginTitle}</p>
 
                                     <ul className='mt-4 mb-6 list-disc text-[14px] list-inside flex flex-col gap-2 marker:text-[#2D85EA]'>
                                         <li>{t.productForm.steamLoginStep1}</li>

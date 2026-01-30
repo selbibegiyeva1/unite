@@ -50,7 +50,7 @@ function Header({ productForm, activeTab, setActiveTab }: HeaderProps) {
                                     <img src="/product/help.png" className='w-[28px]' style={{maxWidth: '28px'}} alt="help" />
 
                                     {/* Display this on hover */}
-                                    <span className='absolute shadow-2xl border text-black border-[#00000026] rounded-[16px] leading-5 text-left top-[50px] z-10 left-[-50px] font-medium text-[14px] w-[300px] bg-white px-4 py-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>
+                                    <span className='absolute shadow-2xl border text-black border-[#00000026] rounded-[16px] leading-5 text-left top-[50px] z-10 left-[-50px] max-1md:left-[-200px] font-medium text-[14px] w-[300px] bg-white px-4 py-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200'>
                                         {t.productHeader.voucherTooltip}
                                     </span>
                                 </div>
