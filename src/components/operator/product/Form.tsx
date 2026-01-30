@@ -143,7 +143,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
             <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
                 <p className="text-[24px] font-bold">{t.productForm.topupAccountTitle}</p>
 
-                <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-8">
+                <div className="mt-4 grid grid-cols-2 max-[720px]:grid-cols-1 gap-x-4 gap-y-8">
                     <div>
                         <div className='pb-4 flex items-center gap-2.5'>
                             <span className="text-[14px] font-medium flex">{t.productForm.steamWhereToFind}</span>
@@ -246,7 +246,7 @@ function Form({ productForm, activeTab, formValues, onFormChange, validationErro
         <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl">
             <p className="text-[24px] font-bold">{t.productForm.topupAccountTitle}</p>
 
-            <div className={`mt-4 grid ${gridCols} gap-x-4 gap-y-8`}>
+            <div className={`mt-4 grid ${gridCols} max-[720px]:grid-cols-1 gap-x-4 gap-y-8`}>
                 {formFields.map((field) => (
                     <div key={field.name}>
                         <span className="text-[14px] font-medium pb-4 flex">{field.label}</span>

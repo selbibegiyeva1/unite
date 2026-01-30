@@ -57,7 +57,7 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
         : (selectedNominalData?.price || 0);
 
     return (
-        <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl w-[490px]">
+        <div className="p-8 border-[1.5px] border-[#00000026] rounded-4xl w-full max-w-[490px] max-2lg:max-w-[400px] shrink-0 max-1lg:max-w-[360px] max-slg:max-w-full">
             <p className="text-[24px] font-medium">{t.productTotal.title}</p>
 
             <div className="my-6">
@@ -86,7 +86,7 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                         return (
                             <div key={field.name} className="flex items-center justify-between py-4 border-b border-[#0000001A]">
                                 <p className="font-medium">{field.label}</p>
-                                <p className="font-medium ml-4">{value || '-'}</p>
+                                <p className="font-medium ml-4 line-clamp-3">{value || '-'}</p>
                             </div>
                         );
                     })
@@ -96,14 +96,14 @@ function Total({ productForm, activeTab, selectedRegion, formValues, selectedNom
                 {creditedProduct && (
                     <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
                         <p className="font-medium whitespace-nowrap">{t.productTotal.toBeCredited}</p>
-                        <p className="font-medium text-right ml-4">{creditedProduct}</p>
+                        <p className="font-medium text-right ml-4 line-clamp-2">{creditedProduct}</p>
                     </div>
                 )}
 
                 {/* Итого к списанию */}
                 <div className="flex items-center justify-between py-4 border-b border-[#0000001A]">
-                    <p className="font-medium whitespace-nowrap">{t.productTotal.totalToDebit}</p>
-                    <p className="font-medium ml-4">{totalAmount} TMT</p>
+                    <p className="font-medium">{t.productTotal.totalToDebit}</p>
+                    <p className="font-medium ml-4 text-right text-nowrap">{totalAmount} TMT</p>
                 </div>
             </div>
 

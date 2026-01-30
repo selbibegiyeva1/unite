@@ -101,7 +101,7 @@ function Nominals({ productForm, selectedRegion, activeTab, selectedNominal, onN
                         key={nominal.value}
                         type="button"
                         onClick={() => onNominalChange(nominal.value)}
-                        className={`${baseBtn} ${selectedNominal === nominal.value ? activeClasses : inactiveClasses}`}
+                        className={`text-left ${baseBtn} ${selectedNominal === nominal.value ? activeClasses : inactiveClasses}`}
                     >
                         {nominal.product}
                     </button>
