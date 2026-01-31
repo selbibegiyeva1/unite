@@ -149,9 +149,12 @@ export const tm = {
     subheading: 'Aşakdaky jogaplary gözden geçiriň ýa-da bize ýazanyňyzda — biz ýanyňyzda.',
     contactsLabel: 'Habarlaşmak üçin:',
     contacts: {
-      email: 'Email: esim@unite-venture.com',
-      telegram: 'Telegram: @unite_esim',
-      support: 'Goldaw:+99362 42 31 18',
+      email: 'Email: support@unite-gaming.com',
+      emailUrl: 'mailto:support@unite-gaming.com',
+      telegram: 'Telegram: @unite_shop',
+      telegramUrl: 'https://t.me/unite_shop',
+      support: 'Goldaw: +993 (62) 42-31-18',
+      supportTel: 'tel:+99362423118',
     },
   },
   esim: {

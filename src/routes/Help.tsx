@@ -198,15 +198,26 @@ function Help() {
                 <div className="flex items-center gap-3 justify-center pt-[32px]">
                     <b className="mr-[20px]">{t.help.contactsLabel}</b>
                     <div className="flex items-center gap-3 flex-wrap">
-                        <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">
+                        <a
+                            href={t.help.contacts.emailUrl}
+                            className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold hover:underline"
+                        >
                             {t.help.contacts.email}
-                        </p>
-                        <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">
+                        </a>
+                        <a
+                            href={t.help.contacts.telegramUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold hover:underline"
+                        >
                             {t.help.contacts.telegram}
-                        </p>
-                        <p className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold">
+                        </a>
+                        <a
+                            href={t.help.contacts.supportTel}
+                            className="px-[12px] py-[10px] border border-[#00000026] rounded-[8px] w-fit text-[14px] font-bold hover:underline"
+                        >
                             {t.help.contacts.support}
-                        </p>
+                        </a>
                     </div>
                 </div>
                 <div className='max-w-[672px] m-auto mt-[24px]'>
