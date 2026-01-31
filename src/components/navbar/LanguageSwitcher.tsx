@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLanguage, type LanguageCode } from '../contexts/LanguageContext';
-import { useTranslation } from '../hooks/useTranslation';
+import { useLanguage, type LanguageCode } from '../../contexts/LanguageContext';
+import { useTranslation } from '../../hooks/useTranslation';
 
 const SHORT_LABELS: Record<LanguageCode, string> = {
   ru: 'РУ',

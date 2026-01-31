@@ -1,7 +1,7 @@
 import { type FormEvent, useState, useEffect } from 'react';
 import { useSignIn } from '../../hooks/auth/useSignIn';
 import { useTranslation } from '../../hooks/useTranslation';
-import LanguageSwitcher from '../LanguageSwitcher';
+import LanguageSwitcher from '../navbar/LanguageSwitcher';
 
 function SignInForm() {
     const { t } = useTranslation();

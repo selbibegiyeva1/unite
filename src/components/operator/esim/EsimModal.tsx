@@ -16,7 +16,6 @@ interface EsimModalProps {
     checkboxRef: React.RefObject<HTMLDivElement | null>;
     onPayment: () => void;
     isPaymentLoading?: boolean;
-    paymentError?: string | null;
 }
 
 function formatTraffic(traffic: number): string {
@@ -37,7 +36,7 @@ function formatDays(days: number): string {
     return `${days} дней`;
 }
 
-function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, isCheckboxChecked, onCheckboxChange, validationErrors, formRefs, checkboxRef, onPayment, isPaymentLoading, paymentError }: EsimModalProps) {
+function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, isCheckboxChecked, onCheckboxChange, validationErrors, formRefs, checkboxRef, onPayment, isPaymentLoading }: EsimModalProps) {
     const { t } = useTranslation();
     const handleInputChange = (name: string, value: string) => {
         onFormChange({
@@ -192,12 +191,6 @@ function EsimModal({ isOpen, onClose, selectedTariff, formValues, onFormChange, 
                         </div>
                         <p className="text-[14px] font-medium">{t.esim.modal.checkboxText}</p>
                     </div>
-
-                    {paymentError && (
-                        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-[8px]">
-                            <p className="text-[14px] font-medium text-red-600">{paymentError}</p>
-                        </div>
-                    )}
 
                     <button
                         onClick={onPayment}
