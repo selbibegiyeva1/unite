@@ -24,7 +24,7 @@ function Header({ productForm, activeTab, setActiveTab }: HeaderProps) {
                     alt="image"
                     className='w-[160px] rounded-[24px] max-1lg:max-w-[140px] max-xsm:w-full max-xsm:max-w-full'
                 />
-                <div>
+                <div className='max-xsm:w-full'>
                     <p className="text-[24px] font-bold">{productForm.group}</p>
                     <p className="text-[14px] text-[#00000099] py-[18px]">{productForm.short_info}</p>
                     <div className='flex items-center gap-2.5 max-slg:flex-wrap max-xsm:flex-col'>
