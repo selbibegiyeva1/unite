@@ -90,7 +90,12 @@ export function usePayment({
         throw new Error('No redirect URL received from server');
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || 'Payment failed';
+      const data = err.response?.data;
+      const errorMessage =
+        (typeof data?.comment === 'string' && data.comment) ||
+        data?.message ||
+        err.message ||
+        'Payment failed';
       setError(errorMessage);
       console.error('Payment error:', err);
       return false;
@@ -99,9 +104,12 @@ export function usePayment({
     }
   }, [productForm, activeTab, formValues, selectedNominal]);
 
+  const clearError = useCallback(() => setError(null), []);
+
   return {
     processPayment,
     isLoading,
     error,
+    clearError,
   };
 }

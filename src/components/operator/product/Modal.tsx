@@ -12,10 +12,9 @@ interface ModalProps {
     selectedNominal: number | null;
     onPayment: () => void;
     isPaymentLoading?: boolean;
-    paymentError?: string | null;
 }
 
-function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formValues, selectedNominal, onPayment, isPaymentLoading, paymentError }: ModalProps) {
+function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formValues, selectedNominal, onPayment, isPaymentLoading }: ModalProps) {
     const [isModalCheckboxChecked, setIsModalCheckboxChecked] = useState(false);
     const { t } = useTranslation();
 
@@ -215,9 +214,6 @@ function Modal({ isOpen, onClose, productForm, activeTab, selectedRegion, formVa
                     <p className="text-[14px] font-medium">{t.esim.modal.checkboxText}</p>
                 </div>
 
-                {paymentError && (
-                    <p className="mt-4 text-red-500 text-[12px] text-center">{paymentError}</p>
-                )}
                 <button
                     onClick={onPayment}
                     disabled={isPaymentLoading || !isModalCheckboxChecked}
