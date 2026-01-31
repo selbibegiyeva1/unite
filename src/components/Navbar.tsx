@@ -42,6 +42,7 @@ function Navbar({ onMenuOpen }: NavbarProps) {
     const currentGroup = searchParams.get("group");
     const isSteamActive =
         location.pathname === "/operator/product" && currentGroup === "Steam";
+    const isHelpActive = location.pathname === "/help";
 
     return (
         <header className="px-[80px] max-1lg:px-15 max-md:px-8 max-sm:px-4">
@@ -133,9 +134,12 @@ function Navbar({ onMenuOpen }: NavbarProps) {
                     </p>
 
                     <LanguageSwitcher />
-                    <Link to='/help' className="flex items-center gap-3 cursor-pointer p-1.5 max-1lg:hidden">
+                    <Link
+                        to='/help'
+                        className={`flex items-center gap-3 cursor-pointer p-1.5 max-1lg:hidden ${isHelpActive ? 'text-[#2D85EA]' : 'text-black'}`}
+                    >
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 17H12.01M12 14C12.8906 12.0938 15 12.2344 15 10C15 8.5 14 7 12 7C10.4521 7 9.50325 7.89844 9.15332 9M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M12 17H12.01M12 14C12.8906 12.0938 15 12.2344 15 10C15 8.5 14 7 12 7C10.4521 7 9.50325 7.89844 9.15332 9M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                         <span className="text-[14px] font-medium">{t.navbar.help}</span>
                     </Link>
