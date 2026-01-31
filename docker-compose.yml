@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:5173:5173"
+    container_name: unite-web
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host
+    volumes:
+      - .:/app
+      - /app/node_modules
