@@ -11,6 +11,7 @@ import Form from '../../components/operator/product/Form';
 import ProductFaq from '../../components/operator/product/ProductFaq';
 import Total from '../../components/operator/product/Total';
 import Modal from '../../components/operator/product/Modal';
+import Alert from '../../components/operator/product/Alert';
 import { useTranslation } from '../../hooks/useTranslation';
 
 function ProductOperator() {
@@ -93,12 +94,19 @@ function ProductOperator() {
     });
 
     // Payment hook
-    const { processPayment, isLoading: isPaymentLoading, error: paymentError } = usePayment({
+    const { processPayment, isLoading: isPaymentLoading, error: paymentError, clearError } = usePayment({
         productForm,
         activeTab,
         formValues,
         selectedNominal,
     });
+
+    // Close modal when payment error occurs so the fixed alert is visible
+    useEffect(() => {
+        if (paymentError) {
+            setIsModalOpen(false);
+        }
+    }, [paymentError]);
 
     const handleOpenModal = () => {
         const { isValid, errors } = validateAndScroll();
@@ -158,7 +166,6 @@ function ProductOperator() {
                                     selectedNominal={selectedNominal}
                                     onPayment={handleModalPayment}
                                     isPaymentLoading={isPaymentLoading}
-                                    paymentError={paymentError}
                                 />
                                 <Header productForm={productForm} activeTab={activeTab} setActiveTab={setActiveTab} />
                                 <Region
@@ -195,9 +202,13 @@ function ProductOperator() {
                                 checkboxRef={checkboxRef}
                                 onPayment={handleOpenModal}
                                 isPaymentLoading={isPaymentLoading}
-                                paymentError={paymentError}
                             />
                         </div>
+                        {paymentError && (
+                            <div className="fixed bottom-10 left-1/2 -translate-x-1/2 w-full max-w-[360px] z-50">
+                                <Alert message={paymentError} onClose={clearError} />
+                            </div>
+                        )}
                         <div className='mt-6'>
                             <ProductFaq
                                 productForm={productForm}

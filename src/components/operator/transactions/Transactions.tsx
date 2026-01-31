@@ -30,7 +30,7 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
     const { t } = useTranslation();
     const { data, isLoading, error, refetch } = useTransactions({
         page: currentPage,
-        perPage: 8,
+        perPage: 50,
         period,
         category,
         transactionId,
@@ -60,12 +60,12 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
         }
     }, [showCopied]);
 
-    const handleCopyTransactionId = async (id: string) => {
+    const handleCopy = async (text: string) => {
         try {
-            await navigator.clipboard.writeText(id);
+            await navigator.clipboard.writeText(text);
             setShowCopied(true);
         } catch (err) {
-            console.error('Failed to copy transaction ID:', err);
+            console.error('Failed to copy:', err);
         }
     };
 
@@ -103,14 +103,14 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
             let status: 'success' | 'pending' | 'failed' = 'pending';
             if (order.status === 'PAID' || order.status === 'SUCCESS') {
                 status = 'success';
-            } else if (order.status === 'FAILED' || order.status === 'ERROR') {
+            } else if (order.status === 'FAILED' || order.status === 'ERROR' || order.status === 'CANCELED') {
                 status = 'failed';
             }
 
             // Format amount
             const formattedAmount = order.amount !== undefined && order.amount !== null
-                ? `+${order.amount} ТМТ`
-                : '+0 ТМТ';
+                ? `${order.amount} ТМТ`
+                : '0 ТМТ';
 
             return {
                 id: order.transaction_id,
@@ -213,9 +213,15 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
                                 {transactions.map((transaction) => (
                                     <tr key={transaction.id} className="transaction grid grid-cols-9 gap-[30px] items-center text-center px-2.5 py-3 mb-[20px] rounded-[6px] text-black">
                                         <td className="flex text-left">{transaction.date}</td>
-                                        <td className="truncate min-w-0">{transaction.email}</td>
                                         <td
-                                            onClick={() => handleCopyTransactionId(transaction.transactionId)}
+                                            onClick={() => handleCopy(transaction.email)}
+                                            className="text-[#2D85EA] cursor-pointer truncate min-w-0 hover:underline"
+                                            title={t.transactions.copyHint}
+                                        >
+                                            {transaction.email}
+                                        </td>
+                                        <td
+                                            onClick={() => handleCopy(transaction.transactionId)}
                                             className="text-[#2D85EA] cursor-pointer truncate min-w-0 hover:underline"
                                             title={t.transactions.copyHint}
                                         >
@@ -229,8 +235,12 @@ function Transactions({ period, category, transactionId }: TransactionsProps = {
                                             {getStatusIcon(transaction.status)}
                                             {getStatusText(transaction.status)}
                                         </td>
-                                        <td className="text-right text-[#2D85EA]">
-                                            <a href={transaction.link} target="_blank" rel="noopener noreferrer">{t.transactions.qrInstruction}</a>
+                                        <td className="text-right">
+                                            {transaction.status === 'failed' ? (
+                                                '—'
+                                            ) : (
+                                                <a href={transaction.link} target="_blank" rel="noopener noreferrer" className="text-[#2D85EA]">{t.transactions.qrInstruction}</a>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}

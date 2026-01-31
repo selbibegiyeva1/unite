@@ -1,7 +1,7 @@
-import { type FormEvent } from 'react';
+import { type FormEvent, useState, useEffect } from 'react';
 import { useSignIn } from '../../hooks/auth/useSignIn';
 import { useTranslation } from '../../hooks/useTranslation';
-import LanguageSwitcher from '../LanguageSwitcher';
+import LanguageSwitcher from '../navbar/LanguageSwitcher';
 
 function SignInForm() {
     const { t } = useTranslation();
@@ -18,6 +18,25 @@ function SignInForm() {
         closeSuccessAlert,
         clearError,
     } = useSignIn();
+
+    const [successVisible, setSuccessVisible] = useState(false);
+    const [errorVisible, setErrorVisible] = useState(false);
+    useEffect(() => {
+        if (isSuccess) {
+            const id = requestAnimationFrame(() => setSuccessVisible(true));
+            return () => cancelAnimationFrame(id);
+        } else {
+            setSuccessVisible(false);
+        }
+    }, [isSuccess]);
+    useEffect(() => {
+        if (error) {
+            const id = requestAnimationFrame(() => setErrorVisible(true));
+            return () => cancelAnimationFrame(id);
+        } else {
+            setErrorVisible(false);
+        }
+    }, [error]);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -97,7 +116,11 @@ function SignInForm() {
 
             {/* success */}
             {isSuccess && (
-                <div className='fixed bottom-10 left-1/2 -translate-x-1/2 w-full max-w-[360px] p-4 bg-[#EAF7EE] border-2 border-[#C2D7C8] rounded-[10px] flex items-center gap-4'>
+                <div
+                    className={`fixed bottom-10 left-1/2 w-full max-w-[360px] p-4 bg-[#EAF7EE] border-2 border-[#C2D7C8] rounded-[10px] flex items-center gap-4 transition-all duration-300 ease-out ${
+                        successVisible ? 'opacity-100 -translate-x-1/2 translate-y-0' : 'opacity-0 -translate-x-1/2 translate-y-2'
+                    }`}
+                >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 3.93552C14.795 3.33671 13.4368 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 11.662 20.9814 11.3283 20.9451 11M21 5L12 14L9 11" stroke="#50A66A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -117,7 +140,11 @@ function SignInForm() {
 
             {/* error */}
             {error && (
-                <div className='fixed bottom-10 left-1/2 -translate-x-1/2 w-full max-w-[360px] p-4 bg-[#FCEDE9] border-2 border-[#DBBAB1] rounded-[10px] flex items-center gap-4'>
+                <div
+                    className={`fixed bottom-10 left-1/2 w-full max-w-[360px] p-4 bg-[#FCEDE9] border-2 border-[#DBBAB1] rounded-[10px] flex items-center gap-4 transition-all duration-300 ease-out ${
+                        errorVisible ? 'opacity-100 -translate-x-1/2 translate-y-0' : 'opacity-0 -translate-x-1/2 translate-y-2'
+                    }`}
+                >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 12H8M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#ED2428" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>

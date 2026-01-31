@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Country from '../../components/operator/esim/Country';
 import Tariff from '../../components/operator/esim/Tariff';
 import EsimFaq from '../../components/operator/esim/EsimFaq';
 import type { EsimTab } from '../../hooks/operator/esim/useEsimLocations';
 import RegionModal from '../../components/operator/esim/RegionModal';
 import EsimModal from '../../components/operator/esim/EsimModal';
+import Alert from '../../components/operator/product/Alert';
 import { useEsimValidation } from '../../hooks/operator/esim/useEsimValidation';
 import authService from '../../services/authService';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -37,6 +38,13 @@ function EsimCategory() {
         formValues,
         isCheckboxChecked,
     });
+
+    // Close modal when payment error occurs so the fixed alert is visible
+    useEffect(() => {
+        if (paymentError) {
+            setIsEsimModalOpen(false);
+        }
+    }, [paymentError]);
 
     return (
         <div className='px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4 mt-[28px] pb-[100px]'>
@@ -141,17 +149,26 @@ function EsimCategory() {
                         } else {
                             setPaymentError('Не удалось получить ссылку на ваучер');
                         }
-                    } catch (error: any) {
-                        console.error('Payment error:', error);
-                        const errorMessage = error?.response?.data?.message || error?.message || 'Произошла ошибка при обработке платежа';
+                    } catch (err: any) {
+                        console.error('Payment error:', err);
+                        const data = err?.response?.data;
+                        const errorMessage =
+                            (typeof data?.comment === 'string' && data.comment) ||
+                            data?.message ||
+                            err?.message ||
+                            'Произошла ошибка при обработке платежа';
                         setPaymentError(errorMessage);
                     } finally {
                         setIsPaymentLoading(false);
                     }
                 }}
                 isPaymentLoading={isPaymentLoading}
-                paymentError={paymentError}
             />
+            {paymentError && (
+                <div className="fixed bottom-10 left-1/2 -translate-x-1/2 w-full max-w-[360px] z-50">
+                    <Alert message={paymentError} onClose={() => setPaymentError(null)} />
+                </div>
+            )}
         </div>
     )
 }

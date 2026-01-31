@@ -38,7 +38,6 @@ function Region({ productForm, activeTab, selectedRegion, onRegionChange }: Regi
                     onChange={(e) => onRegionChange(e.target.value)}
                     className="appearance-none w-full text-[14px] font-medium cursor-pointer outline-0 rounded-[10px] p-4 bg-[#F5F5F9]"
                 >
-                    <option value="">{t.productRegion.placeholder}</option>
                     {regionOptions
                         .filter((option): option is { name: string; value: string } =>
                             'name' in option && 'value' in option && typeof option.value === 'string'

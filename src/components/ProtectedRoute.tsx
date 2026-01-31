@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import Navbar from './Navbar';
-import Menu from './Menu';
+import Navbar from './navbar/Navbar';
+import Menu from './navbar/Menu';
 import Loading from './Loading';
 
 interface ProtectedRouteProps {

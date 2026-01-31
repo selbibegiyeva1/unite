@@ -2,12 +2,12 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import Sidebar from "./Sidebar";
-import { useUserInfo } from "../hooks/auth/useUserInfo";
-import { usePartnerMainInfo } from "../hooks/auth/usePartnerMainInfo";
+import { useUserInfo } from "../../hooks/auth/useUserInfo";
+import { usePartnerMainInfo } from "../../hooks/auth/usePartnerMainInfo";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import LanguageSwitcher from "./LanguageSwitcher";
-import { useTranslation } from "../hooks/useTranslation";
+import { useTranslation } from "../../hooks/useTranslation";
 
 interface MenuProps {
     isOpen: boolean;

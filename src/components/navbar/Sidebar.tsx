@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useLogout } from '../hooks/auth/useLogout';
-import { useUserInfo } from '../hooks/auth/useUserInfo';
-import { useTranslation } from '../hooks/useTranslation';
+import { useLogout } from '../../hooks/auth/useLogout';
+import { useUserInfo } from '../../hooks/auth/useUserInfo';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface SidebarProps {
     click: () => void;
