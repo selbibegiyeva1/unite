@@ -33,6 +33,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
         location.pathname === "/operator/product" && currentGroup === "Steam";
 
     const username = userData?.user.username ?? "-";
+    const userRole = userData?.user.role;
     const formattedBalance =
         partnerMain?.balance !== undefined
             ? new Intl.NumberFormat('ru-RU').format(partnerMain.balance) + ' ' + (partnerMain.currency || 'ТМТ')
@@ -41,6 +42,9 @@ function Menu({ isOpen, onClose }: MenuProps) {
     const handleSidebarOpen = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
+
+    const isDirector = userRole === 'DIRECTOR';
+    const homePath = isDirector ? '/director/home' : '/operator/home';
 
     return (
         <div
@@ -51,7 +55,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
 
                 <div className="m-auto flex h-[90px] max-1lg:h-[80px] max-w-[1680px] items-center justify-between">
                     <div className="flex items-center gap-8">
-                        <Link to="/operator/home">
+                        <Link to={homePath}>
                             {userData?.company?.logo ? (
                                 <img
                                     src={userData.company.logo}
@@ -98,78 +102,91 @@ function Menu({ isOpen, onClose }: MenuProps) {
 
             <div className="px-[80px] max-1lg:px-15 max-md:px-8 max-sm:px-4" onClick={onClose}>
                 <ul className="menu max-w-[1680px] m-auto">
+                    {isDirector ? (
+                        <>
+                            <li>
+                                <NavLink to="/director/home" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.navbar.home}</span>
+                                            <span className={menuUnderlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/director/transactions" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.navbar.transactions}</span>
+                                            <span className={menuUnderlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/director/reports" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.navbar.reports}</span>
+                                            <span className={menuUnderlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li>
+                                <NavLink to="/operator/home" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.navbar.home}</span>
+                                            <span className={menuUnderlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <Link to="/operator/product?group=Steam" className={getMenuLinkClasses(isSteamActive)} style={{ fontWeight: "bold" }}>
+                                    <span>{t.navbar.steam}</span>
+                                    <span className={menuUnderlineClasses(isSteamActive)} />
+                                </Link>
+                            </li>
+                            <li>
+                                <NavLink to="/operator/products" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.navbar.products}</span>
+                                            <span className={menuUnderlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/operator/esim" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.navbar.esim}</span>
+                                            <span className={menuUnderlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/operator/transactions" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.navbar.transactions}</span>
+                                            <span className={menuUnderlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                        </>
+                    )}
                     <li>
-                        <NavLink
-                            to="/operator/home"
-                            className={({ isActive }) => getMenuLinkClasses(isActive)}
-                            style={{ fontWeight: "bold" }}
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    <span>{t.navbar.home}</span>
-                                    <span className={menuUnderlineClasses(isActive)} />
-                                </>
-                            )}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <Link
-                            to="/operator/product?group=Steam"
-                            className={getMenuLinkClasses(isSteamActive)}
-                            style={{ fontWeight: "bold" }}
-                        >
-                            <span>{t.navbar.steam}</span>
-                            <span className={menuUnderlineClasses(isSteamActive)} />
-                        </Link>
-                    </li>
-                    <li>
-                        <NavLink
-                            to="/operator/products"
-                            className={({ isActive }) => getMenuLinkClasses(isActive)}
-                            style={{ fontWeight: "bold" }}
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    <span>{t.navbar.products}</span>
-                                    <span className={menuUnderlineClasses(isActive)} />
-                                </>
-                            )}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to="/operator/esim"
-                            className={({ isActive }) => getMenuLinkClasses(isActive)}
-                            style={{ fontWeight: "bold" }}
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    <span>{t.navbar.esim}</span>
-                                    <span className={menuUnderlineClasses(isActive)} />
-                                </>
-                            )}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to="/operator/transactions"
-                            className={({ isActive }) => getMenuLinkClasses(isActive)}
-                            style={{ fontWeight: "bold" }}
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    <span>{t.navbar.transactions}</span>
-                                    <span className={menuUnderlineClasses(isActive)} />
-                                </>
-                            )}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to="/help"
-                            className={({ isActive }) => getMenuLinkClasses(isActive)}
-                            style={{ fontWeight: "bold" }}
-                        >
+                        <NavLink to="/help" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
                             {({ isActive }) => (
                                 <>
                                     <span>{t.navbar.help}</span>

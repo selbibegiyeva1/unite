@@ -12,6 +12,7 @@ export const tm = {
     products: 'Produktlar',
     esim: 'eSIM',
     transactions: 'Tranzaksiýalar',
+    reports: 'Hasabaty',
     help: 'Kömek',
   },
   sidebar: {

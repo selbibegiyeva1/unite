@@ -12,6 +12,7 @@ export const ru = {
     products: 'Продукты',
     esim: 'eSIM',
     transactions: 'Транзакции',
+    reports: 'Отчёты',
     help: 'Помощь',
   },
   sidebar: {
