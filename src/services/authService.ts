@@ -45,6 +45,21 @@ export interface UserInfoResponse {
 export interface PartnerMainInfoResponse {
   balance: number;
   currency: string;
+  revenue_total: number;
+  transactions_count: number;
+  withdrawn: number;
+  earn_total: number;
+  available_withdrawal: number;
+  dashboard_info?: Array<{
+    date: string;
+    revenue: number;
+    transaction_count: number;
+  }>;
+}
+
+export interface PartnerMainInfoQueryParams {
+  category?: string;
+  period?: string;
 }
 
 export interface ProductGroup {
@@ -292,9 +307,12 @@ export const authService = {
     return response.data;
   },
 
-  async getPartnerMainInfo(): Promise<PartnerMainInfoResponse> {
+  async getPartnerMainInfo(params?: PartnerMainInfoQueryParams): Promise<PartnerMainInfoResponse> {
     const response = await apiClient.get<PartnerMainInfoResponse>(
-      apiConfig.ENDPOINTS.PARTNER.MAIN_INFO
+      apiConfig.ENDPOINTS.PARTNER.MAIN_INFO,
+      {
+        params,
+      }
     );
     return response.data;
   },

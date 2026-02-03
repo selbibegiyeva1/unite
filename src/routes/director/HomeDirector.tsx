@@ -1,4 +1,6 @@
 import Grid from "../../components/director/home/Grid";
+import Sell from "../../components/director/home/Sell";
+import Trans from "../../components/director/home/Trans";
 import { useTranslation } from "../../hooks/useTranslation";
 
 function HomeDirector() {
@@ -9,6 +11,10 @@ function HomeDirector() {
                 <h1 className="text-[36px] font-bold">{t.homeDirector.pageHeading}</h1>
                 <div className="mt-5">
                     <Grid key={lang} />
+                </div>
+                <div className="mt-5 grid grid-cols-2 gap-5">
+                    <Sell />
+                    <Trans />
                 </div>
             </div>
         </div>
