@@ -12,6 +12,7 @@ export const ru = {
     products: 'Продукты',
     esim: 'eSIM',
     transactions: 'Транзакции',
+    reports: 'Отчёты',
     help: 'Помощь',
   },
   sidebar: {
@@ -221,6 +222,16 @@ export const ru = {
       empty: 'Страны для выбранного региона не найдены.',
       tariffsSuffix: 'тарифов',
     },
+  },
+  homeDirector: {
+    pageHeading: 'Главная',
+    turnover: 'Оборот',
+    transactions: 'Транзакции',
+    available: 'Доступно к выводу',
+    earned: 'Всего заработано',
+    withdrawn: 'Выведено',
+    availableTooltip: 'Расчёт по проценту категории',
+    pieces: 'шт',
   },
   signIn: {
     pageTitle: 'Unite Shop - Вход',

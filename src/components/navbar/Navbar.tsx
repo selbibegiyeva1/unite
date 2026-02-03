@@ -29,6 +29,7 @@ function Navbar({ onMenuOpen }: NavbarProps) {
     const { data: partnerMain } = usePartnerMainInfo();
 
     const username = userData?.user.username ?? "-";
+    const userRole = userData?.user.role;
     const formattedBalance =
         partnerMain?.balance !== undefined
             ? new Intl.NumberFormat('ru-RU').format(partnerMain.balance) + ' ' + (partnerMain.currency || 'ТМТ')
@@ -44,13 +45,16 @@ function Navbar({ onMenuOpen }: NavbarProps) {
         location.pathname === "/operator/product" && currentGroup === "Steam";
     const isHelpActive = location.pathname === "/help";
 
+    const isDirector = userRole === 'DIRECTOR';
+    const homePath = isDirector ? '/director/home' : '/operator/home';
+
     return (
         <header className="px-[80px] max-1lg:px-15 max-md:px-8 max-sm:px-4">
             <Sidebar click={handleSidebarOpen} isSidebarOpen={isSidebarOpen} />
 
             <div className="m-auto flex h-[90px] max-1lg:h-[80px] max-w-[1680px] items-center justify-between">
                 <div className="flex items-center gap-8">
-                    <Link to="/operator/home">
+                    <Link to={homePath}>
                         {userData?.company?.logo ? (
                             <img
                                 src={userData.company.logo}
@@ -62,67 +66,89 @@ function Navbar({ onMenuOpen }: NavbarProps) {
                         )}
                     </Link>
                     <ul className="flex gap-4 max-1lg:hidden">
-                        <li className="px-1.5 py-2.5">
-                            <NavLink
-                                to="/operator/home"
-                                className={({ isActive }) => getLinkClasses(isActive)}
-                            >
-                                {({ isActive }) => (
-                                    <>
-                                        <span>{t.navbar.home}</span>
-                                        <span className={underlineClasses(isActive)} />
-                                    </>
-                                )}
-                            </NavLink>
-                        </li>
-                        <li className="px-1.5 py-2.5">
-                            <Link
-                                to="/operator/product?group=Steam"
-                                className={getLinkClasses(isSteamActive)}
-                            >
-                                <span>{t.navbar.steam}</span>
-                                <span className={underlineClasses(isSteamActive)} />
-                            </Link>
-                        </li>
-                        <li className="px-1.5 py-2.5">
-                            <NavLink
-                                to="/operator/products"
-                                className={({ isActive }) => getLinkClasses(isActive)}
-                            >
-                                {({ isActive }) => (
-                                    <>
-                                        <span>{t.navbar.products}</span>
-                                        <span className={underlineClasses(isActive)} />
-                                    </>
-                                )}
-                            </NavLink>
-                        </li>
-                        <li className="px-1.5 py-2.5">
-                            <NavLink
-                                to="/operator/esim"
-                                className={({ isActive }) => getLinkClasses(isActive)}
-                            >
-                                {({ isActive }) => (
-                                    <>
-                                        <span>{t.navbar.esim}</span>
-                                        <span className={underlineClasses(isActive)} />
-                                    </>
-                                )}
-                            </NavLink>
-                        </li>
-                        <li className="px-1.5 py-2.5">
-                            <NavLink
-                                to="/operator/transactions"
-                                className={({ isActive }) => getLinkClasses(isActive)}
-                            >
-                                {({ isActive }) => (
-                                    <>
-                                        <span>{t.navbar.transactions}</span>
-                                        <span className={underlineClasses(isActive)} />
-                                    </>
-                                )}
-                            </NavLink>
-                        </li>
+                        {isDirector ? (
+                            <>
+                                <li className="px-1.5 py-2.5">
+                                    <NavLink to="/director/home" className={({ isActive }) => getLinkClasses(isActive)}>
+                                        {({ isActive }) => (
+                                            <>
+                                                <span>{t.navbar.home}</span>
+                                                <span className={underlineClasses(isActive)} />
+                                            </>
+                                        )}
+                                    </NavLink>
+                                </li>
+                                <li className="px-1.5 py-2.5">
+                                    <NavLink to="/director/transactions" className={({ isActive }) => getLinkClasses(isActive)}>
+                                        {({ isActive }) => (
+                                            <>
+                                                <span>{t.navbar.transactions}</span>
+                                                <span className={underlineClasses(isActive)} />
+                                            </>
+                                        )}
+                                    </NavLink>
+                                </li>
+                                <li className="px-1.5 py-2.5">
+                                    <NavLink to="/director/reports" className={({ isActive }) => getLinkClasses(isActive)}>
+                                        {({ isActive }) => (
+                                            <>
+                                                <span>{t.navbar.reports}</span>
+                                                <span className={underlineClasses(isActive)} />
+                                            </>
+                                        )}
+                                    </NavLink>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li className="px-1.5 py-2.5">
+                                    <NavLink to="/operator/home" className={({ isActive }) => getLinkClasses(isActive)}>
+                                        {({ isActive }) => (
+                                            <>
+                                                <span>{t.navbar.home}</span>
+                                                <span className={underlineClasses(isActive)} />
+                                            </>
+                                        )}
+                                    </NavLink>
+                                </li>
+                                <li className="px-1.5 py-2.5">
+                                    <Link to="/operator/product?group=Steam" className={getLinkClasses(isSteamActive)}>
+                                        <span>{t.navbar.steam}</span>
+                                        <span className={underlineClasses(isSteamActive)} />
+                                    </Link>
+                                </li>
+                                <li className="px-1.5 py-2.5">
+                                    <NavLink to="/operator/products" className={({ isActive }) => getLinkClasses(isActive)}>
+                                        {({ isActive }) => (
+                                            <>
+                                                <span>{t.navbar.products}</span>
+                                                <span className={underlineClasses(isActive)} />
+                                            </>
+                                        )}
+                                    </NavLink>
+                                </li>
+                                <li className="px-1.5 py-2.5">
+                                    <NavLink to="/operator/esim" className={({ isActive }) => getLinkClasses(isActive)}>
+                                        {({ isActive }) => (
+                                            <>
+                                                <span>{t.navbar.esim}</span>
+                                                <span className={underlineClasses(isActive)} />
+                                            </>
+                                        )}
+                                    </NavLink>
+                                </li>
+                                <li className="px-1.5 py-2.5">
+                                    <NavLink to="/operator/transactions" className={({ isActive }) => getLinkClasses(isActive)}>
+                                        {({ isActive }) => (
+                                            <>
+                                                <span>{t.navbar.transactions}</span>
+                                                <span className={underlineClasses(isActive)} />
+                                            </>
+                                        )}
+                                    </NavLink>
+                                </li>
+                            </>
+                        )}
                     </ul>
                 </div>
 

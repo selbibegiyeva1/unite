@@ -12,6 +12,7 @@ export const tm = {
     products: 'Produktlar',
     esim: 'eSIM',
     transactions: 'Tranzaksiýalar',
+    reports: 'Hasabaty',
     help: 'Kömek',
   },
   sidebar: {
@@ -222,6 +223,16 @@ export const tm = {
       empty: 'Saýlanan sebit üçin ýurt tapylmady.',
       tariffsSuffix: 'tarif',
     },
+  },
+  homeDirector: {
+    pageHeading: 'Baş sahypa',
+    turnover: 'Aýlanyşyk',
+    transactions: 'Tranzaksiýalar',
+    available: 'Çykarmaga elýeterli',
+    earned: 'Jemi gazanylan',
+    withdrawn: 'Çykarylan',
+    availableTooltip: 'Kategoriýa göterimine görä hasaplama',
+    pieces: 'st',
   },
   signIn: {
     pageTitle: 'Unite Shop - Giriş',

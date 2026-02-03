@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import authService from '../../services/authService';
 
 export function useSignIn() {
     const { login } = useAuth();
@@ -50,11 +51,16 @@ export function useSignIn() {
         setError(null);
         try {
             await login(username, password);
-            // Show success alert and then redirect
+            const userInfo = await authService.getUserInfo();
+            const role = userInfo.user.role;
             setIsSuccess(true);
             setTimeout(() => {
                 setIsSuccess(false);
-                navigate('/operator/home');
+                if (role === 'DIRECTOR') {
+                    navigate('/director/home');
+                } else {
+                    navigate('/operator/home');
+                }
             }, 2500);
         } catch (err: any) {
             const errorMessage = err.response?.data?.message || 'Sign in failed. Please try again.';

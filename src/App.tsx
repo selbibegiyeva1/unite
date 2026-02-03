@@ -16,6 +16,9 @@ const CategoryOperator = lazy(() => import("./routes/operator/CategoryOperator")
 const EsimCategory = lazy(() => import("./routes/operator/EsimCategory"));
 const TransactionsOperator = lazy(() => import("./routes/operator/TransactionsOperator"));
 
+const TransactionsDirector = lazy(() => import("./routes/director/TransactionsDirector"));
+const ReportsDirector = lazy(() => import("./routes/director/ReportsDirector"));
+
 function App() {
   return (
     <LanguageProvider>
@@ -33,6 +36,8 @@ function App() {
 
               {/* director */}
               <Route path="/director/home" element={<HomeDirector />} />
+              <Route path="/director/transactions" element={<TransactionsDirector />} />
+              <Route path="/director/reports" element={<ReportsDirector />} />
               <Route path="/help" element={<Help />} />
             </Route>
           </Routes>

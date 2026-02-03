@@ -1,0 +1,11 @@
+function TransactionsDirector() {
+    return (
+        <div className="px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4 pb-[100px] mt-[28px]">
+            <div className="max-w-[1680px] m-auto">
+                <h1 className="text-[36px] font-bold max-2lg:text-[28px] max-lg:text-[24px] max-md:text-[20px]">Транзакции</h1>
+            </div>
+        </div>
+    )
+}
+
+export default TransactionsDirector
