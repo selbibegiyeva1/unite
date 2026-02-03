@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -17,6 +17,8 @@ const EsimCategory = lazy(() => import("./routes/operator/EsimCategory"));
 const TransactionsOperator = lazy(() => import("./routes/operator/TransactionsOperator"));
 
 const TransactionsDirector = lazy(() => import("./routes/director/TransactionsDirector"));
+const TransactionsDirectorTopup = lazy(() => import("./routes/director/transactions/Topup"));
+const TransactionsDirectorPurchase = lazy(() => import("./routes/director/transactions/Purchase"));
 const ReportsDirector = lazy(() => import("./routes/director/ReportsDirector"));
 
 function App() {
@@ -36,7 +38,11 @@ function App() {
 
               {/* director */}
               <Route path="/director/home" element={<HomeDirector />} />
-              <Route path="/director/transactions" element={<TransactionsDirector />} />
+              <Route path="/director/transactions" element={<TransactionsDirector />}>
+                <Route index element={<Navigate to="topup" replace />} />
+                <Route path="topup" element={<TransactionsDirectorTopup />} />
+                <Route path="purchase" element={<TransactionsDirectorPurchase />} />
+              </Route>
               <Route path="/director/reports" element={<ReportsDirector />} />
               <Route path="/help" element={<Help />} />
             </Route>
