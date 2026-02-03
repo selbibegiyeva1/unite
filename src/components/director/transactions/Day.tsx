@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from "react"
+import { useTranslation } from "../../../hooks/useTranslation"
 
 export type PeriodValue = "day" | "week" | "month" | "year" | "all"
-
-const OPTIONS: { value: PeriodValue; label: string }[] = [
-    { value: "day", label: "День" },
-    { value: "week", label: "Неделя" },
-    { value: "month", label: "Месяц" },
-    { value: "year", label: "Год" },
-    { value: "all", label: "Всё" },
-]
 
 interface DayProps {
     value?: PeriodValue
@@ -16,9 +9,19 @@ interface DayProps {
 }
 
 function Day({ value = "all", onChange }: DayProps) {
+    const { t } = useTranslation()
     const [isOpen, setIsOpen] = useState(false)
     const [current, setCurrent] = useState<PeriodValue>(value)
     const rootRef = useRef<HTMLDivElement | null>(null)
+
+    // Get period options with translated labels
+    const OPTIONS: { value: PeriodValue; label: string }[] = [
+        { value: "day", label: t.directorTransactions.period.day },
+        { value: "week", label: t.directorTransactions.period.week },
+        { value: "month", label: t.directorTransactions.period.month },
+        { value: "year", label: t.directorTransactions.period.year },
+        { value: "all", label: t.directorTransactions.period.all },
+    ]
 
     // Sync internal state with prop value
     useEffect(() => {
@@ -49,7 +52,7 @@ function Day({ value = "all", onChange }: DayProps) {
         }
     }, [isOpen])
 
-    const currentLabel = OPTIONS.find((o) => o.value === current)?.label ?? "Всё"
+    const currentLabel = OPTIONS.find((o) => o.value === current)?.label ?? t.directorTransactions.period.all
 
     const handleSelect = (selectedValue: PeriodValue) => {
         setCurrent(selectedValue)
