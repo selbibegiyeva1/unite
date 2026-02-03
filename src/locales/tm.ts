@@ -250,6 +250,7 @@ export const tm = {
     successMessage: 'Giriş amala aşyryldy',
     closeNotification: 'Duýduryşy ýap',
     closeErrorNotification: 'Sowal duýduryşyny ýap',
+    fieldRequired: 'Meýdany dolduryň',
   },
 } as const;
 

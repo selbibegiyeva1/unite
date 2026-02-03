@@ -249,6 +249,7 @@ export const ru = {
     successMessage: 'Вход выполнен',
     closeNotification: 'Закрыть уведомление',
     closeErrorNotification: 'Закрыть уведомление об ошибке',
+    fieldRequired: 'Заполните поле',
   },
 } as const;
 

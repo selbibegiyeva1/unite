@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslation } from '../../hooks/useTranslation';
 import authService from '../../services/authService';
 
 export function useSignIn() {
     const { login } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -28,12 +30,12 @@ export function useSignIn() {
         let isValid = true;
 
         if (!username.trim()) {
-            newErrors.username = 'Заполните поле';
+            newErrors.username = t.signIn.fieldRequired;
             isValid = false;
         }
 
         if (!password.trim()) {
-            newErrors.password = 'Заполните поле';
+            newErrors.password = t.signIn.fieldRequired;
             isValid = false;
         }
 
@@ -74,14 +76,14 @@ export function useSignIn() {
     const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
         if (touched.username && errors.username) {
-            setErrors(prev => ({ ...prev, username: e.target.value.trim() ? '' : 'Заполните поле' }));
+            setErrors(prev => ({ ...prev, username: e.target.value.trim() ? '' : t.signIn.fieldRequired }));
         }
     };
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
         if (touched.password && errors.password) {
-            setErrors(prev => ({ ...prev, password: e.target.value.trim() ? '' : 'Заполните поле' }));
+            setErrors(prev => ({ ...prev, password: e.target.value.trim() ? '' : t.signIn.fieldRequired }));
         }
     };
 
