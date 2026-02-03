@@ -222,6 +222,16 @@ export const ru = {
       tariffsSuffix: 'тарифов',
     },
   },
+  homeDirector: {
+    pageHeading: 'Главная',
+    turnover: 'Оборот',
+    transactions: 'Транзакции',
+    available: 'Доступно к выводу',
+    earned: 'Всего заработано',
+    withdrawn: 'Выведено',
+    availableTooltip: 'Расчёт по проценту категории',
+    pieces: 'шт',
+  },
   signIn: {
     pageTitle: 'Unite Shop - Вход',
     title: 'Личный кабинет',

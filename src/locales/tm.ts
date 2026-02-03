@@ -223,6 +223,16 @@ export const tm = {
       tariffsSuffix: 'tarif',
     },
   },
+  homeDirector: {
+    pageHeading: 'Baş sahypa',
+    turnover: 'Aýlanyşyk',
+    transactions: 'Tranzaksiýalar',
+    available: 'Çykarmaga elýeterli',
+    earned: 'Jemi gazanylan',
+    withdrawn: 'Çykarylan',
+    availableTooltip: 'Kategoriýa göterimine görä hasaplama',
+    pieces: 'st',
+  },
   signIn: {
     pageTitle: 'Unite Shop - Giriş',
     title: 'Şahsy kabinet',
