@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-type PeriodValue = "day" | "week" | "month" | "year" | "all"
+export type PeriodValue = "day" | "week" | "month" | "year" | "all"
 
 const OPTIONS: { value: PeriodValue; label: string }[] = [
     { value: "day", label: "День" },
@@ -10,10 +10,20 @@ const OPTIONS: { value: PeriodValue; label: string }[] = [
     { value: "all", label: "Всё" },
 ]
 
-function Day() {
+interface DayProps {
+    value?: PeriodValue
+    onChange?: (value: PeriodValue) => void
+}
+
+function Day({ value = "all", onChange }: DayProps) {
     const [isOpen, setIsOpen] = useState(false)
-    const [current, setCurrent] = useState<PeriodValue>("all")
+    const [current, setCurrent] = useState<PeriodValue>(value)
     const rootRef = useRef<HTMLDivElement | null>(null)
+
+    // Sync internal state with prop value
+    useEffect(() => {
+        setCurrent(value)
+    }, [value])
 
     useEffect(() => {
         if (!isOpen) return
@@ -41,10 +51,10 @@ function Day() {
 
     const currentLabel = OPTIONS.find((o) => o.value === current)?.label ?? "Всё"
 
-    const handleSelect = (value: PeriodValue) => {
-        setCurrent(value)
+    const handleSelect = (selectedValue: PeriodValue) => {
+        setCurrent(selectedValue)
         setIsOpen(false)
-        // TODO: lift selected period to parent via props when needed
+        onChange?.(selectedValue)
     }
 
     return (

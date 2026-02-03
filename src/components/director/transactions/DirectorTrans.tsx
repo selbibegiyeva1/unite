@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
+import { useTopupHistory } from "../../../hooks/director/transactions/useTopupHistory"
+import { type PeriodValue } from "./Day"
 
 interface TopupRow {
     id: string
@@ -9,117 +11,83 @@ interface TopupRow {
     amount: string
 }
 
-// TODO: replace mock data with real API integration
-const mockTopups: TopupRow[] = [
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-    {
-        id: '1',
-        date: '6 авг. 2024, 15:56',
-        transactionId: 'x0565847856584785',
-        balanceBefore: '325 TMT',
-        balanceAfter: '325 TMT',
-        amount: '+325 TMT',
-    },
-]
+interface DirectorTransProps {
+    period?: PeriodValue
+}
 
-function DirectorTrans() {
+function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
+    const [currentPage, setCurrentPage] = useState(1)
     const [isRefreshing, setIsRefreshing] = useState(false)
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    
+    // Map period value: "all" -> "all_time", others pass through
+    const period = periodValue === "all" ? "all_time" : periodValue
+    
+    const { data, isLoading, error, refetch } = useTopupHistory({
+        page: currentPage,
+        perPage: 50,
+        period,
+    })
+
+    // Reset to page 1 when period changes
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [periodValue])
+
+    // Scroll to bottom when data loads or changes
+    useEffect(() => {
+        if (!isLoading && data && scrollContainerRef.current) {
+            // Use setTimeout to ensure DOM has updated
+            setTimeout(() => {
+                if (scrollContainerRef.current) {
+                    scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight
+                }
+            }, 0)
+        }
+    }, [data, isLoading, currentPage])
 
     const handleRefresh = async () => {
         setIsRefreshing(true)
-        // placeholder for future API refetch
-        await new Promise((resolve) => setTimeout(resolve, 400))
+        await refetch()
         setIsRefreshing(false)
     }
 
-    const rows = mockTopups
+    // Transform API data to component format
+    const rows: TopupRow[] = (data?.topup_history || [])
+        .filter((item) => {
+            // Filter out invalid items - must have datetime and transaction_id
+            if (!item || !item.datetime || !item.transaction_id) {
+                return false
+            }
+            const date = new Date(item.datetime)
+            return !isNaN(date.getTime())
+        })
+        .map((item) => {
+            // Format date from ISO string to readable format
+            const date = new Date(item.datetime)
+            const formattedDate = isNaN(date.getTime())
+                ? 'Invalid Date'
+                : date.toLocaleDateString('ru-RU', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                })
+
+            // Format amounts with TMT currency
+            const formatAmount = (value: number) =>
+                new Intl.NumberFormat('ru-RU').format(value) + ' TMT'
+
+            return {
+                id: item.transaction_id,
+                date: formattedDate,
+                transactionId: item.transaction_id,
+                balanceBefore: formatAmount(item.balance_before),
+                balanceAfter: formatAmount(item.balance_after),
+                amount: `+${formatAmount(item.amount)}`,
+            }
+        })
 
     return (
         <div className="p-5 border border-[#00000026] rounded-[16px] h-[665px] flex flex-col">
@@ -128,7 +96,7 @@ function DirectorTrans() {
 
                 <button
                     onClick={handleRefresh}
-                    disabled={isRefreshing}
+                    disabled={isRefreshing || isLoading}
                     className="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-300 hover:scale-105"
                     title="Обновить"
                     type="button"
@@ -152,9 +120,20 @@ function DirectorTrans() {
                 </button>
             </div>
 
-            <div className="min-h-0 overflow-y-auto overflow-x-auto transactions-table-scroll mt-3.5">
-                {rows.length === 0 ? (
-                    <div className="flex items-center justify-center h-full min-h-[200px]">
+            <div
+                ref={scrollContainerRef}
+                className="flex-1 min-h-0 overflow-y-auto overflow-x-auto transactions-table-scroll mt-3.5"
+            >
+                {isLoading ? (
+                    <div className="flex items-center justify-center h-full">
+                        <p className="text-[#00000099]">Загрузка...</p>
+                    </div>
+                ) : error ? (
+                    <div className="flex items-center justify-center h-full">
+                        <p className="text-[#ED2428]">Ошибка загрузки данных</p>
+                    </div>
+                ) : rows.length === 0 ? (
+                    <div className="flex items-center justify-center h-full">
                         <p className="text-[#00000099]">Нет данных</p>
                     </div>
                 ) : (
@@ -187,6 +166,23 @@ function DirectorTrans() {
                     </table>
                 )}
             </div>
+
+            {data && data.total_pages > 1 && (
+                <div className='flex items-center gap-2 justify-center mt-6'>
+                    {Array.from({ length: data.total_pages }, (_, i) => i + 1).map((page) => (
+                        <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`w-9 h-9 cursor-pointer rounded-[6px] text-[13px] ${currentPage === page
+                                    ? 'bg-[#2D85EA] text-white'
+                                    : 'border border-[#00000026]'
+                                }`}
+                        >
+                            {page}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }

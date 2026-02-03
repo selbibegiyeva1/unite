@@ -146,6 +146,25 @@ export interface OrdersQueryParams {
   transaction_id?: string;
 }
 
+export interface TopupHistoryItem {
+  datetime: string;
+  transaction_id: string;
+  balance_before: number;
+  balance_after: number;
+  amount: number;
+}
+
+export interface TopupHistoryResponse {
+  total_pages: number;
+  topup_history: TopupHistoryItem[];
+}
+
+export interface TopupHistoryQueryParams {
+  page?: number;
+  per_page?: number;
+  period?: string;
+}
+
 export interface EsimCountry {
   country_code: string;
   country_name: {
@@ -349,6 +368,16 @@ export const authService = {
   async getOrders(params?: OrdersQueryParams): Promise<OrdersResponse> {
     const response = await apiClient.get<OrdersResponse>(
       apiConfig.ENDPOINTS.PARTNER.ORDERS,
+      {
+        params,
+      }
+    );
+    return response.data;
+  },
+
+  async getTopupHistory(params?: TopupHistoryQueryParams): Promise<TopupHistoryResponse> {
+    const response = await apiClient.get<TopupHistoryResponse>(
+      apiConfig.ENDPOINTS.PARTNER.TOPUP_HISTORY,
       {
         params,
       }
