@@ -16,11 +16,11 @@ function Day({ value = "all", onChange }: DayProps) {
 
     // Get period options with translated labels
     const OPTIONS: { value: PeriodValue; label: string }[] = [
+        { value: "all", label: t.directorTransactions.period.all },
         { value: "day", label: t.directorTransactions.period.day },
         { value: "week", label: t.directorTransactions.period.week },
         { value: "month", label: t.directorTransactions.period.month },
         { value: "year", label: t.directorTransactions.period.year },
-        { value: "all", label: t.directorTransactions.period.all },
     ]
 
     // Sync internal state with prop value
