@@ -57,3 +57,38 @@
     background: #2D85EA;
     border-radius: 3px;
 }
+
+/* Chart tooltip styles */
+
+.chart-tooltip-block {
+    border-left: 4px solid #5682FF;
+    padding-left: 12px;
+    border-radius: 4px;
+}
+
+.chart-tooltip {
+    background: rgba(255, 255, 255);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 14px 12px 14px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: 1000;
+    position: fixed;
+    transform: translate(-50%, -100%);
+    margin-top: -8px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+.chart-tooltip-date {
+    font-size: 12px;
+    font-weight: 600;
+    color: #00000099;
+    margin-bottom: 6px;
+}
+
+.chart-tooltip-value {
+    font-size: 15px;
+    font-weight: 500;
+}

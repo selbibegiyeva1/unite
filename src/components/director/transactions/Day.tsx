@@ -62,6 +62,7 @@ function Day({ value = "all", onChange }: DayProps) {
 
     return (
         <div ref={rootRef} className="relative">
+            <p className='font-medium text-[13px] pb-[8px] text-right max-1md:text-left'>Период</p>
             <button
                 type="button"
                 onClick={() => setIsOpen((prev) => !prev)}

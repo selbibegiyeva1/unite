@@ -65,18 +65,59 @@ function Sell({ period = "all" }: SellProps) {
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    callbacks: {
-                        label: (ctx) => {
-                            const raw = data?.dashboard_info?.[ctx.dataIndex];
-                            const dateStr = raw
-                                ? formatChartLabel(raw.label ?? raw.date ?? "", locale)
-                                : ctx.label;
-                            const value = new Intl.NumberFormat(locale, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                            }).format(ctx.parsed.y ?? 0);
-                            return [`${dateStr}`, `${value} TMT`];
-                        },
+                    enabled: false,
+                    external: (context) => {
+                        const tooltipModel = context.tooltip;
+                        const tooltipEl = document.getElementById('chart-tooltip-sell');
+
+                        if (!tooltipEl) return;
+
+                        // Hide tooltip
+                        if (!tooltipModel || tooltipModel.opacity === 0) {
+                            tooltipEl.style.opacity = '0';
+                            return;
+                        }
+
+                        const raw = data?.dashboard_info?.[tooltipModel.dataPoints[0]?.dataIndex ?? -1];
+                        if (!raw) {
+                            tooltipEl.style.opacity = '0';
+                            return;
+                        }
+
+                        // Format full date for tooltip (e.g., "18 Окт 2025")
+                        const dateStr = raw.label ?? raw.date ?? "";
+                        const d = new Date(dateStr);
+                        const formattedDate = isNaN(d.getTime())
+                            ? dateStr
+                            : d.toLocaleDateString(locale, {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric',
+                            });
+
+                        const value = new Intl.NumberFormat(locale, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        }).format(tooltipModel.dataPoints[0]?.parsed.y ?? 0);
+
+                        // Set HTML content
+                        tooltipEl.innerHTML = `
+                            <div class="chart-tooltip-block">
+                                <div class="chart-tooltip-date">${formattedDate}</div>
+                                <div class="chart-tooltip-value">${value} TMT</div>
+                            </div>
+                        `;
+
+                        // Position tooltip relative to chart container
+                        const position = context.chart.canvas.getBoundingClientRect();
+                        const tooltipRect = tooltipEl.getBoundingClientRect();
+                        // Shift right by 20px and lower by reducing the offset
+                        const left = position.left + tooltipModel.caretX - tooltipRect.width / 2 + 150;
+                        const top = position.top + tooltipModel.caretY - tooltipRect.height + 200;
+
+                        tooltipEl.style.left = left + 'px';
+                        tooltipEl.style.top = top + 'px';
+                        tooltipEl.style.opacity = '1';
                     },
                 },
             },
@@ -121,9 +162,12 @@ function Sell({ period = "all" }: SellProps) {
                     {t.homeDirector.loading}
                 </div>
             ) : (
-                <div className="h-[317px]">
-                    <Bar data={chartData} options={options} />
-                </div>
+                <>
+                    <div id="chart-tooltip-sell" className="chart-tooltip" />
+                    <div className="h-[317px]">
+                        <Bar data={chartData} options={options} />
+                    </div>
+                </>
             )}
         </div>
     );
