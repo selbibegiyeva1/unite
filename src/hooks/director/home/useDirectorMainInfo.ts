@@ -14,8 +14,8 @@ export function useDirectorMainInfo(options: UseDirectorMainInfoOptions = {}) {
     queryFn: () => {
       const params: PartnerMainInfoQueryParams = {};
 
-      // Only send category if it's not 'ALL'
-      if (category && category !== 'ALL') {
+      // Always send category when provided (API requires category=ALL for dashboard)
+      if (category) {
         params.category = category;
       }
 
