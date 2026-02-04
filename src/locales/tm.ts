@@ -190,6 +190,7 @@ export const tm = {
       validity: 'Hereket möhleti',
       amount: 'Möçberi',
       buy: 'Satyn almak',
+      unlimited: 'Çäklenmedik',
     },
     modal: {
       title: 'Tarifi satyn almak',
