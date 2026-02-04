@@ -233,6 +233,10 @@ export const tm = {
     withdrawn: 'Çykarylan',
     availableTooltip: 'Kategoriýa göterimine görä hasaplama',
     pieces: 'st',
+    salesRevenue: 'Satuw aýlanyşygy',
+    transactionCount: 'Tranzaksiýalar sany',
+    loadError: 'Maglumatlary ýüklemekde säwlik ýüze çykdy',
+    loading: 'Ýüklenýär...',
   },
   directorTransactions: {
     heading: 'Tranzaksiýalar',

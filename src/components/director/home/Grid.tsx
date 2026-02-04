@@ -1,6 +1,7 @@
 import { useState, useMemo, type ReactNode } from 'react'
 import { useTranslation } from '../../../hooks/useTranslation'
 import { useDirectorMainInfo } from '../../../hooks/director/home/useDirectorMainInfo'
+import { type PeriodValue } from '../transactions/Day'
 
 const blockClasses = 'px-4 py-4.5 border-2 border-[#00000026] rounded-[16px] h-[140px] max-md:p-3.5'
 
@@ -36,11 +37,13 @@ const iconWithdraw = (
     </svg>
 )
 
-function Grid() {
+const periodToApi = (p: PeriodValue): string => (p === 'all' ? 'all_time' : p)
+
+function Grid({ period = 'all' }: { period?: PeriodValue }) {
     const { t, lang } = useTranslation()
     const { data } = useDirectorMainInfo({
         category: 'ALL',
-        period: 'all_time',
+        period: periodToApi(period),
     })
     const [showTooltip, setShowTooltip] = useState(false)
 

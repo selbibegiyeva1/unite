@@ -51,7 +51,8 @@ export interface PartnerMainInfoResponse {
   earn_total: number;
   available_withdrawal: number;
   dashboard_info?: Array<{
-    date: string;
+    date?: string;
+    label?: string;
     revenue: number;
     transaction_count: number;
   }>;
