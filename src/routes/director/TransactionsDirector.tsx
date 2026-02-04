@@ -16,7 +16,7 @@ function TransactionsDirector() {
     return (
         <div className="px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4 pb-[100px] mt-[28px]">
             <div className="max-w-[1680px] m-auto">
-                <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center justify-between gap-4 max-1md:flex-col max-1md:items-start">
                     <h1 className="text-[36px] font-bold">{t.directorTransactions.heading}</h1>
                     <div className="flex items-center gap-3">
                         <Day value={periodValue} onChange={setPeriodValue} />

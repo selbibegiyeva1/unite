@@ -85,7 +85,7 @@ function Day({ value = "all", onChange }: DayProps) {
             </button>
 
             <div
-                className={`absolute right-0 mt-2 w-[180px] rounded-[10px] border border-[#0000001A] bg-white px-[10px] py-[10px] shadow-sm z-50 transition-all duration-200 ${
+                className={`absolute right-0 max-1md:left-0 mt-2 w-[180px] rounded-[10px] border border-[#0000001A] bg-white px-[10px] py-[10px] shadow-sm z-50 transition-all duration-200 ${
                     isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
                 }`}
             >
