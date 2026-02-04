@@ -189,6 +189,7 @@ export const ru = {
       validity: 'Срок действия',
       amount: 'Сумма',
       buy: 'Купить',
+      unlimited: 'Безлимит',
     },
     modal: {
       title: 'Покупка тарифа',

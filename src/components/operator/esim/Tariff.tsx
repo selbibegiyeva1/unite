@@ -86,7 +86,9 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                 {tariffs.map((tariff: EsimTariff, index: number) => (
                     <div key={index} className="px-6 pb-8 pt-6 rounded-[24px] border-[1.5px] border-[#00000026] hover:border-[#2D85EA] hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
                         <div className="flex items-center gap-2.5 justify-between py-[10px]">
-                            <b className="text-[32px]">{formatTraffic(tariff.traffic)}</b>
+                            <b className="text-[32px]">
+                                {tariff.is_unlimited ? t.esim.tariff.unlimited : formatTraffic(tariff.traffic)}
+                            </b>
                             <img
                                 src={tariff.flag_url || selectedFlagUrl || '/esim/AU2.png'}
                                 alt={tariff.operator}
