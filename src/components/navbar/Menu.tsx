@@ -4,6 +4,7 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import { useUserInfo } from "../../hooks/auth/useUserInfo";
 import { usePartnerMainInfo } from "../../hooks/auth/usePartnerMainInfo";
+import type { PartnerMainInfoResponse } from "../../services/authService";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -25,7 +26,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const { data: userData } = useUserInfo();
-    const { data: partnerMain } = usePartnerMainInfo();
+    const partnerMain = usePartnerMainInfo().data as PartnerMainInfoResponse | undefined;
 
     const searchParams = new URLSearchParams(location.search);
     const currentGroup = searchParams.get("group");
@@ -36,7 +37,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
     const userRole = userData?.user.role;
     const formattedBalance =
         partnerMain?.balance !== undefined
-            ? new Intl.NumberFormat('ru-RU').format(partnerMain.balance) + ' ' + (partnerMain.currency || 'ТМТ')
+            ? new Intl.NumberFormat('ru-RU').format(partnerMain.balance) + ' ' + (partnerMain.currency ?? 'ТМТ')
             : '-';
 
     const handleSidebarOpen = () => {

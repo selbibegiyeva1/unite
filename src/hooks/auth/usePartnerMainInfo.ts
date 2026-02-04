@@ -1,10 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import authService, { type PartnerMainInfoResponse } from '../../services/authService';
 
-export function usePartnerMainInfo() {
-    return useQuery<PartnerMainInfoResponse>({
+export function usePartnerMainInfo(): UseQueryResult<PartnerMainInfoResponse, Error> {
+    return useQuery({
         queryKey: ['partner', 'main-info'],
-        queryFn: authService.getPartnerMainInfo,
+        queryFn: () => authService.getPartnerMainInfo(),
         staleTime: 30 * 1000,
     });
 }

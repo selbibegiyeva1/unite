@@ -232,6 +232,10 @@ export const ru = {
     withdrawn: 'Выведено',
     availableTooltip: 'Расчёт по проценту категории',
     pieces: 'шт',
+    salesRevenue: 'Оборот продаж',
+    transactionCount: 'Количество транзакций',
+    loadError: 'Ошибка загрузки данных',
+    loading: 'Загрузка...',
   },
   directorTransactions: {
     heading: 'Транзакции',

@@ -1,7 +1,15 @@
-import { useState } from 'react'
+import { useState, useMemo, type ReactNode } from 'react'
 import { useTranslation } from '../../../hooks/useTranslation'
+import { useDirectorMainInfo } from '../../../hooks/director/home/useDirectorMainInfo'
+import { type PeriodValue } from '../transactions/Day'
 
 const blockClasses = 'px-4 py-4.5 border-2 border-[#00000026] rounded-[16px] h-[140px] max-md:p-3.5'
+
+type BlockId = 'turnover' | 'transactions' | 'available' | 'earned' | 'withdrawn'
+
+type Block =
+    | { id: BlockId; value: string; icon: ReactNode }
+    | { id: BlockId; valueAmount: string; valueUnit: 'pieces'; icon: ReactNode }
 
 const iconTruck = (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,18 +37,49 @@ const iconWithdraw = (
     </svg>
 )
 
-const initialBlocks = [
-    { id: 'turnover', value: '8.672,20 ТМТ', icon: iconTruck },
-    { id: 'transactions', valueAmount: '215', valueUnit: 'pieces', icon: iconChart },
-    { id: 'available', value: '8.672,20 ТМТ', icon: iconWallet },
-    { id: 'earned', value: '8.672,20 ТМТ', icon: iconBank },
-    { id: 'withdrawn', value: '8.672,20 ТМТ', icon: iconWithdraw },
-] as const
+const periodToApi = (p: PeriodValue): string => (p === 'all' ? 'all_time' : p)
 
-function Grid() {
-    const { t } = useTranslation()
-    const [blocks] = useState(initialBlocks)
+function Grid({ period = 'all' }: { period?: PeriodValue }) {
+    const { t, lang } = useTranslation()
+    const { data } = useDirectorMainInfo({
+        category: 'ALL',
+        period: periodToApi(period),
+    })
     const [showTooltip, setShowTooltip] = useState(false)
+
+    // Create blocks from API data
+    const blocks = useMemo((): Block[] => {
+        // Format amount with TMT currency
+        const formatAmount = (value: number) => {
+            return new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'tk-TM', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(value) + ' TMT'
+        }
+
+        // Format number (for transactions count)
+        const formatNumber = (value: number) => {
+            return new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'tk-TM').format(value)
+        }
+
+        if (!data) {
+            return [
+                { id: 'turnover', value: '0,00 TMT', icon: iconTruck },
+                { id: 'transactions', valueAmount: '0', valueUnit: 'pieces', icon: iconChart },
+                { id: 'available', value: '0,00 TMT', icon: iconWallet },
+                { id: 'earned', value: '0,00 TMT', icon: iconBank },
+                { id: 'withdrawn', value: '0,00 TMT', icon: iconWithdraw },
+            ]
+        }
+
+        return [
+            { id: 'turnover', value: formatAmount(data.revenue_total), icon: iconTruck },
+            { id: 'transactions', valueAmount: formatNumber(data.transactions_count), valueUnit: 'pieces', icon: iconChart },
+            { id: 'available', value: formatAmount(data.available_withdrawal), icon: iconWallet },
+            { id: 'earned', value: formatAmount(data.earn_total), icon: iconBank },
+            { id: 'withdrawn', value: formatAmount(data.withdrawn), icon: iconWithdraw },
+        ]
+    }, [data, lang])
 
     return (
         <div className="grid grid-cols-5 gap-5 max-2lg:grid-cols-4 max-lg:grid-cols-3 max-md:gap-4" id="grid">
@@ -49,7 +88,7 @@ function Grid() {
                     <div className='flex items-center justify-between h-[32px] gap-2'>
                         <div className="flex items-center gap-2">
                             {block.icon}
-                            <p className="text-[14px] font-medium max-md:text-[12px]">{t.homeDirector[block.id]}</p>
+                            <p className="text-[14px] font-medium max-md:text-[12px]">{t.homeDirector[block.id as keyof typeof t.homeDirector]}</p>
                         </div>
                         {block.id === 'available' && (
                             <div className='relative'>
@@ -70,7 +109,7 @@ function Grid() {
                     </div>
                     <p className="text-[24px] font-medium mt-3 max-lg:text-[20px] max-md:text-[18px] max-md:mt-2">
                         {'valueUnit' in block && block.valueUnit
-                            ? `${block.valueAmount} ${block.valueUnit === 'pieces' ? t.homeDirector.pieces : t.homeDirector[block.valueUnit]}`
+                            ? `${block.valueAmount} ${block.valueUnit === 'pieces' ? t.homeDirector.pieces : block.valueUnit}`
                             : 'value' in block && block.value}
                     </p>
                 </div>
