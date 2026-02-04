@@ -18,7 +18,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const periodToApi = (p: PeriodValue): string => (p === "all" ? "all_time" : p);
 
-const BAR_COLOR = "#0D9488";
+const BAR_COLOR = "#2D85EA";
 
 function formatChartLabel(raw: string, locale: string): string {
     const d = new Date(raw);
