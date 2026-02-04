@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -38,6 +38,15 @@ function Sell({ period = "all" }: SellProps) {
     });
     const locale = lang === "ru" ? "ru-RU" : "tk-TM";
 
+    // Ensure tooltip is hidden on mount
+    useEffect(() => {
+        const tooltipEl = document.getElementById('chart-tooltip-sell');
+        if (tooltipEl) {
+            tooltipEl.style.opacity = '0';
+            tooltipEl.style.pointerEvents = 'none';
+        }
+    }, []);
+
     const chartData = useMemo(() => {
         const info = data?.dashboard_info ?? [];
         const labels = info.map((item) =>
@@ -72,15 +81,20 @@ function Sell({ period = "all" }: SellProps) {
 
                         if (!tooltipEl) return;
 
-                        // Hide tooltip
-                        if (!tooltipModel || tooltipModel.opacity === 0) {
+                        // Hide tooltip if not active or no data points
+                        if (!tooltipModel || 
+                            tooltipModel.opacity === 0 || 
+                            !tooltipModel.dataPoints || 
+                            tooltipModel.dataPoints.length === 0) {
                             tooltipEl.style.opacity = '0';
+                            tooltipEl.style.pointerEvents = 'none';
                             return;
                         }
 
                         const raw = data?.dashboard_info?.[tooltipModel.dataPoints[0]?.dataIndex ?? -1];
                         if (!raw) {
                             tooltipEl.style.opacity = '0';
+                            tooltipEl.style.pointerEvents = 'none';
                             return;
                         }
 
@@ -118,6 +132,7 @@ function Sell({ period = "all" }: SellProps) {
                         tooltipEl.style.left = left + 'px';
                         tooltipEl.style.top = top + 'px';
                         tooltipEl.style.opacity = '1';
+                        tooltipEl.style.pointerEvents = 'none';
                     },
                 },
             },
