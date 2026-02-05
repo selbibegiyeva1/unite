@@ -1,22 +1,71 @@
+import { useEffect, useRef, useState } from 'react';
 import { useTransactionFilters } from '../../../hooks/operator/transactions/useTransactionFilters';
 import { useTranslation } from '../../../hooks/useTranslation';
+
+type PeriodValue = 'all_time' | 'day' | 'week' | 'month' | 'year';
+type CategoryValue = 'ALL' | 'ESIM' | 'VOUCHER' | 'STEAM' | 'TOPUP';
 
 interface FilterProps {
     onFiltersChange: (filters: { period: string; category: string; transactionId: string }) => void;
 }
 
+const ChevronIcon = () => (
+    <svg className="shrink-0" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
+    </svg>
+);
+
 function Filter({ onFiltersChange }: FilterProps) {
     const { filters, setPeriod, setCategory, setTransactionId, handleSearch, handleReset } = useTransactionFilters();
     const { t } = useTranslation();
+    const [dateOpen, setDateOpen] = useState(false);
+    const [categoryOpen, setCategoryOpen] = useState(false);
+    const dateRef = useRef<HTMLDivElement | null>(null);
+    const categoryRef = useRef<HTMLDivElement | null>(null);
 
-    const handlePeriodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const period = e.target.value as 'all_time' | 'day' | 'week' | 'month' | 'year';
+    const periodOptions: { value: PeriodValue; label: string }[] = [
+        { value: 'all_time', label: t.transactions.filters.dateAll },
+        { value: 'day', label: t.transactions.filters.dateDay },
+        { value: 'week', label: t.transactions.filters.dateWeek },
+        { value: 'month', label: t.transactions.filters.dateMonth },
+        { value: 'year', label: t.transactions.filters.dateYear },
+    ];
+    const categoryOptions: { value: CategoryValue; label: string }[] = [
+        { value: 'ALL', label: t.transactions.filters.categoryAll },
+        { value: 'ESIM', label: t.transactions.filters.categoryEsim },
+        { value: 'VOUCHER', label: t.transactions.filters.categoryVoucher },
+        { value: 'STEAM', label: t.transactions.filters.categorySteam },
+        { value: 'TOPUP', label: t.transactions.filters.categoryTopup },
+    ];
+
+    useEffect(() => {
+        if (!dateOpen) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setDateOpen(false); };
+        const onClick = (e: MouseEvent) => { if (dateRef.current && !dateRef.current.contains(e.target as Node)) setDateOpen(false); };
+        document.addEventListener('keydown', onKey);
+        document.addEventListener('mousedown', onClick);
+        return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('mousedown', onClick); };
+    }, [dateOpen]);
+
+    useEffect(() => {
+        if (!categoryOpen) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setCategoryOpen(false); };
+        const onClick = (e: MouseEvent) => { if (categoryRef.current && !categoryRef.current.contains(e.target as Node)) setCategoryOpen(false); };
+        document.addEventListener('keydown', onKey);
+        document.addEventListener('mousedown', onClick);
+        return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('mousedown', onClick); };
+    }, [categoryOpen]);
+
+    const dateLabel = periodOptions.find((o) => o.value === filters.period)?.label ?? t.transactions.filters.dateAll;
+    const categoryLabel = categoryOptions.find((o) => o.value === filters.category)?.label ?? t.transactions.filters.categoryAll;
+
+    const handlePeriodSelect = (period: PeriodValue) => {
         setPeriod(period);
+        setDateOpen(false);
     };
-
-    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const category = e.target.value as 'ALL' | 'ESIM' | 'VOUCHER' | 'STEAM' | 'TOPUP';
+    const handleCategorySelect = (category: CategoryValue) => {
         setCategory(category);
+        setCategoryOpen(false);
     };
 
     const handleTransactionIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,40 +103,68 @@ function Filter({ onFiltersChange }: FilterProps) {
                 <div className="flex items-end gap-4 max-1md:grid max-1md:grid-cols-1 max-1md:w-full">
                     <div className="max-1md:w-full">
                         <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.dateLabel}</span>
-                        <div className="relative">
-                            <select
-                                value={filters.period}
-                                onChange={handlePeriodChange}
-                                className="w-[320px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
+                        <div ref={dateRef} className="relative w-[320px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full">
+                            <button
+                                type="button"
+                                onClick={() => setDateOpen((prev) => !prev)}
+                                className="flex items-center justify-between w-full text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 cursor-pointer hover:bg-[#0000000d] transition-colors text-left"
                             >
-                                <option value="all_time">{t.transactions.filters.dateAll}</option>
-                                <option value="day">{t.transactions.filters.dateDay}</option>
-                                <option value="week">{t.transactions.filters.dateWeek}</option>
-                                <option value="month">{t.transactions.filters.dateMonth}</option>
-                                <option value="year">{t.transactions.filters.dateYear}</option>
-                            </select>
-                            <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
-                            </svg>
+                                <span>{dateLabel}</span>
+                                <ChevronIcon />
+                            </button>
+                            <div
+                                className={`absolute left-0 right-0 mt-2 rounded-[10px] border border-[#0000001A] bg-white shadow-sm z-50 transition-all duration-200 ${
+                                    dateOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none'
+                                }`}
+                            >
+                                <div className="max-h-[240px] overflow-y-auto py-[13px] px-2.5">
+                                    {periodOptions.map((option) => (
+                                        <button
+                                            key={option.value}
+                                            type="button"
+                                            onClick={() => handlePeriodSelect(option.value)}
+                                            className={`w-full text-left px-[10px] py-[8.5px] rounded-[8px] text-[12px] font-medium cursor-pointer transition-colors ${
+                                                option.value === filters.period ? 'bg-[#EEF3FF]' : 'bg-white'
+                                            }`}
+                                        >
+                                            {option.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="max-1md:w-full">
                         <span className='font-medium text-[15px] pb-[8px] flex'>{t.transactions.filters.categoryLabel}</span>
-                        <div className="relative max-1md:w-full">
-                            <select
-                                value={filters.category}
-                                onChange={handleCategoryChange}
-                                className="w-[320px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer"
+                        <div ref={categoryRef} className="relative w-[320px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full">
+                            <button
+                                type="button"
+                                onClick={() => setCategoryOpen((prev) => !prev)}
+                                className="flex items-center justify-between w-full text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 cursor-pointer hover:bg-[#0000000d] transition-colors text-left"
                             >
-                                <option value="ALL">{t.transactions.filters.categoryAll}</option>
-                                <option value="ESIM">{t.transactions.filters.categoryEsim}</option>
-                                <option value="VOUCHER">{t.transactions.filters.categoryVoucher}</option>
-                                <option value="STEAM">{t.transactions.filters.categorySteam}</option>
-                                <option value="TOPUP">{t.transactions.filters.categoryTopup}</option>
-                            </select>
-                            <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3.87883 5.29289L0.293044 1.70711C-0.336921 1.07714 0.109246 0 1.00015 0H8.17172C9.06263 0 9.50879 1.07714 8.87883 1.70711L5.29304 5.29289C4.90252 5.68342 4.26935 5.68342 3.87883 5.29289Z" fill="black" />
-                            </svg>
+                                <span>{categoryLabel}</span>
+                                <ChevronIcon />
+                            </button>
+                            <div
+                                className={`absolute left-0 right-0 mt-2 rounded-[10px] border border-[#0000001A] bg-white shadow-sm z-50 transition-all duration-200 ${
+                                    categoryOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none'
+                                }`}
+                            >
+                                <div className="max-h-[240px] overflow-y-auto py-[13px] px-2.5">
+                                    {categoryOptions.map((option) => (
+                                        <button
+                                            key={option.value}
+                                            type="button"
+                                            onClick={() => handleCategorySelect(option.value)}
+                                            className={`w-full text-left px-[10px] py-[8.5px] rounded-[8px] text-[12px] font-medium cursor-pointer transition-colors ${
+                                                option.value === filters.category ? 'bg-[#EEF3FF]' : 'bg-white'
+                                            }`}
+                                        >
+                                            {option.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="w-[240px] max-2lg:w-[236px] max-1lg:w-[146px] max-1md:w-full flex items-center gap-2 text-[14px] font-medium border border-[#00000026] rounded-[8px] px-4 py-[8.5px] outline-0 appearance-none cursor-pointer">
