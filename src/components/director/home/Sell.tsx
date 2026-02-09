@@ -170,8 +170,8 @@ function Sell({ period = "all" }: SellProps) {
                 x: {
                     grid: { display: false },
                     ticks: {
-                        maxRotation: 0,
-                        autoSkip: true,
+                        maxRotation: period === "year" ? 45 : 0,
+                        autoSkip: period !== "year",
                         font: { size: 11 },
                     },
                 },
@@ -188,7 +188,7 @@ function Sell({ period = "all" }: SellProps) {
                 },
             },
         }),
-        [data, locale, mode, t.homeDirector.pieces]
+        [data, locale, mode, period, t.homeDirector.pieces]
     );
 
     if (error) {
@@ -200,7 +200,7 @@ function Sell({ period = "all" }: SellProps) {
     }
 
     return (
-        <div className="w-full p-6.5 border border-[#00000026] rounded-[16px] max-lg:col-span-2 max-sm:col-span-1">
+        <div className="w-full max-lg:grid-col-span-2 p-6.5 border border-[#00000026] rounded-[16px] max-lg:col-span-2 max-sm:col-span-1">
             <div className="flex items-center justify-between gap-4 mb-4">
                 <p className="font-medium text-[18px]">
                     {mode === "revenue"

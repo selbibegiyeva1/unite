@@ -32,10 +32,11 @@ function TopClients({ period = "all" }: TopClientsProps) {
         return data.top_5_clients.map((item) => ({
             email: item.email,
             displayEmail: middleTruncate(item.email),
-            revenue: new Intl.NumberFormat(locale, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            }).format(item.revenue_tmt) + " TMT",
+            revenue:
+                new Intl.NumberFormat(locale, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }).format(item.revenue_tmt) + " TMT",
         }));
     }, [data?.top_5_clients, locale]);
 
@@ -54,8 +55,10 @@ function TopClients({ period = "all" }: TopClientsProps) {
             <div>
                 {/* Header */}
                 <div className="flex items-center bg-[#F5F7FB] px-2.5 py-[8.5px] text-[15px] rounded-[4px] font-bold text-[#000000]">
-                    <div className="flex-1">{t.homeDirector.topClientsEmail}</div>
-                    <div className="w-[120px] text-right">{t.homeDirector.topClientsTurnover}</div>
+                    <div className="flex-1 min-w-0">{t.homeDirector.topClientsEmail}</div>
+                    <div className="w-[120px] max-sm:w-[100px] text-right shrink-0">
+                        {t.homeDirector.topClientsTurnover}
+                    </div>
                 </div>
 
                 {/* Body */}
@@ -76,12 +79,12 @@ function TopClients({ period = "all" }: TopClientsProps) {
                             >
                                 <a
                                     href={`mailto:${row.email}`}
-                                    className="text-[#2D85EA] underline truncate"
+                                    className="text-[#2D85EA] underline truncate min-w-0 flex-1"
                                     title={row.email}
                                 >
                                     {row.displayEmail ?? row.email}
                                 </a>
-                                <div className="text-right whitespace-nowrap">
+                                <div className="text-right whitespace-nowrap w-[120px] max-sm:w-[100px] shrink-0">
                                     {row.revenue}
                                 </div>
                             </div>
@@ -94,4 +97,3 @@ function TopClients({ period = "all" }: TopClientsProps) {
 }
 
 export default TopClients;
-

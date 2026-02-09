@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Service from "../../components/director/home/Service";
 import Grid from "../../components/director/home/Grid";
 import Sell from "../../components/director/home/Sell";
 import SalesByProduct from "../../components/director/home/SalesByProduct";
@@ -13,6 +14,7 @@ function HomeDirector() {
     return (
         <div className="px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4 pb-[100px] mt-[28px]">
             <div className="max-w-[1680px] m-auto">
+                <Service />
                 <div className="flex items-center justify-between gap-4 max-1md:flex-col max-1md:items-start">
                     <h1 className="text-[36px] font-bold">{t.homeDirector.pageHeading}</h1>
                     <Day value={periodValue} onChange={setPeriodValue} />
@@ -20,7 +22,7 @@ function HomeDirector() {
                 <div className="mt-5">
                     <Grid key={lang} period={periodValue} />
                 </div>
-                <div className="mt-[19px] grid gap-5 grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
+                <div className="mt-[19px] gap-[19px] grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
                     <Sell period={periodValue} />
                     <SalesByProduct period={periodValue} />
                     <TopClients period={periodValue} />

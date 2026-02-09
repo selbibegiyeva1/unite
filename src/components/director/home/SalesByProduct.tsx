@@ -1,4 +1,3 @@
-import { useMemo, useEffect, useState } from "react";
 import {
     Chart as ChartJS,
     ArcElement,
@@ -7,18 +6,24 @@ import {
     type ChartOptions,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { useEffect, useMemo, useState } from "react";
 import { useDirectorMainInfo } from "../../../hooks/director/home/useDirectorMainInfo";
 import { useTranslation } from "../../../hooks/useTranslation";
 import { type PeriodValue } from "../transactions/Day";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const periodToApi = (p: PeriodValue): string => (p === "all" ? "all_time" : p);
-
 type Mode = "revenue" | "transactions";
 
 const PRODUCT_TYPES = ["STEAM", "ESIM", "TOPUP", "VOUCHER"] as const;
 type ProductType = (typeof PRODUCT_TYPES)[number];
+
+const PRODUCT_COLORS: Record<ProductType, string> = {
+    STEAM: "#3732C7",
+    ESIM: "#A132C7",
+    TOPUP: "#32C7A4",
+    VOUCHER: "#55A5FF",
+};
 
 const PRODUCT_LABELS: Record<ProductType, string> = {
     STEAM: "Steam",
@@ -27,12 +32,7 @@ const PRODUCT_LABELS: Record<ProductType, string> = {
     VOUCHER: "Voucher",
 };
 
-const PRODUCT_COLORS: Record<ProductType, string> = {
-    STEAM: "#3732C7",
-    ESIM: "#A132C7",
-    TOPUP: "#32C7A4",
-    VOUCHER: "#55A5FF",
-};
+const periodToApi = (p: PeriodValue): string => (p === "all" ? "all_time" : p);
 
 interface SalesByProductProps {
     period?: PeriodValue;
@@ -99,7 +99,7 @@ function SalesByProduct({ period = "all" }: SalesByProductProps) {
                     external: (context) => {
                         const tooltipModel = context.tooltip;
                         const tooltipEl = document.getElementById(
-                            "chart-tooltip-sales-by-product",
+                            "chart-tooltip-sales-by-product"
                         );
 
                         if (!tooltipEl) return;
@@ -115,46 +115,62 @@ function SalesByProduct({ period = "all" }: SalesByProductProps) {
                             return;
                         }
 
-                        const point = tooltipModel.dataPoints[0];
-                        const label = point.label ?? "";
-                        const rawValue = point.parsed as number;
-                        const value =
+                        const dataPoint = tooltipModel.dataPoints[0];
+                        const label = dataPoint.label ?? "";
+                        const rawValue = dataPoint.parsed ?? 0;
+
+                        const formattedValue =
                             mode === "revenue"
                                 ? new Intl.NumberFormat(locale, {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                }).format(rawValue)
+                                      minimumFractionDigits: 2,
+                                      maximumFractionDigits: 2,
+                                  }).format(rawValue)
                                 : new Intl.NumberFormat(locale).format(rawValue);
 
                         tooltipEl.innerHTML = `
                             <div class="chart-tooltip-block">
                                 <div class="chart-tooltip-date">${label}</div>
-                                <div class="chart-tooltip-value">${mode === "revenue"
-                                ? `${value} TMT`
-                                : `${value} ${t.homeDirector.pieces}`
-                            }</div>
+                                <div class="chart-tooltip-value">${
+                                    mode === "revenue"
+                                        ? `${formattedValue} TMT`
+                                        : `${formattedValue} ${t.homeDirector.pieces}`
+                                }</div>
                             </div>
                         `;
 
                         const position = context.chart.canvas.getBoundingClientRect();
                         const tooltipRect = tooltipEl.getBoundingClientRect();
 
-                        // Position tooltip tighter to the pie chart
                         const left =
-                            position.left + tooltipModel.caretX - tooltipRect.width / 8;
+                            position.left +
+                            tooltipModel.caretX -
+                            tooltipRect.width / 2;
                         const top =
-                            position.top + tooltipModel.caretY - tooltipRect.height - 0;
+                            position.top +
+                            tooltipModel.caretY -
+                            tooltipRect.height -
+                            6;
 
-                        tooltipEl.style.left = left + "px";
-                        tooltipEl.style.top = top + "px";
+                        tooltipEl.style.left = `${left}px`;
+                        tooltipEl.style.top = `${top}px`;
                         tooltipEl.style.opacity = "1";
                         tooltipEl.style.pointerEvents = "none";
                     },
                 },
             },
         }),
-        [locale, mode, t.homeDirector.pieces],
+        [locale, mode, t.homeDirector.pieces]
     );
+
+    const formattedTotal =
+        mode === "revenue"
+            ? new Intl.NumberFormat(locale, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+              }).format(total) + " TMT"
+            : new Intl.NumberFormat(locale).format(total) +
+              " " +
+              t.homeDirector.pieces;
 
     if (error) {
         return (
@@ -163,16 +179,6 @@ function SalesByProduct({ period = "all" }: SalesByProductProps) {
             </div>
         );
     }
-
-    const formattedTotal =
-        mode === "revenue"
-            ? new Intl.NumberFormat(locale, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            }).format(total) + " TMT"
-            : new Intl.NumberFormat(locale).format(total) +
-            " " +
-            t.homeDirector.pieces;
 
     return (
         <div className="w-full p-6.5 border border-[#00000026] rounded-[16px] flex flex-col justify-between gap-4">
@@ -215,7 +221,7 @@ function SalesByProduct({ period = "all" }: SalesByProductProps) {
                         id="chart-tooltip-sales-by-product"
                         className="chart-tooltip"
                     />
-                    <div className="relative w-[260px] m-auto h-[260px] max-md:w-[220px] max-md:h-[220px]">
+                    <div className="relative w-full max-w-[260px] m-auto aspect-square max-md:max-w-[220px]">
                         <Doughnut data={chartData} options={options} />
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                             <p className="text-[#00000099] mb-1 font-medium">
@@ -247,4 +253,3 @@ function SalesByProduct({ period = "all" }: SalesByProductProps) {
 }
 
 export default SalesByProduct;
-

@@ -50,6 +50,10 @@ export interface PartnerMainInfoResponse {
   debt_amount: number;
   cashback_tmt: number;
   average_check: number;
+  reward_available: number;
+  steam_share_rate: number;
+  topup_share_rate: number;
+  voucher_share_rate: number;
   withdrawn: number;
   earn_total: number;
   available_withdrawal: number;
