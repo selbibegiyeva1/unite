@@ -41,7 +41,7 @@ const periodToApi = (p: PeriodValue): string => (p === 'all' ? 'all_time' : p)
 
 function Grid({ period = 'all' }: { period?: PeriodValue }) {
     const { t, lang } = useTranslation()
-    const { data } = useDirectorMainInfo({
+    const { data, isLoading } = useDirectorMainInfo({
         category: 'ALL',
         period: periodToApi(period),
     })
@@ -62,6 +62,16 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
             return new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'tk-TM').format(value)
         }
 
+        if (isLoading) {
+            return [
+                { id: 'turnover', value: 'Loading...', icon: iconTruck },
+                { id: 'transactions', valueAmount: 'Loading...', valueUnit: 'pieces', icon: iconChart },
+                { id: 'available', value: 'Loading...', icon: iconWallet },
+                { id: 'earned', value: 'Loading...', icon: iconBank },
+                { id: 'withdrawn', value: 'Loading...', icon: iconWithdraw },
+            ]
+        }
+
         if (!data) {
             return [
                 { id: 'turnover', value: '0,00 TMT', icon: iconTruck },
@@ -79,7 +89,7 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
             { id: 'earned', value: formatAmount(data.earn_total), icon: iconBank },
             { id: 'withdrawn', value: formatAmount(data.withdrawn), icon: iconWithdraw },
         ]
-    }, [data, lang])
+    }, [data, lang, isLoading])
 
     return (
         <div className="grid grid-cols-5 gap-5 max-2lg:grid-cols-4 max-lg:grid-cols-3 max-md:gap-4" id="grid">
