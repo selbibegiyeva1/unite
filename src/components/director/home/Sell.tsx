@@ -32,7 +32,7 @@ interface SellProps {
 
 function Sell({ period = "all" }: SellProps) {
     const { t, lang } = useTranslation();
-    const [isSwitchOn, setIsSwitchOn] = useState(true);
+    const [mode, setMode] = useState<"revenue" | "transactions">("revenue");
     const { data, isLoading, error } = useDirectorMainInfo({
         category: "ALL",
         period: periodToApi(period),
@@ -49,16 +49,32 @@ function Sell({ period = "all" }: SellProps) {
     }, []);
 
     const chartData = useMemo(() => {
-        const info = data?.dashboard_info ?? [];
-        const labels = info.map((item) =>
-            formatChartLabel(item.label ?? item.date ?? "", locale)
+        const source =
+            mode === "revenue"
+                ? data?.revenue_bars ?? []
+                : data?.transactions_bars ?? [];
+
+        const labels = source.map((item) =>
+            formatChartLabel(
+                // Prefer explicit bucket label, fall back to start date
+                (item as any).bucket_label ?? (item as any).bucket_start ?? "",
+                locale
+            )
         );
-        const values = info.map((item) => item.revenue);
+
+        const values = source.map((item) =>
+            mode === "revenue"
+                ? (item as any).revenue_tmt ?? 0
+                : (item as any).orders_count ?? 0
+        );
         return {
             labels,
             datasets: [
                 {
-                    label: t.homeDirector.salesRevenue,
+                    label:
+                        mode === "revenue"
+                            ? t.homeDirector.salesRevenue
+                            : t.homeDirector.transactionCount,
                     data: values,
                     backgroundColor: BAR_COLOR,
                     borderColor: BAR_COLOR,
@@ -66,7 +82,7 @@ function Sell({ period = "all" }: SellProps) {
                 },
             ],
         };
-    }, [data, t.homeDirector.salesRevenue, locale]);
+    }, [data, t.homeDirector.salesRevenue, t.homeDirector.transactionCount, locale, mode]);
 
     const options: ChartOptions<"bar"> = useMemo(
         () => ({
@@ -92,7 +108,11 @@ function Sell({ period = "all" }: SellProps) {
                             return;
                         }
 
-                        const raw = data?.dashboard_info?.[tooltipModel.dataPoints[0]?.dataIndex ?? -1];
+                        const index = tooltipModel.dataPoints[0]?.dataIndex ?? -1;
+                        const raw =
+                            mode === "revenue"
+                                ? data?.revenue_bars?.[index]
+                                : data?.transactions_bars?.[index];
                         if (!raw) {
                             tooltipEl.style.opacity = '0';
                             tooltipEl.style.pointerEvents = 'none';
@@ -100,7 +120,8 @@ function Sell({ period = "all" }: SellProps) {
                         }
 
                         // Format full date for tooltip (e.g., "18 Окт 2025")
-                        const dateStr = raw.label ?? raw.date ?? "";
+                        const dateStr =
+                            (raw as any).bucket_label ?? (raw as any).bucket_start ?? "";
                         const d = new Date(dateStr);
                         const formattedDate = isNaN(d.getTime())
                             ? dateStr
@@ -110,16 +131,24 @@ function Sell({ period = "all" }: SellProps) {
                                 year: 'numeric',
                             });
 
-                        const value = new Intl.NumberFormat(locale, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                        }).format(tooltipModel.dataPoints[0]?.parsed.y ?? 0);
+                        const rawValue = tooltipModel.dataPoints[0]?.parsed.y ?? 0;
+                        const value =
+                            mode === "revenue"
+                                ? new Intl.NumberFormat(locale, {
+                                      minimumFractionDigits: 2,
+                                      maximumFractionDigits: 2,
+                                  }).format(rawValue)
+                                : new Intl.NumberFormat(locale).format(rawValue);
 
                         // Set HTML content
                         tooltipEl.innerHTML = `
                             <div class="chart-tooltip-block">
                                 <div class="chart-tooltip-date">${formattedDate}</div>
-                                <div class="chart-tooltip-value">${value} TMT</div>
+                                <div class="chart-tooltip-value">${
+                                    mode === "revenue"
+                                        ? `${value} TMT`
+                                        : `${value} ${t.homeDirector.pieces}`
+                                }</div>
                             </div>
                         `;
 
@@ -159,7 +188,7 @@ function Sell({ period = "all" }: SellProps) {
                 },
             },
         }),
-        [data, locale]
+        [data, locale, mode, t.homeDirector.pieces]
     );
 
     if (error) {
@@ -171,23 +200,29 @@ function Sell({ period = "all" }: SellProps) {
     }
 
     return (
-        <div className="p-6.5 border border-[#00000026] rounded-[16px]">
+        <div className="w-full p-6.5 border border-[#00000026] rounded-[16px] max-lg:col-span-2 max-sm:col-span-1">
             <div className="flex items-center justify-between gap-4 mb-4">
-                <p className="font-medium text-[18px]">{t.homeDirector.salesRevenue}</p>
+                <p className="font-medium text-[18px]">
+                    {mode === "revenue"
+                        ? t.homeDirector.salesRevenue
+                        : t.homeDirector.transactionCount}
+                </p>
 
-                {/* Interactive toggle switch (visual only) */}
+                {/* Interactive toggle switch controlling chart mode */}
                 <button
                     type="button"
-                    onClick={() => setIsSwitchOn((prev) => !prev)}
-                    className={`relative w-[60px] h-[32px] rounded-full cursor-pointer transition-all duration-300 ease-in-out ${
-                        isSwitchOn ? "bg-[#2D85EA]" : "bg-gray-200"
+                    onClick={() =>
+                        setMode((prev) => (prev === "revenue" ? "transactions" : "revenue"))
+                    }
+                    className={`relative min-w-[56px] h-[30px] rounded-full cursor-pointer transition-all duration-300 ease-in-out ${
+                        mode === "revenue" ? "bg-[#2D85EA]" : "bg-[#E5F0FF]"
                     }`}
-                    aria-pressed={isSwitchOn}
+                    aria-pressed={mode === "transactions"}
                     aria-label="Toggle chart view"
                 >
                     <span
-                        className={`absolute top-[50%] h-[24px] w-[24px] rounded-full bg-white shadow-sm transform -translate-y-1/2 transition-all duration-300 ease-in-out ${
-                            isSwitchOn ? "right-[4px]" : "left-[4px]"
+                        className={`absolute top-[50%] h-[22px] w-[22px] rounded-full bg-white shadow-sm transform -translate-y-1/2 transition-all duration-300 ease-in-out ${
+                            mode === "revenue" ? "right-[4px]" : "left-[4px]"
                         }`}
                     />
                 </button>

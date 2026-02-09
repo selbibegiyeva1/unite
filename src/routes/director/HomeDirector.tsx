@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Grid from "../../components/director/home/Grid";
 import Sell from "../../components/director/home/Sell";
-import Trans from "../../components/director/home/Trans";
+import SalesByProduct from "../../components/director/home/SalesByProduct";
+import TopClients from "../../components/director/home/TopClients";
 import Day, { type PeriodValue } from "../../components/director/transactions/Day";
 import { useTranslation } from "../../hooks/useTranslation";
 
@@ -19,9 +20,10 @@ function HomeDirector() {
                 <div className="mt-5">
                     <Grid key={lang} period={periodValue} />
                 </div>
-                <div className="mt-5 grid grid-cols-2 gap-5 max-md:grid-cols-1">
+                <div className="mt-[19px] grid gap-5 grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
                     <Sell period={periodValue} />
-                    <Trans period={periodValue} />
+                    <SalesByProduct period={periodValue} />
+                    <TopClients period={periodValue} />
                 </div>
             </div>
         </div>

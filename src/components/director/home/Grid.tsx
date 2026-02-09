@@ -5,7 +5,7 @@ import { type PeriodValue } from '../transactions/Day'
 
 const blockClasses = 'px-4 py-4.5 border-2 border-[#00000026] rounded-[16px] h-[140px] max-md:p-3.5'
 
-type BlockId = 'turnover' | 'transactions' | 'available' | 'earned' | 'withdrawn'
+type BlockId = 'turnover' | 'transactions' | 'profit' | 'averageCheck'
 
 type Block =
     | { id: BlockId; value: string; icon: ReactNode }
@@ -23,17 +23,12 @@ const iconChart = (
 )
 const iconWallet = (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15.8333 6.66671V5.33337C15.8333 4.2288 14.9379 3.33337 13.8333 3.33337H5.5C3.84315 3.33337 2.5 4.67652 2.5 6.33337V13.6667C2.5 15.3236 3.84315 16.6667 5.5 16.6667H15.5C16.6046 16.6667 17.5 15.7713 17.5 14.6667V8.33337C17.5 7.4129 16.7538 6.66671 15.8333 6.66671ZM15.8333 6.66671H5.83333M14.1667 11.6667H13.3333" stroke="#2D85EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M10 4.16634H4.5C3.39543 4.16634 2.5 5.06177 2.5 6.16634V11.6663M17.5 2.49967L13.3333 7.49967M12.5 2.49967L12.5 3.33301M18.3333 6.66634L18.3333 7.49967M2.5 11.6663V13.833C2.5 14.9376 3.39543 15.833 4.5 15.833H15.5C16.6046 15.833 17.5 14.9376 17.5 13.833V11.6663H2.5Z" stroke="#2D85EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
 )
 const iconBank = (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2.5 15.8333H17.5M10 10V15.8333M15 10V15.8333M5 10V15.8333M10.4472 2.72361L16.59 5.79502C17.4395 6.21973 17.1372 7.5 16.1875 7.5H3.81246C2.86276 7.5 2.56053 6.21973 3.40997 5.79501L9.55279 2.72361C9.83431 2.58284 10.1657 2.58284 10.4472 2.72361Z" stroke="#2D85EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-)
-const iconWithdraw = (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 4.16671H4.5C3.39543 4.16671 2.5 5.06214 2.5 6.16671V11.6667M17.5 2.50004L13.3333 7.50004M12.5 2.50004L12.5 3.33337M18.3333 6.66671L18.3333 7.50004M2.5 11.6667V13.8334C2.5 14.9379 3.39543 15.8334 4.5 15.8334H15.5C16.6046 15.8334 17.5 14.9379 17.5 13.8334V11.6667H2.5Z" stroke="#2D85EA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M10 4.16634H4.5C3.39543 4.16634 2.5 5.06177 2.5 6.16634V11.6663M17.5 2.49967L13.3333 7.49967M12.5 2.49967L12.5 3.33301M18.3333 6.66634L18.3333 7.49967M2.5 11.6663V13.833C2.5 14.9376 3.39543 15.833 4.5 15.833H15.5C16.6046 15.833 17.5 14.9376 17.5 13.833V11.6663H2.5Z" stroke="#2D85EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
 )
 
@@ -45,7 +40,6 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
         category: 'ALL',
         period: periodToApi(period),
     })
-    const [showTooltip, setShowTooltip] = useState(false)
 
     // Create blocks from API data
     const blocks = useMemo((): Block[] => {
@@ -62,37 +56,25 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
             return new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'tk-TM').format(value)
         }
 
-        if (isLoading) {
+        if (isLoading || !data) {
             return [
-                { id: 'turnover', value: 'Loading...', icon: iconTruck },
-                { id: 'transactions', valueAmount: 'Loading...', valueUnit: 'pieces', icon: iconChart },
-                { id: 'available', value: 'Loading...', icon: iconWallet },
-                { id: 'earned', value: 'Loading...', icon: iconBank },
-                { id: 'withdrawn', value: 'Loading...', icon: iconWithdraw },
-            ]
-        }
-
-        if (!data) {
-            return [
-                { id: 'turnover', value: '0,00 TMT', icon: iconTruck },
-                { id: 'transactions', valueAmount: '0', valueUnit: 'pieces', icon: iconChart },
-                { id: 'available', value: '0,00 TMT', icon: iconWallet },
-                { id: 'earned', value: '0,00 TMT', icon: iconBank },
-                { id: 'withdrawn', value: '0,00 TMT', icon: iconWithdraw },
+                { id: 'turnover', value: isLoading ? 'Loading...' : '0,00 TMT', icon: iconTruck },
+                { id: 'transactions', valueAmount: isLoading ? 'Loading...' : '0', valueUnit: 'pieces', icon: iconChart },
+                { id: 'profit', value: isLoading ? 'Loading...' : '0,00 TMT', icon: iconBank },
+                { id: 'averageCheck', value: isLoading ? 'Loading...' : '0,00 TMT', icon: iconWallet },
             ]
         }
 
         return [
             { id: 'turnover', value: formatAmount(data.revenue_total), icon: iconTruck },
             { id: 'transactions', valueAmount: formatNumber(data.transactions_count), valueUnit: 'pieces', icon: iconChart },
-            { id: 'available', value: formatAmount(data.available_withdrawal), icon: iconWallet },
-            { id: 'earned', value: formatAmount(data.earn_total), icon: iconBank },
-            { id: 'withdrawn', value: formatAmount(data.withdrawn), icon: iconWithdraw },
+            { id: 'profit', value: formatAmount(data.cashback_tmt), icon: iconBank },
+            { id: 'averageCheck', value: formatAmount(data.average_check), icon: iconWallet },
         ]
     }, [data, lang, isLoading])
 
     return (
-        <div className="grid grid-cols-5 gap-5 max-2lg:grid-cols-4 max-lg:grid-cols-3 max-md:gap-4" id="grid">
+        <div className="grid grid-cols-4 gap-5 max-2lg:grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-2 max-sm:grid-cols-1" id="grid">
             {blocks.map((block) => (
                 <div key={block.id} className={blockClasses}>
                     <div className='flex items-center justify-between h-[32px] gap-2'>
@@ -100,22 +82,6 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
                             {block.icon}
                             <p className="text-[14px] font-medium max-md:text-[12px]">{t.homeDirector[block.id as keyof typeof t.homeDirector]}</p>
                         </div>
-                        {block.id === 'available' && (
-                            <div className='relative'>
-                                <img
-                                    src="/director.png"
-                                    alt="director"
-                                    className='w-[32px] shrink-0 cursor-pointer'
-                                    onMouseEnter={() => setShowTooltip(true)}
-                                    onMouseLeave={() => setShowTooltip(false)}
-                                />
-                                <p
-                                    className={`absolute bottom-[-55px] right-0 w-[230px] border border-[#00000026] text-center text-[12px] font-medium bg-white px-4 py-[14.5px] rounded-[10px] pointer-events-none transition-opacity ${showTooltip ? 'opacity-100' : 'opacity-0'}`}
-                                >
-                                    {t.homeDirector.availableTooltip}
-                                </p>
-                            </div>
-                        )}
                     </div>
                     <p className="text-[24px] font-medium mt-3 max-lg:text-[20px] max-md:text-[18px] max-md:mt-2">
                         {'valueUnit' in block && block.valueUnit

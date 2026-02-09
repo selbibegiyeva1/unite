@@ -47,9 +47,38 @@ export interface PartnerMainInfoResponse {
   currency: string;
   revenue_total: number;
   transactions_count: number;
+  debt_amount: number;
+  cashback_tmt: number;
+  average_check: number;
   withdrawn: number;
   earn_total: number;
   available_withdrawal: number;
+  // New backend structure for director charts
+  revenue_bars?: Array<{
+    bucket_label?: string;
+    bucket_start?: string;
+    bucket_end?: string;
+    revenue_tmt: number;
+  }>;
+  transactions_bars?: Array<{
+    bucket_label?: string;
+    bucket_start?: string;
+    bucket_end?: string;
+    orders_count: number;
+  }>;
+  revenue_by_product?: Array<{
+    order_type: string;
+    revenue_tmt: number;
+  }>;
+  transactions_by_product?: Array<{
+    order_type: string;
+    orders_count: number;
+  }>;
+  top_5_clients?: Array<{
+    email: string;
+    revenue_tmt: number;
+  }>;
+  // Keep for backward compatibility if backend still returns it somewhere
   dashboard_info?: Array<{
     date?: string;
     label?: string;
