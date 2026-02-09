@@ -1,93 +1,87 @@
-import { useState, useEffect } from "react"
-import { useTopupHistory } from "../../../hooks/director/transactions/useTopupHistory"
-import { type PeriodValue } from "./Day"
-import { useTranslation } from "../../../hooks/useTranslation"
+import { useState, useEffect } from "react";
+import { usePayoutHistory } from "../../../hooks/director/reports/usePayoutHistory";
+import { type PeriodValue } from "../transactions/Day";
+import { useTranslation } from "../../../hooks/useTranslation";
 
-interface TopupRow {
-    id: string
-    date: string
-    transactionId: string
-    balanceBefore: string
-    balanceAfter: string
-    amount: string
+interface PayoutRow {
+    id: string;
+    date: string;
+    transactionId: string;
+    method: string;
+    description: string;
+    amount: string;
 }
 
-interface DirectorTransProps {
-    period?: PeriodValue
+interface DirectorPayoutHistoryProps {
+    period?: PeriodValue;
 }
 
-function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
-    const { t } = useTranslation()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [isRefreshing, setIsRefreshing] = useState(false)
-    
-    // Map period value: "all" -> "all_time", others pass through
-    const period = periodValue === "all" ? "all_time" : periodValue
-    
-    const { data, isLoading, error, refetch } = useTopupHistory({
+function DirectorPayoutHistory({ period: periodValue = "all" }: DirectorPayoutHistoryProps) {
+    const { t } = useTranslation();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const period = periodValue === "all" ? "all_time" : periodValue;
+
+    const { data, isLoading, error, refetch } = usePayoutHistory({
         page: currentPage,
         perPage: 50,
         period,
-    })
+    });
 
-    // Reset to page 1 when period changes
     useEffect(() => {
-        setCurrentPage(1)
-    }, [periodValue])
+        setCurrentPage(1);
+    }, [periodValue]);
 
     const handleRefresh = async () => {
-        setIsRefreshing(true)
-        await refetch()
-        setIsRefreshing(false)
-    }
+        setIsRefreshing(true);
+        await refetch();
+        setIsRefreshing(false);
+    };
 
-    // Transform API data to component format
-    const rows: TopupRow[] = (data?.topup_history || [])
+    const rows: PayoutRow[] = (data?.reward_history || [])
         .filter((item) => {
-            // Filter out invalid items - must have datetime and transaction_id
             if (!item || !item.datetime || !item.transaction_id) {
-                return false
+                return false;
             }
-            const date = new Date(item.datetime)
-            return !isNaN(date.getTime())
+            const date = new Date(item.datetime);
+            return !isNaN(date.getTime());
         })
         .map((item) => {
-            // Format date from ISO string to readable format
-            const date = new Date(item.datetime)
+            const date = new Date(item.datetime);
             const formattedDate = isNaN(date.getTime())
-                ? 'Invalid Date'
-                : date.toLocaleDateString('ru-RU', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                })
+                ? "Invalid Date"
+                : date.toLocaleDateString("ru-RU", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                  });
 
-            // Format amounts with TMT currency
             const formatAmount = (value: number) =>
-                new Intl.NumberFormat('ru-RU').format(value) + ' TMT'
+                new Intl.NumberFormat("ru-RU").format(value) + " TMT";
 
             return {
                 id: item.transaction_id,
                 date: formattedDate,
                 transactionId: item.transaction_id,
-                balanceBefore: formatAmount(item.balance_before),
-                balanceAfter: formatAmount(item.balance_after),
-                amount: `+${formatAmount(item.amount)}`,
-            }
-        })
+                method: item.type,
+                description: item.description,
+                amount: formatAmount(item.amount),
+            };
+        });
 
     return (
         <div className="p-5 border border-[#00000026] rounded-[16px] h-[665px] flex flex-col">
             <div className="flex items-center justify-between">
-                <p className="font-medium text-[18px]">{t.directorTransactions.topupTitle}</p>
+                <p className="font-medium text-[18px]">{t.directorReports.payoutTitle}</p>
 
                 <button
                     onClick={handleRefresh}
                     disabled={isRefreshing || isLoading}
                     className="cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-300 hover:scale-105"
-                    title={t.directorTransactions.refreshTitle}
+                    title={t.directorReports.refreshTitle}
                     type="button"
                 >
                     <svg
@@ -114,25 +108,25 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
             >
                 {isLoading ? (
                     <div className="flex items-center justify-center h-full">
-                        <p className="text-[#00000099]">{t.directorTransactions.loading}</p>
+                        <p className="text-[#00000099]">{t.directorReports.loading}</p>
                     </div>
                 ) : error ? (
                     <div className="flex items-center justify-center h-full">
-                        <p className="text-[#ED2428]">{t.directorTransactions.loadError}</p>
+                        <p className="text-[#ED2428]">{t.directorReports.loadError}</p>
                     </div>
                 ) : rows.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
-                        <p className="text-[#00000099]">{t.directorTransactions.empty}</p>
+                        <p className="text-[#00000099]">{t.directorReports.empty}</p>
                     </div>
                 ) : (
                     <table className="w-full max-1lg:min-w-[1000px]">
                         <thead>
                             <tr className="grid grid-cols-5 gap-[30px] text-center px-[13px] py-[8px] mb-4 bg-[#F5F5F9] rounded-[6px] text-[#00000099] text-[12px]">
-                                <td className="text-left">{t.directorTransactions.date}</td>
-                                <td>{t.directorTransactions.transactionId}</td>
-                                <td>{t.directorTransactions.topup.balanceBefore}</td>
-                                <td>{t.directorTransactions.topup.balanceAfter}</td>
-                                <td className="text-right">{t.directorTransactions.amount}</td>
+                                <td className="text-left">{t.directorReports.date}</td>
+                                <td>{t.directorReports.transactionId}</td>
+                                <td>{t.directorReports.method}</td>
+                                <td>{t.directorReports.description}</td>
+                                <td className="text-right">{t.directorReports.amount}</td>
                             </tr>
                         </thead>
                         <tbody className="text-[#00000099] text-[12px]">
@@ -145,8 +139,8 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
                                     <td className="truncate min-w-0 text-[#2D85EA] cursor-default">
                                         {row.transactionId}
                                     </td>
-                                    <td>{row.balanceBefore}</td>
-                                    <td>{row.balanceAfter}</td>
+                                    <td>{row.method}</td>
+                                    <td className="min-w-0">{row.description}</td>
                                     <td className="text-right font-medium">{row.amount}</td>
                                 </tr>
                             ))}
@@ -156,15 +150,17 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
             </div>
 
             {data && data.total_pages > 1 && (
-                <div className='flex items-center gap-2 justify-center mt-6'>
+                <div className="flex items-center gap-2 justify-center mt-6">
                     {Array.from({ length: data.total_pages }, (_, i) => i + 1).map((page) => (
                         <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`w-9 h-9 cursor-pointer rounded-[6px] text-[13px] ${currentPage === page
-                                    ? 'bg-[#2D85EA] text-white'
-                                    : 'border border-[#00000026]'
-                                }`}
+                            className={`w-9 h-9 cursor-pointer rounded-[6px] text-[13px] ${
+                                currentPage === page
+                                    ? "bg-[#2D85EA] text-white"
+                                    : "border border-[#00000026]"
+                            }`}
+                            type="button"
                         >
                             {page}
                         </button>
@@ -172,7 +168,8 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
                 </div>
             )}
         </div>
-    )
+    );
 }
 
-export default DirectorTrans
+export default DirectorPayoutHistory;
+
