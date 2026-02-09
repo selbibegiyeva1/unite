@@ -167,7 +167,7 @@ function Service() {
                         <div className="flex items-center justify-between h-[32px] gap-2">
                             <div className="flex items-center gap-2">
                                 {block.icon}
-                                <p className="text-[14px] font-medium max-md:text-[12px]">
+                                <p className="text-[14px] leading-5 font-medium max-md:text-[12px]">
                                     {block.id === "currentBalance" && t.navbar.currentBalance}
                                     {block.id === "creditDebt" && t.navbar.creditDebt}
                                     {block.id === "availablePayout" && t.homeDirector.available}
@@ -181,6 +181,7 @@ function Service() {
                                     src="/director.png" 
                                     alt="director" 
                                     className="w-[32px] cursor-pointer" 
+                                    style={{minWidth: '32px'}}
                                     onMouseEnter={() => setHoveredBlockId(block.id)}
                                     onMouseLeave={() => setHoveredBlockId(null)}
                                 />

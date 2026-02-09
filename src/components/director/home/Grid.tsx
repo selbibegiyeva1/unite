@@ -1,4 +1,4 @@
-import { useState, useMemo, type ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from '../../../hooks/useTranslation'
 import { useDirectorMainInfo } from '../../../hooks/director/home/useDirectorMainInfo'
 import { type PeriodValue } from '../transactions/Day'
@@ -74,7 +74,7 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
     }, [data, lang, isLoading])
 
     return (
-        <div className="grid grid-cols-4 gap-5 max-2lg:grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-2 max-sm:grid-cols-1" id="grid">
+        <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-2 max-md:grid-cols-2" id="grid">
             {blocks.map((block) => (
                 <div key={block.id} className={blockClasses}>
                     <div className='flex items-center justify-between h-[32px] gap-2'>
@@ -85,7 +85,9 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
                     </div>
                     <p className="text-[24px] font-medium mt-3 max-lg:text-[20px] max-md:text-[18px] max-md:mt-2">
                         {'valueUnit' in block && block.valueUnit
-                            ? `${block.valueAmount} ${block.valueUnit === 'pieces' ? t.homeDirector.pieces : block.valueUnit}`
+                            ? isLoading && block.valueAmount === 'Loading...'
+                                ? block.valueAmount
+                                : `${block.valueAmount} ${block.valueUnit === 'pieces' ? t.homeDirector.pieces : block.valueUnit}`
                             : 'value' in block && block.value}
                     </p>
                 </div>
