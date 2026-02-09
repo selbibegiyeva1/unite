@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useDirectorMainInfo } from "../../../hooks/director/home/useDirectorMainInfo";
 import { useTranslation } from "../../../hooks/useTranslation";
 import { type PeriodValue } from "../transactions/Day";
+import Copied from "../../operator/transactions/Copied";
 
 const periodToApi = (p: PeriodValue): string => (p === "all" ? "all_time" : p);
 
@@ -11,12 +12,42 @@ interface TopClientsProps {
 
 function TopClients({ period = "all" }: TopClientsProps) {
     const { t, lang } = useTranslation();
+    const [showCopied, setShowCopied] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const { data, isLoading, error } = useDirectorMainInfo({
         category: "ALL",
         period: periodToApi(period),
     });
 
     const locale = lang === "ru" ? "ru-RU" : "tk-TM";
+
+    // Handle copied notification visibility and auto-hide
+    useEffect(() => {
+        if (showCopied) {
+            // Trigger fade-in animation
+            setTimeout(() => setIsVisible(true), 10);
+            
+            // Hide after 3 seconds
+            const timer = setTimeout(() => {
+                setIsVisible(false);
+                // Remove from DOM after fade-out
+                setTimeout(() => setShowCopied(false), 300);
+            }, 3000);
+            
+            return () => clearTimeout(timer);
+        } else {
+            setIsVisible(false);
+        }
+    }, [showCopied]);
+
+    const handleCopy = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setShowCopied(true);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    };
 
     const rows = useMemo(() => {
         if (!data?.top_5_clients) return [];
@@ -77,14 +108,14 @@ function TopClients({ period = "all" }: TopClientsProps) {
                                 key={row.email + index}
                                 className="flex items-center justify-between gap-5 font-medium py-[11.5px] text-[14px] text-[#000000]"
                             >
-                                <a
-                                    href={`mailto:${row.email}`}
-                                    className="text-[#2D85EA] underline truncate min-w-0 flex-1"
-                                    title={row.email}
+                                <div
+                                    onClick={() => handleCopy(row.email)}
+                                    className="text-[#2D85EA] cursor-pointer truncate underline"
+                                    title={t.transactions.copyHint || row.email}
                                 >
                                     {row.displayEmail ?? row.email}
-                                </a>
-                                <div className="text-right whitespace-nowrap w-[120px] max-sm:w-[100px] shrink-0">
+                                </div>
+                                <div className="text-right whitespace-nowrap shrink-0">
                                     {row.revenue}
                                 </div>
                             </div>
@@ -92,6 +123,8 @@ function TopClients({ period = "all" }: TopClientsProps) {
                     </div>
                 )}
             </div>
+
+            {showCopied && <Copied isVisible={isVisible} />}
         </div>
     );
 }
