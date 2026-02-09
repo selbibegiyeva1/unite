@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { usePayoutHistory } from "../../../hooks/director/reports/usePayoutHistory";
 import { type PeriodValue } from "../transactions/Day";
 import { useTranslation } from "../../../hooks/useTranslation";
@@ -20,7 +20,6 @@ function DirectorPayoutHistory({ period: periodValue = "all" }: DirectorPayoutHi
     const { t } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const period = periodValue === "all" ? "all_time" : periodValue;
 
@@ -33,16 +32,6 @@ function DirectorPayoutHistory({ period: periodValue = "all" }: DirectorPayoutHi
     useEffect(() => {
         setCurrentPage(1);
     }, [periodValue]);
-
-    useEffect(() => {
-        if (!isLoading && data && scrollContainerRef.current) {
-            setTimeout(() => {
-                if (scrollContainerRef.current) {
-                    scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
-                }
-            }, 0);
-        }
-    }, [data, isLoading, currentPage]);
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
@@ -115,7 +104,6 @@ function DirectorPayoutHistory({ period: periodValue = "all" }: DirectorPayoutHi
             </div>
 
             <div
-                ref={scrollContainerRef}
                 className="flex-1 min-h-0 overflow-y-auto overflow-x-auto transactions-table-scroll mt-3.5"
             >
                 {isLoading ? (

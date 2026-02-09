@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useTopupHistory } from "../../../hooks/director/transactions/useTopupHistory"
 import { type PeriodValue } from "./Day"
 import { useTranslation } from "../../../hooks/useTranslation"
@@ -20,7 +20,6 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
     const { t } = useTranslation()
     const [currentPage, setCurrentPage] = useState(1)
     const [isRefreshing, setIsRefreshing] = useState(false)
-    const scrollContainerRef = useRef<HTMLDivElement>(null)
     
     // Map period value: "all" -> "all_time", others pass through
     const period = periodValue === "all" ? "all_time" : periodValue
@@ -35,18 +34,6 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
     useEffect(() => {
         setCurrentPage(1)
     }, [periodValue])
-
-    // Scroll to bottom when data loads or changes
-    useEffect(() => {
-        if (!isLoading && data && scrollContainerRef.current) {
-            // Use setTimeout to ensure DOM has updated
-            setTimeout(() => {
-                if (scrollContainerRef.current) {
-                    scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight
-                }
-            }, 0)
-        }
-    }, [data, isLoading, currentPage])
 
     const handleRefresh = async () => {
         setIsRefreshing(true)
@@ -123,7 +110,6 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
             </div>
 
             <div
-                ref={scrollContainerRef}
                 className="flex-1 min-h-0 overflow-y-auto overflow-x-auto transactions-table-scroll mt-3.5"
             >
                 {isLoading ? (

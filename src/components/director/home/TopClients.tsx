@@ -98,7 +98,7 @@ function TopClients({ period = "all" }: TopClientsProps) {
                         {t.homeDirector.loading}
                     </div>
                 ) : rows.length === 0 ? (
-                    <div className="flex-1 flex items-center justify-center text-[14px] text-[#00000099] px-4 py-4">
+                    <div className="flex-1 flex items-center justify-center text-[14px] h-[280px] text-[#00000099] px-4 py-4">
                         {t.directorTransactions.empty}
                     </div>
                 ) : (
