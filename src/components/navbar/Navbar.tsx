@@ -107,7 +107,7 @@ function Navbar({ onMenuOpen }: NavbarProps) {
                                     </NavLink>
                                 </li>
                                 <li className="px-1.5 py-2.5">
-                                    <NavLink to="/director/reports" className={({ isActive }) => getLinkClasses(isActive)}>
+                                    <NavLink to="/director/payouts" className={({ isActive }) => getLinkClasses(isActive)}>
                                         {({ isActive }) => (
                                             <>
                                                 <span>{t.navbar.reports}</span>

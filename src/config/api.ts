@@ -19,6 +19,8 @@ export default {
       PRODUCT_GROUP_FORM: '/partner/catalog/product/group/form',
       ORDERS: '/partner/info/orders',
       TOPUP_HISTORY: '/partner/info/topup_history',
+      PAYOUT_HISTORY: '/partner/payout',
+      CASHBACK_HISTORY: '/partner/cashback',
       ESIM_COUNTRIES: '/partner/esim/countries',
       ESIM_REGIONS: '/partner/esim/regions',
       ESIM_COUNTRIES_TARIFFS: '/partner/esim/countries/tarrifs',

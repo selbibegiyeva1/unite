@@ -20,6 +20,8 @@ const TransactionsDirector = lazy(() => import("./routes/director/TransactionsDi
 const TransactionsDirectorTopup = lazy(() => import("./routes/director/transactions/Topup"));
 const TransactionsDirectorPurchase = lazy(() => import("./routes/director/transactions/Purchase"));
 const ReportsDirector = lazy(() => import("./routes/director/ReportsDirector"));
+const ReportsDirectorHistory = lazy(() => import("./routes/director/reports/History"));
+const ReportsDirectorRewards = lazy(() => import("./routes/director/reports/Rewards"));
 
 function App() {
   return (
@@ -43,7 +45,11 @@ function App() {
                 <Route path="topup" element={<TransactionsDirectorTopup />} />
                 <Route path="purchase" element={<TransactionsDirectorPurchase />} />
               </Route>
-              <Route path="/director/reports" element={<ReportsDirector />} />
+              <Route path="/director/payouts" element={<ReportsDirector />}>
+                <Route index element={<Navigate to="history" replace />} />
+                <Route path="history" element={<ReportsDirectorHistory />} />
+                <Route path="rewards" element={<ReportsDirectorRewards />} />
+              </Route>
               <Route path="/help" element={<Help />} />
             </Route>
           </Routes>

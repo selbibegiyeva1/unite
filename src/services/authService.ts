@@ -214,6 +214,46 @@ export interface TopupHistoryQueryParams {
   period?: string;
 }
 
+export interface PayoutHistoryItem {
+  datetime: string;
+  transaction_id: string;
+  partner_name?: string;
+  type: string;
+  description: string;
+  amount: number;
+}
+
+export interface PayoutHistoryResponse {
+  total_pages: number;
+  reward_history: PayoutHistoryItem[];
+}
+
+export interface PayoutHistoryQueryParams {
+  page?: number;
+  per_page?: number;
+  period?: string;
+}
+
+export interface CashbackHistoryItem {
+  datetime: string;
+  transaction_id: string;
+  ref_order_id: string;
+  ref_order_type: string;
+  description: string;
+  amount: number;
+}
+
+export interface CashbackHistoryResponse {
+  total_pages: number;
+  cashback_history: CashbackHistoryItem[];
+}
+
+export interface CashbackHistoryQueryParams {
+  page?: number;
+  per_page?: number;
+  period?: string;
+}
+
 export interface EsimCountry {
   country_code: string;
   country_name: {
@@ -430,6 +470,26 @@ export const authService = {
   async getTopupHistory(params?: TopupHistoryQueryParams): Promise<TopupHistoryResponse> {
     const response = await apiClient.get<TopupHistoryResponse>(
       apiConfig.ENDPOINTS.PARTNER.TOPUP_HISTORY,
+      {
+        params,
+      }
+    );
+    return response.data;
+  },
+
+  async getPayoutHistory(params?: PayoutHistoryQueryParams): Promise<PayoutHistoryResponse> {
+    const response = await apiClient.get<PayoutHistoryResponse>(
+      apiConfig.ENDPOINTS.PARTNER.PAYOUT_HISTORY,
+      {
+        params,
+      }
+    );
+    return response.data;
+  },
+
+  async getCashbackHistory(params?: CashbackHistoryQueryParams): Promise<CashbackHistoryResponse> {
+    const response = await apiClient.get<CashbackHistoryResponse>(
+      apiConfig.ENDPOINTS.PARTNER.CASHBACK_HISTORY,
       {
         params,
       }

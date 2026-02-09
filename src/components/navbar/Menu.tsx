@@ -163,7 +163,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/director/reports" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
+                                <NavLink to="/director/payouts" className={({ isActive }) => getMenuLinkClasses(isActive)} style={{ fontWeight: "bold" }}>
                                     {({ isActive }) => (
                                         <>
                                             <span>{t.navbar.reports}</span>
