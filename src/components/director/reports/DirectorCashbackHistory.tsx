@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useCashbackHistory } from "../../../hooks/director/reports/useCashbackHistory";
 import { type PeriodValue } from "../transactions/Day";
 import { useTranslation } from "../../../hooks/useTranslation";
+import Copied from "../../operator/transactions/Copied";
 
 interface CashbackRow {
     id: string;
@@ -20,6 +21,8 @@ function DirectorCashbackHistory({ period: periodValue = "all" }: DirectorCashba
     const { t } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [showCopied, setShowCopied] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     const period = periodValue === "all" ? "all_time" : periodValue;
 
@@ -32,6 +35,28 @@ function DirectorCashbackHistory({ period: periodValue = "all" }: DirectorCashba
     useEffect(() => {
         setCurrentPage(1);
     }, [periodValue]);
+
+    useEffect(() => {
+        if (showCopied) {
+            setTimeout(() => setIsVisible(true), 10);
+            const timer = setTimeout(() => {
+                setIsVisible(false);
+                setTimeout(() => setShowCopied(false), 300);
+            }, 3000);
+            return () => clearTimeout(timer);
+        } else {
+            setIsVisible(false);
+        }
+    }, [showCopied]);
+
+    const handleCopy = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setShowCopied(true);
+        } catch (err) {
+            console.error("Failed to copy:", err);
+        }
+    };
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
@@ -136,11 +161,29 @@ function DirectorCashbackHistory({ period: periodValue = "all" }: DirectorCashba
                                     className="grid grid-cols-5 gap-[30px] items-center text-center px-2.5 py-3 mb-[12px] rounded-[6px] text-black"
                                 >
                                     <td className="text-left">{row.date}</td>
-                                    <td className="truncate min-w-0 text-[#2D85EA] cursor-default">
-                                        {row.transactionId}
+                                    <td className="truncate min-w-0">
+                                        <span
+                                            onClick={() => handleCopy(row.transactionId)}
+                                            className="text-[#2D85EA] underline cursor-pointer select-text"
+                                            title={t.transactions.copyHint}
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => e.key === "Enter" && handleCopy(row.transactionId)}
+                                        >
+                                            {row.transactionId}
+                                        </span>
                                     </td>
-                                    <td className="truncate min-w-0 text-[#2D85EA] cursor-default">
-                                        {row.refOrderId}
+                                    <td className="truncate min-w-0">
+                                        <span
+                                            onClick={() => handleCopy(row.refOrderId)}
+                                            className="text-[#2D85EA] underline cursor-pointer select-text"
+                                            title={t.transactions.copyHint}
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => e.key === "Enter" && handleCopy(row.refOrderId)}
+                                        >
+                                            {row.refOrderId}
+                                        </span>
                                     </td>
                                     <td className="min-w-0">{row.description}</td>
                                     <td className="text-right font-medium">{row.amount}</td>
@@ -169,6 +212,8 @@ function DirectorCashbackHistory({ period: periodValue = "all" }: DirectorCashba
                     ))}
                 </div>
             )}
+
+            {showCopied && <Copied isVisible={isVisible} />}
         </div>
     );
 }

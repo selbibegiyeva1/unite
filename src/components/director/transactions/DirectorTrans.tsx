@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useTopupHistory } from "../../../hooks/director/transactions/useTopupHistory"
 import { type PeriodValue } from "./Day"
 import { useTranslation } from "../../../hooks/useTranslation"
+import Copied from "../../operator/transactions/Copied"
 
 interface TopupRow {
     id: string
@@ -20,7 +21,9 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
     const { t } = useTranslation()
     const [currentPage, setCurrentPage] = useState(1)
     const [isRefreshing, setIsRefreshing] = useState(false)
-    
+    const [showCopied, setShowCopied] = useState(false)
+    const [isVisible, setIsVisible] = useState(false)
+
     // Map period value: "all" -> "all_time", others pass through
     const period = periodValue === "all" ? "all_time" : periodValue
     
@@ -34,6 +37,28 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
     useEffect(() => {
         setCurrentPage(1)
     }, [periodValue])
+
+    useEffect(() => {
+        if (showCopied) {
+            setTimeout(() => setIsVisible(true), 10)
+            const timer = setTimeout(() => {
+                setIsVisible(false)
+                setTimeout(() => setShowCopied(false), 300)
+            }, 3000)
+            return () => clearTimeout(timer)
+        } else {
+            setIsVisible(false)
+        }
+    }, [showCopied])
+
+    const handleCopy = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text)
+            setShowCopied(true)
+        } catch (err) {
+            console.error("Failed to copy:", err)
+        }
+    }
 
     const handleRefresh = async () => {
         setIsRefreshing(true)
@@ -142,8 +167,17 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
                                     className="grid grid-cols-5 gap-[30px] items-center text-center px-2.5 py-3 mb-[12px] rounded-[6px] text-black"
                                 >
                                     <td className="text-left">{row.date}</td>
-                                    <td className="truncate min-w-0 text-[#2D85EA] cursor-default">
-                                        {row.transactionId}
+                                    <td className="truncate min-w-0">
+                                        <span
+                                            onClick={() => handleCopy(row.transactionId)}
+                                            className="text-[#2D85EA] underline cursor-pointer select-text"
+                                            title={t.transactions.copyHint}
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => e.key === "Enter" && handleCopy(row.transactionId)}
+                                        >
+                                            {row.transactionId}
+                                        </span>
                                     </td>
                                     <td>{row.balanceBefore}</td>
                                     <td>{row.balanceAfter}</td>
@@ -171,6 +205,8 @@ function DirectorTrans({ period: periodValue = "all" }: DirectorTransProps) {
                     ))}
                 </div>
             )}
+
+            {showCopied && <Copied isVisible={isVisible} />}
         </div>
     )
 }
