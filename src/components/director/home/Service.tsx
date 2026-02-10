@@ -172,12 +172,12 @@ function Service() {
             : allBlocks;
     }, [data, isLoading, lang, isDirectorPostpaid]);
 
-    const nickname = userInfo?.user?.username;
+    const displayName = userInfo?.company?.display_name || userInfo?.user?.username;
 
     return (
         <div className="mb-8">
             <h1 className="text-[36px] font-bold">
-                {nickname || t.sidebar.nicknameLabel}
+                {displayName || t.sidebar.nicknameLabel}
             </h1>
             <div
                 className={`grid gap-5 mt-5 ${
