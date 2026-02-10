@@ -11,6 +11,13 @@ interface SteamInfo {
   steam_max_amount_tmt: number;
 }
 
+/** Basic email format: local@domain.tld */
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidEmail(value: string): boolean {
+  return EMAIL_REGEX.test(value.trim());
+}
+
 interface UseProductValidationOptions {
   productForm: ProductGroupForm | undefined;
   activeTab: 'popolnenie' | 'voucher';
@@ -53,7 +60,10 @@ export function useProductValidation({
       if (!formValues.login || formValues.login.trim() === '') {
         errors.formFields['login'] = true;
       }
-      if (!formValues.email || formValues.email.trim() === '') {
+      const email = formValues.email?.trim() ?? '';
+      if (!email) {
+        errors.formFields['email'] = true;
+      } else if (!isValidEmail(formValues.email!)) {
         errors.formFields['email'] = true;
       }
       if (!formValues.amount || formValues.amount.trim() === '') {
