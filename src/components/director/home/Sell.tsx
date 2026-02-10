@@ -209,7 +209,7 @@ function Sell({ period = "all" }: SellProps) {
     }
 
     return (
-        <div className="w-full min-w-0 max-w-[830px] max-lg:max-w-full max-lg:grid-col-span-2 p-6.5 border border-[#00000026] rounded-[16px] max-lg:col-span-2 max-sm:col-span-1">
+        <div className="col-span-2 p-6.5 border border-[#00000026] rounded-[16px] max-lg:col-span-2 max-sm:col-span-1">
             <div className="flex items-center justify-between gap-4 mb-4">
                 <p className="font-medium text-[18px]">
                     {mode === "revenue"
@@ -241,8 +241,16 @@ function Sell({ period = "all" }: SellProps) {
             ) : (
                 <>
                     <div id="chart-tooltip-sell" className="chart-tooltip" />
-                    <div className="overflow-auto transactions-table-scroll">
-                        <div className="h-[317px] max-3lg:min-w-[1000px]">
+                    <div
+                        className={
+                            period !== "all"
+                                ? "overflow-auto transactions-table-scroll"
+                                : ""
+                        }
+                    >
+                        <div
+                            className={`h-[317px] ${period !== "all" ? "max-3lg:min-w-[1000px]" : ""}`}
+                        >
                             <Bar data={chartData} options={options} />
                         </div>
                     </div>
