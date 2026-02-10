@@ -121,7 +121,7 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
                                     <div className="flex flex-col gap-[8px]">
                                         <span className="text-[15px] font-medium">{t.sidebar.tokenLabel}</span>
                                         <div className="px-4 py-[12.5px] flex items-center justify-between gap-1.5 rounded-[8px] border border-[#00000026]">
-                                            <span className="flex-1 min-w-0 truncate">
+                                            <span className="flex-1 truncate max-0md:w-[200px]">
                                                 {company.api_token}
                                             </span>
                                             <button
