@@ -72,8 +72,8 @@ function Menu({ isOpen, onClose }: MenuProps) {
             <header className="px-[80px] max-1lg:px-15 max-md:px-8 max-sm:px-4 border-b border-b-[#00000026]">
                 <Sidebar click={handleSidebarOpen} isSidebarOpen={isSidebarOpen} />
 
-                <div className={`m-auto flex h-[90px] max-1lg:h-[80px] max-sm:h-auto max-sm:py-5.5 max-w-[1680px] items-center justify-between gap-4` + (isDirectorPostpaid ? "max-sm:items-center" : "max-sm:items-start")}>
-                    <div className="flex items-center gap-8">
+                <div className={`m-auto flex h-[90px] max-1lg:h-[80px] max-sm:h-auto max-sm:py-5.5 max-w-[1680px] items-center justify-between gap-4 ${isDirectorPostpaid ? "max-sm:items-center" : "max-sm:items-start"}`}>
+                    <div className="flex items-start gap-8">
                         <Link to={homePath}>
                             {userData?.company?.logo ? (
                                 <img

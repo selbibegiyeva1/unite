@@ -117,7 +117,7 @@ function Sidebar({ click, isSidebarOpen }: SidebarProps) {
                             </div>
                             {company?.api_token && company.billing_mode === 'POSTPAID' && user.role === 'DIRECTOR' && (
                                 <div className='mt-1.5'>
-                                    <b className="text-[14px] pb-3.5 uppercase text-[#00000099] flex">Управление токенами</b>
+                                    <b className="text-[14px] pb-3.5 uppercase text-[#00000099] flex">{t.sidebar.tokensManagement}</b>
                                     <div className="flex flex-col gap-[8px]">
                                         <span className="text-[15px] font-medium">{t.sidebar.tokenLabel}</span>
                                         <div className="px-4 py-[12.5px] flex items-center justify-between gap-1.5 rounded-[8px] border border-[#00000026]">

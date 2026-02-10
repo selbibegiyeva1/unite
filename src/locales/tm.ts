@@ -26,6 +26,7 @@ export const tm = {
     fullNameLabel: 'Doly ady',
     roleLabel: 'Roly',
     tokenLabel: 'Siziň tokeniňiz',
+      tokensManagement: 'Tokenleri dolandyrmak',
     logout: 'Çykmak',
     loggingOut: 'Hasapdan çykylýar...',
   },
