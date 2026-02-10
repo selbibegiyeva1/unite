@@ -20,7 +20,8 @@ const periodToApi = (p: PeriodValue): string => (p === "all" ? "all_time" : p);
 
 const BAR_COLOR = "#2D85EA";
 
-function formatChartLabel(raw: string, locale: string): string {
+/** Format bucket_start as date only when bucket_label is not provided */
+function formatBucketStartAsLabel(raw: string, locale: string): string {
     const d = new Date(raw);
     if (isNaN(d.getTime())) return raw;
     return d.toLocaleDateString(locale, { day: "numeric", month: "short" });
@@ -54,13 +55,12 @@ function Sell({ period = "all" }: SellProps) {
                 ? data?.revenue_bars ?? []
                 : data?.transactions_bars ?? [];
 
-        const labels = source.map((item) =>
-            formatChartLabel(
-                // Prefer explicit bucket label, fall back to start date
-                (item as any).bucket_label ?? (item as any).bucket_start ?? "",
-                locale
-            )
-        );
+        const labels = source.map((item) => {
+            const label = (item as { bucket_label?: string; bucket_start?: string }).bucket_label;
+            const start = (item as { bucket_start?: string }).bucket_start;
+            if (label != null && label !== "") return label;
+            return formatBucketStartAsLabel(start ?? "", locale);
+        });
 
         const values = source.map((item) =>
             mode === "revenue"
@@ -79,6 +79,7 @@ function Sell({ period = "all" }: SellProps) {
                     backgroundColor: BAR_COLOR,
                     borderColor: BAR_COLOR,
                     borderWidth: 0,
+                    borderRadius: 4,
                 },
             ],
         };
@@ -119,17 +120,24 @@ function Sell({ period = "all" }: SellProps) {
                             return;
                         }
 
-                        // Format full date for tooltip (e.g., "18 Окт 2025")
-                        const dateStr =
-                            (raw as any).bucket_label ?? (raw as any).bucket_start ?? "";
-                        const d = new Date(dateStr);
-                        const formattedDate = isNaN(d.getTime())
-                            ? dateStr
-                            : d.toLocaleDateString(locale, {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
-                            });
+                        // Use bucket_label when present, otherwise format bucket_start
+                        const bucketLabel = (raw as { bucket_label?: string }).bucket_label;
+                        const bucketStart = (raw as { bucket_start?: string }).bucket_start;
+                        const formattedDate =
+                            bucketLabel != null && bucketLabel !== ""
+                                ? bucketLabel
+                                : bucketStart
+                                    ? (() => {
+                                          const d = new Date(bucketStart);
+                                          return isNaN(d.getTime())
+                                              ? bucketStart
+                                              : d.toLocaleDateString(locale, {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                });
+                                      })()
+                                    : "";
 
                         const rawValue = tooltipModel.dataPoints[0]?.parsed.y ?? 0;
                         const value =
