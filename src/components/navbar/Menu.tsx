@@ -38,6 +38,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
 
     const username = userData?.user.username ?? "-";
     const userRole = userData?.user.role;
+    const billingMode = userData?.company?.billing_mode;
 
     const formatMoney = (value: number | undefined) =>
         new Intl.NumberFormat('ru-RU').format(value ?? 0) + ' ' + (partnerMain?.currency ?? 'ТМТ');
@@ -61,6 +62,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
     };
 
     const isDirector = userRole === 'DIRECTOR';
+    const isDirectorPostpaid = isDirector && billingMode === 'POSTPAID';
     const homePath = isDirector ? '/director/home' : '/operator/home';
 
     return (
@@ -70,7 +72,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
             <header className="px-[80px] max-1lg:px-15 max-md:px-8 max-sm:px-4 border-b border-b-[#00000026]">
                 <Sidebar click={handleSidebarOpen} isSidebarOpen={isSidebarOpen} />
 
-                <div className="m-auto flex h-[90px] max-1lg:h-[80px] max-sm:h-auto max-sm:py-5.5 max-sm:items-start max-w-[1680px] items-center justify-between gap-4">
+                <div className={`m-auto flex h-[90px] max-1lg:h-[80px] max-sm:h-auto max-sm:py-5.5 max-w-[1680px] items-center justify-between gap-4` + (isDirectorPostpaid ? "max-sm:items-center" : "max-sm:items-start")}>
                     <div className="flex items-center gap-8">
                         <Link to={homePath}>
                             {userData?.company?.logo ? (
@@ -88,29 +90,35 @@ function Menu({ isOpen, onClose }: MenuProps) {
 
                     <div className="flex items-center gap-4 max-1lg:gap-2 max-sm:flex-wrap-reverse max-sm:justify-end">
 
-                        <div className="flex items-center gap-4">
-                            {/* Balance */}
-                            <div className="flex items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
-                                <svg className="shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 5H5C3.89543 5 3 5.89543 3 7V14M21 3L16 9M15 3L15 4M22 8L22 9M3 14V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V14H3Z" stroke="#F50100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div className="flex flex-col">
-                                    <p className="text-[#F50100] text-[14px]">{formattedDebt}</p>
-                                    <span className="text-[12px] text-[#00000099] leading-4">Задолженность по кредиту</span>
+                        {!isDirectorPostpaid && (
+                            <div className="flex items-center gap-4">
+                                {/* Credit debt */}
+                                <div className="flex items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
+                                    <svg className="shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 5H5C3.89543 5 3 5.89543 3 7V14M21 3L16 9M15 3L15 4M22 8L22 9M3 14V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V14H3Z" stroke="#F50100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div className="flex flex-col">
+                                        <p className="text-[#F50100] text-[14px]">{formattedDebt}</p>
+                                        <span className="text-[12px] text-[#00000099] leading-4">
+                                            {t.navbar.creditDebt}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Balance */}
-                            <div className="flex items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
-                                <svg className="shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3 6V17C3 18.6569 4.34315 20 6 20H20C20.5523 20 21 19.5523 21 19V16M3 6C3 4.89543 3.89543 4 5 4H18C18.5523 4 19 4.44772 19 5V8M3 6C3 7.10457 3.89543 8 5 8H19M19 8H20C20.5523 8 21 8.44772 21 9V12M21 12H18C16.8954 12 16 12.8954 16 14C16 15.1046 16.8954 16 18 16H21M21 12V16" stroke="#2D85EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div className="flex flex-col">
-                                    <p className="text-[#2D85EA] text-[14px]">{formattedBalance}</p>
-                                    <span className="text-[12px] text-[#00000099] leading-4">Текущий баланс</span>
+                                {/* Current balance */}
+                                <div className="flex items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
+                                    <svg className="shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 6V17C3 18.6569 4.34315 20 6 20H20C20.5523 20 21 19.5523 21 19V16M3 6C3 4.89543 3.89543 4 5 4H18C18.5523 4 19 4.44772 19 5V8M3 6C3 7.10457 3.89543 8 5 8H19M19 8H20C20.5523 8 21 8.44772 21 9V12M21 12H18C16.8954 12 16 12.8954 16 14C16 15.1046 16.8954 16 18 16H21M21 12V16" stroke="#2D85EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div className="flex flex-col">
+                                        <p className="text-[#2D85EA] text-[14px]">{formattedBalance}</p>
+                                        <span className="text-[12px] text-[#00000099] leading-4">
+                                            {t.navbar.currentBalance}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                         <div className="flex items-center gap-2">
                             <LanguageSwitcher />
                             <Link to='/help' className="flex items-center gap-3 cursor-pointer p-1.5 max-1lg:hidden">

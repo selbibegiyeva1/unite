@@ -104,6 +104,10 @@ function Service() {
     });
     const [hoveredBlockId, setHoveredBlockId] = useState<BlockId | null>(null);
 
+    const userRole = userInfo?.user?.role;
+    const billingMode = userInfo?.company?.billing_mode;
+    const isDirectorPostpaid = userRole === "DIRECTOR" && billingMode === "POSTPAID";
+
     const blocks: Block[] = useMemo(() => {
         const formatAmount = (value: number) =>
             new Intl.NumberFormat(lang === "ru" ? "ru-RU" : "tk-TM", {
@@ -117,18 +121,25 @@ function Service() {
                 maximumFractionDigits: 2,
             }).format(value) + "%";
 
-        if (isLoading || !data) {
-            return [
+        const loadingBlocks: Block[] = [
                 { id: "currentBalance", value: "Loading...", icon: iconCurrentBalance },
                 { id: "creditDebt", value: "Loading...", icon: iconCreditDebt },
                 { id: "availablePayout", value: "Loading...", icon: iconAvailable },
                 { id: "cashbackSteam", value: "Loading...", icon: iconCashbackSteam },
                 { id: "cashbackTopup", value: "Loading...", icon: iconCashbackTopup },
                 { id: "cashbackVoucher", value: "Loading...", icon: iconCashbackVoucher },
-            ];
+        ];
+
+        if (isLoading || !data) {
+            return isDirectorPostpaid
+                ? loadingBlocks.filter(
+                      (block) =>
+                          block.id !== "currentBalance" && block.id !== "creditDebt"
+                  )
+                : loadingBlocks;
         }
 
-        return [
+        const allBlocks: Block[] = [
             { id: "currentBalance", value: formatAmount(data.balance), icon: iconCurrentBalance },
             { id: "creditDebt", value: formatAmount(data.debt_amount), icon: iconCreditDebt },
             {
@@ -152,7 +163,14 @@ function Service() {
                 icon: iconCashbackVoucher,
             },
         ];
-    }, [data, isLoading, lang]);
+
+        return isDirectorPostpaid
+            ? allBlocks.filter(
+                  (block) =>
+                      block.id !== "currentBalance" && block.id !== "creditDebt"
+              )
+            : allBlocks;
+    }, [data, isLoading, lang, isDirectorPostpaid]);
 
     const nickname = userInfo?.user?.username;
 
@@ -161,7 +179,13 @@ function Service() {
             <h1 className="text-[36px] font-bold">
                 {nickname || t.sidebar.nicknameLabel}
             </h1>
-            <div className="grid grid-cols-6 gap-5 mt-5 max-2lg:grid-cols-3 max-sm:grid-cols-1">
+            <div
+                className={`grid gap-5 mt-5 ${
+                    blocks.length === 4
+                        ? "grid-cols-4 max-2lg:grid-cols-2 max-sm:grid-cols-1"
+                        : "grid-cols-6 max-2lg:grid-cols-3 max-sm:grid-cols-1"
+                }`}
+            >
                 {blocks.map((block) => (
                     <div key={block.id} className={blockClasses}>
                         <div className="flex items-center justify-between h-[32px] gap-2">
