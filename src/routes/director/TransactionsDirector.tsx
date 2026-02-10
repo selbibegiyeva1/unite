@@ -2,6 +2,7 @@ import { useState } from "react"
 import { NavLink, Outlet } from "react-router-dom"
 import Day, { type PeriodValue } from "../../components/director/transactions/Day"
 import { useTranslation } from "../../hooks/useTranslation"
+import { useUserInfo } from "../../hooks/auth/useUserInfo"
 
 const linkBaseClasses = "inline-flex flex-col items-start text-[14px] font-medium outline-0"
 const getLinkClasses = (isActive: boolean) =>
@@ -11,7 +12,12 @@ const underlineClasses = (isActive: boolean) =>
 
 function TransactionsDirector() {
     const { t } = useTranslation()
+    const { data: userInfo } = useUserInfo()
     const [periodValue, setPeriodValue] = useState<PeriodValue>("all")
+
+    const userRole = userInfo?.user?.role
+    const billingMode = userInfo?.company?.billing_mode
+    const isDirectorPostpaid = userRole === "DIRECTOR" && billingMode === "POSTPAID"
 
     return (
         <div className="px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4 pb-[100px] mt-[28px]">
@@ -25,20 +31,22 @@ function TransactionsDirector() {
 
                 <div className="my-5 overflow-x-auto">
                     <ul className="flex gap-4 min-w-max">
-                        <li className="px-1.5 py-2.5 shrink-0">
-                            <NavLink
-                                to="topup"
-                                end
-                                className={({ isActive }) => getLinkClasses(isActive)}
-                            >
-                                {({ isActive }) => (
-                                    <>
-                                        <span>{t.directorTransactions.topupTitle}</span>
-                                        <span className={underlineClasses(isActive)} />
-                                    </>
-                                )}
-                            </NavLink>
-                        </li>
+                        {!isDirectorPostpaid && (
+                            <li className="px-1.5 py-2.5 shrink-0">
+                                <NavLink
+                                    to="topup"
+                                    end
+                                    className={({ isActive }) => getLinkClasses(isActive)}
+                                >
+                                    {({ isActive }) => (
+                                        <>
+                                            <span>{t.directorTransactions.topupTitle}</span>
+                                            <span className={underlineClasses(isActive)} />
+                                        </>
+                                    )}
+                                </NavLink>
+                            </li>
+                        )}
                         <li className="px-1.5 py-2.5 shrink-0">
                             <NavLink
                                 to="purchase"
