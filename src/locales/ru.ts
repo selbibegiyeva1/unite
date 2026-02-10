@@ -25,6 +25,7 @@ export const ru = {
     nicknameLabel: 'Никнейм',
     fullNameLabel: 'Полное имя',
     roleLabel: 'Роль',
+    tokenLabel: 'Ваш токен',
     logout: 'Выйти',
     loggingOut: 'Выходим...',
   },

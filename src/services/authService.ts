@@ -39,6 +39,7 @@ export interface UserInfoResponse {
     display_name: string;
     billing_mode: string;
     logo: string;
+    api_token?: string;
   };
 }
 

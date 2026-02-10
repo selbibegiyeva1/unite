@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { NavLink, Outlet } from "react-router-dom"
+import { NavLink, Outlet, Navigate, useLocation } from "react-router-dom"
 import Day, { type PeriodValue } from "../../components/director/transactions/Day"
 import { useTranslation } from "../../hooks/useTranslation"
 import { useUserInfo } from "../../hooks/auth/useUserInfo"
@@ -14,10 +14,17 @@ function TransactionsDirector() {
     const { t } = useTranslation()
     const { data: userInfo } = useUserInfo()
     const [periodValue, setPeriodValue] = useState<PeriodValue>("all")
+    const location = useLocation()
 
     const userRole = userInfo?.user?.role
     const billingMode = userInfo?.company?.billing_mode
     const isDirectorPostpaid = userRole === "DIRECTOR" && billingMode === "POSTPAID"
+
+    const isAtRoot = location.pathname === "/director/transactions"
+
+    if (isDirectorPostpaid && isAtRoot) {
+        return <Navigate to="purchase" replace />
+    }
 
     return (
         <div className="px-20 max-1lg:px-15 max-md:px-8 max-sm:px-4 pb-[100px] mt-[28px]">
