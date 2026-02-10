@@ -69,11 +69,11 @@ function Menu({ isOpen, onClose }: MenuProps) {
         <div
             className={`fixed z-50 top-0 left-0 w-full h-full overflow-auto bg-white transition-opacity duration-200 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
         >
-            <header className="px-[80px] max-1lg:px-15 max-md:px-8 max-sm:px-4 border-b border-b-[#00000026]">
+            <header className="relative px-[80px] max-1lg:px-15 max-md:px-8 max-sm:px-4 border-b border-b-[#00000026]">
                 <Sidebar click={handleSidebarOpen} isSidebarOpen={isSidebarOpen} />
 
                 <div className={`m-auto flex h-[90px] max-1lg:h-[80px] max-sm:h-auto max-sm:py-5.5 max-w-[1680px] items-center justify-between gap-4 ${isDirectorPostpaid ? "max-sm:items-center" : "max-sm:items-start"}`}>
-                    <div className="flex items-start gap-8">
+                    <div className="flex items-start gap-8 max-sm:absolute max-sm:top-[22px] max-sm:left-[16px]">
                         <Link to={homePath}>
                             {userData?.company?.logo ? (
                                 <img
@@ -88,12 +88,12 @@ function Menu({ isOpen, onClose }: MenuProps) {
                         </Link>
                     </div>
 
-                    <div className="flex items-center gap-4 max-1lg:gap-2 max-sm:flex-wrap-reverse max-sm:justify-end">
+                    <div className="flex items-center gap-4 max-1lg:gap-2 max-sm:w-full max-sm:flex-col-reverse max-sm:flex-wrap max-sm:justify-end max-sm:items-end">
 
                         {!isDirectorPostpaid && (
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-4 max-sm:flex-col max-sm:items-start max-sm:w-full max-sm:gap-2 max-sm:mt-2">
                                 {/* Credit debt */}
-                                <div className="flex items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
+                                <div className="flex max-sm:w-full items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
                                     <svg className="shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12 5H5C3.89543 5 3 5.89543 3 7V14M21 3L16 9M15 3L15 4M22 8L22 9M3 14V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V14H3Z" stroke="#F50100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
@@ -106,7 +106,7 @@ function Menu({ isOpen, onClose }: MenuProps) {
                                 </div>
 
                                 {/* Current balance */}
-                                <div className="flex items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
+                                <div className="flex max-sm:w-full items-center gap-2 font-bold px-4 py-[7.5px] border border-[#00000026] rounded-[8px]">
                                     <svg className="shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M3 6V17C3 18.6569 4.34315 20 6 20H20C20.5523 20 21 19.5523 21 19V16M3 6C3 4.89543 3.89543 4 5 4H18C18.5523 4 19 4.44772 19 5V8M3 6C3 7.10457 3.89543 8 5 8H19M19 8H20C20.5523 8 21 8.44772 21 9V12M21 12H18C16.8954 12 16 12.8954 16 14C16 15.1046 16.8954 16 18 16H21M21 12V16" stroke="#2D85EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
