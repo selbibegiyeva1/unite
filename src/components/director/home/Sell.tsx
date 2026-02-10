@@ -178,8 +178,9 @@ function Sell({ period = "all" }: SellProps) {
                 x: {
                     grid: { display: false },
                     ticks: {
-                        maxRotation: period === "year" ? 45 : 0,
-                        autoSkip: period !== "year",
+                        maxRotation: 45,
+                        autoSkip: false,
+                        maxTicksLimit: undefined,
                         font: { size: 11 },
                     },
                 },
