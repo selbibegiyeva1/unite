@@ -80,6 +80,7 @@ function Sell({ period = "all" }: SellProps) {
                     borderColor: BAR_COLOR,
                     borderWidth: 0,
                     borderRadius: 4,
+                    maxBarThickness: 50,
                 },
             ],
         };
