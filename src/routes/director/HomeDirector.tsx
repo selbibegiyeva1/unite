@@ -27,6 +27,8 @@ function HomeDirector() {
                     <SalesByProduct period={periodValue} />
                     <TopClients period={periodValue} />
                 </div>
+
+                {/* test */}
             </div>
         </div>
     )
