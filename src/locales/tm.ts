@@ -233,7 +233,7 @@ export const tm = {
     transactions: 'Tranzaksiýalar',
     profit: 'Girdeji',
     averageCheck: 'Ortaça töleg',
-    pieces: 'st',
+    pieces: 'san',
     salesRevenue: 'Satuw aýlanyşygy',
     transactionCount: 'Tranzaksiýalar sany',
     byProducts: '(produktlar boýunça)',
