@@ -248,6 +248,14 @@ export const tm = {
     cashbackVoucher: 'Käşbek VOUCHER',
     loadError: 'Maglumatlary ýüklemekde säwlik ýüze çykdy',
     loading: 'Ýüklenýär...',
+    tooltips: {
+      currentBalance: 'Hasabyňyzdaky serişdeler',
+      creditDebt: 'Satyn alyşlar boýunça jemi karz mukdary',
+      availablePayout: 'Aýyň ahyrynda nagt almaga elýeterli serişdeler',
+      cashback: 'Satyn alyşdan töleg hasabyna geçirilýän göterim gaýtaryşy',
+      profit: 'Saýlanan döwür üçin girdeji mukdary',
+      averageCheck: 'Saýlanan döwür üçin bir geleşigiň ortaça mukdary',
+    },
   },
   directorTransactions: {
     heading: 'Tranzaksiýalar',

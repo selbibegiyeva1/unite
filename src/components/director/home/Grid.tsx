@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from '../../../hooks/useTranslation'
 import { useDirectorMainInfo } from '../../../hooks/director/home/useDirectorMainInfo'
 import { type PeriodValue } from '../transactions/Day'
@@ -36,6 +36,7 @@ const periodToApi = (p: PeriodValue): string => (p === 'all' ? 'all_time' : p)
 
 function Grid({ period = 'all' }: { period?: PeriodValue }) {
     const { t, lang } = useTranslation()
+    const [hoveredBlockId, setHoveredBlockId] = useState<BlockId | null>(null)
     const { data, isLoading } = useDirectorMainInfo({
         category: 'ALL',
         period: periodToApi(period),
@@ -73,6 +74,20 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
         ]
     }, [data, lang, isLoading])
 
+    const getBlockLabel = (id: BlockId): string => {
+        switch (id) {
+            case 'turnover':
+                return t.homeDirector.turnover
+            case 'transactions':
+                return t.homeDirector.transactions
+            case 'profit':
+                return t.homeDirector.profit
+            case 'averageCheck':
+            default:
+                return t.homeDirector.averageCheck
+        }
+    }
+
     return (
         <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-2 max-md:grid-cols-2" id="grid">
             {blocks.map((block) => (
@@ -80,8 +95,29 @@ function Grid({ period = 'all' }: { period?: PeriodValue }) {
                     <div className='flex items-center justify-between h-[32px] gap-2'>
                         <div className="flex items-center gap-2">
                             {block.icon}
-                            <p className="text-[14px] font-medium max-md:text-[12px]">{t.homeDirector[block.id as keyof typeof t.homeDirector]}</p>
+                            <p className="text-[14px] font-medium max-md:text-[12px]">
+                                {getBlockLabel(block.id)}
+                            </p>
                         </div>
+                        {(block.id === 'profit' || block.id === 'averageCheck') && (
+                            <div className="relative">
+                                <img
+                                    src="/director.png"
+                                    alt="director"
+                                    className="w-[32px] cursor-pointer"
+                                    onMouseEnter={() => setHoveredBlockId(block.id)}
+                                    onMouseLeave={() => setHoveredBlockId(null)}
+                                />
+                                <p
+                                    className={`absolute top-[40px] bg-white rounded-[10px] border border-[#00000026] px-4 py-[10px] w-[260px] text-center right-0 text-[12px] font-medium text-[#000000] z-10 transition-opacity duration-200 ease-in-out ${
+                                        hoveredBlockId === block.id ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                                    }`}
+                                >
+                                    {block.id === 'profit' && t.homeDirector.tooltips.profit}
+                                    {block.id === 'averageCheck' && t.homeDirector.tooltips.averageCheck}
+                                </p>
+                            </div>
+                        )}
                     </div>
                     <p className="text-[24px] font-medium mt-3 max-lg:text-[20px] max-md:text-[18px] max-md:mt-2">
                         {'valueUnit' in block && block.valueUnit

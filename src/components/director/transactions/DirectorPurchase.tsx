@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { usePurchaseHistory } from "../../../hooks/director/transactions/usePurchaseHistory"
 import { type PeriodValue } from "./Day"
 import { useTranslation } from "../../../hooks/useTranslation"
+import Copied from "../../operator/transactions/Copied"
 
 interface PurchaseRow {
     id: string
@@ -24,6 +25,8 @@ function DirectorPurchase({ period: periodValue = "all" }: DirectorPurchaseProps
     const { t } = useTranslation()
     const [currentPage, setCurrentPage] = useState(1)
     const [isRefreshing, setIsRefreshing] = useState(false)
+    const [showCopied, setShowCopied] = useState(false)
+    const [isVisible, setIsVisible] = useState(false)
 
     // Map period value: "all" -> "all_time", others pass through
     const period = periodValue === "all" ? "all_time" : periodValue
@@ -38,6 +41,28 @@ function DirectorPurchase({ period: periodValue = "all" }: DirectorPurchaseProps
     useEffect(() => {
         setCurrentPage(1)
     }, [periodValue])
+
+    useEffect(() => {
+        if (showCopied) {
+            setTimeout(() => setIsVisible(true), 10)
+            const timer = setTimeout(() => {
+                setIsVisible(false)
+                setTimeout(() => setShowCopied(false), 300)
+            }, 3000)
+            return () => clearTimeout(timer)
+        } else {
+            setIsVisible(false)
+        }
+    }, [showCopied])
+
+    const handleCopy = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text)
+            setShowCopied(true)
+        } catch (err) {
+            console.error("Failed to copy:", err)
+        }
+    }
 
     const handleRefresh = async () => {
         setIsRefreshing(true)
@@ -190,11 +215,29 @@ function DirectorPurchase({ period: periodValue = "all" }: DirectorPurchaseProps
                                     className="grid grid-cols-8 gap-[30px] items-center text-center px-2.5 py-3 mb-[12px] rounded-[6px] text-black"
                                 >
                                     <td className="text-left">{row.date}</td>
-                                    <td className="truncate min-w-0 text-[#2D85EA] cursor-default">
-                                        {row.email}
+                                    <td className="truncate min-w-0">
+                                        <span
+                                            onClick={() => handleCopy(row.email)}
+                                            className="text-[#2D85EA] underline cursor-pointer select-text"
+                                            title={t.transactions.copyHint}
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => e.key === "Enter" && handleCopy(row.email)}
+                                        >
+                                            {row.email}
+                                        </span>
                                     </td>
-                                    <td className="truncate min-w-0 text-[#2D85EA] cursor-default">
-                                        {row.transactionId}
+                                    <td className="truncate min-w-0">
+                                        <span
+                                            onClick={() => handleCopy(row.transactionId)}
+                                            className="text-[#2D85EA] underline cursor-pointer select-text"
+                                            title={t.transactions.copyHint}
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => e.key === "Enter" && handleCopy(row.transactionId)}
+                                        >
+                                            {row.transactionId}
+                                        </span>
                                     </td>
                                     <td>{row.operator}</td>
                                     <td>{row.category}</td>
@@ -229,6 +272,8 @@ function DirectorPurchase({ period: periodValue = "all" }: DirectorPurchaseProps
                     ))}
                 </div>
             )}
+
+            {showCopied && <Copied isVisible={isVisible} />}
         </div>
     )
 }

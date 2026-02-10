@@ -20,7 +20,8 @@ const periodToApi = (p: PeriodValue): string => (p === "all" ? "all_time" : p);
 
 const BAR_COLOR = "#2D85EA";
 
-function formatChartLabel(raw: string, locale: string): string {
+/** Format bucket_start as date only when bucket_label is not provided */
+function formatBucketStartAsLabel(raw: string, locale: string): string {
     const d = new Date(raw);
     if (isNaN(d.getTime())) return raw;
     return d.toLocaleDateString(locale, { day: "numeric", month: "short" });
@@ -54,13 +55,12 @@ function Sell({ period = "all" }: SellProps) {
                 ? data?.revenue_bars ?? []
                 : data?.transactions_bars ?? [];
 
-        const labels = source.map((item) =>
-            formatChartLabel(
-                // Prefer explicit bucket label, fall back to start date
-                (item as any).bucket_label ?? (item as any).bucket_start ?? "",
-                locale
-            )
-        );
+        const labels = source.map((item) => {
+            const label = (item as { bucket_label?: string; bucket_start?: string }).bucket_label;
+            const start = (item as { bucket_start?: string }).bucket_start;
+            if (label != null && label !== "") return label;
+            return formatBucketStartAsLabel(start ?? "", locale);
+        });
 
         const values = source.map((item) =>
             mode === "revenue"
@@ -79,6 +79,8 @@ function Sell({ period = "all" }: SellProps) {
                     backgroundColor: BAR_COLOR,
                     borderColor: BAR_COLOR,
                     borderWidth: 0,
+                    borderRadius: 4,
+                    maxBarThickness: 50,
                 },
             ],
         };
@@ -119,36 +121,42 @@ function Sell({ period = "all" }: SellProps) {
                             return;
                         }
 
-                        // Format full date for tooltip (e.g., "18 Окт 2025")
-                        const dateStr =
-                            (raw as any).bucket_label ?? (raw as any).bucket_start ?? "";
-                        const d = new Date(dateStr);
-                        const formattedDate = isNaN(d.getTime())
-                            ? dateStr
-                            : d.toLocaleDateString(locale, {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
-                            });
+                        // Use bucket_label when present, otherwise format bucket_start
+                        const bucketLabel = (raw as { bucket_label?: string }).bucket_label;
+                        const bucketStart = (raw as { bucket_start?: string }).bucket_start;
+                        const formattedDate =
+                            bucketLabel != null && bucketLabel !== ""
+                                ? bucketLabel
+                                : bucketStart
+                                    ? (() => {
+                                        const d = new Date(bucketStart);
+                                        return isNaN(d.getTime())
+                                            ? bucketStart
+                                            : d.toLocaleDateString(locale, {
+                                                day: "numeric",
+                                                month: "short",
+                                                year: "numeric",
+                                            });
+                                    })()
+                                    : "";
 
                         const rawValue = tooltipModel.dataPoints[0]?.parsed.y ?? 0;
                         const value =
                             mode === "revenue"
                                 ? new Intl.NumberFormat(locale, {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                  }).format(rawValue)
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                }).format(rawValue)
                                 : new Intl.NumberFormat(locale).format(rawValue);
 
                         // Set HTML content
                         tooltipEl.innerHTML = `
                             <div class="chart-tooltip-block">
                                 <div class="chart-tooltip-date">${formattedDate}</div>
-                                <div class="chart-tooltip-value">${
-                                    mode === "revenue"
-                                        ? `${value} TMT`
-                                        : `${value} ${t.homeDirector.pieces}`
-                                }</div>
+                                <div class="chart-tooltip-value">${mode === "revenue"
+                                ? `${value} TMT`
+                                : `${value} ${t.homeDirector.pieces}`
+                            }</div>
                             </div>
                         `;
 
@@ -170,8 +178,9 @@ function Sell({ period = "all" }: SellProps) {
                 x: {
                     grid: { display: false },
                     ticks: {
-                        maxRotation: period === "year" ? 45 : 0,
-                        autoSkip: period !== "year",
+                        maxRotation: 45,
+                        autoSkip: false,
+                        maxTicksLimit: undefined,
                         font: { size: 11 },
                     },
                 },
@@ -200,7 +209,7 @@ function Sell({ period = "all" }: SellProps) {
     }
 
     return (
-        <div className="w-full max-lg:grid-col-span-2 p-6.5 border border-[#00000026] rounded-[16px] max-lg:col-span-2 max-sm:col-span-1">
+        <div className="col-span-2 p-6.5 border border-[#00000026] rounded-[16px] max-lg:col-span-2 max-sm:col-span-1">
             <div className="flex items-center justify-between gap-4 mb-4">
                 <p className="font-medium text-[18px]">
                     {mode === "revenue"
@@ -214,16 +223,14 @@ function Sell({ period = "all" }: SellProps) {
                     onClick={() =>
                         setMode((prev) => (prev === "revenue" ? "transactions" : "revenue"))
                     }
-                    className={`relative min-w-[56px] h-[30px] rounded-full cursor-pointer transition-all duration-300 ease-in-out ${
-                        mode === "revenue" ? "bg-[#2D85EA]" : "bg-[#E5F0FF]"
-                    }`}
+                    className={`relative min-w-[56px] h-[30px] rounded-full cursor-pointer transition-all duration-300 ease-in-out ${mode === "revenue" ? "bg-[#2D85EA]" : "bg-[#E5F0FF]"
+                        }`}
                     aria-pressed={mode === "transactions"}
                     aria-label="Toggle chart view"
                 >
                     <span
-                        className={`absolute top-[50%] h-[22px] w-[22px] rounded-full bg-white shadow-sm transform -translate-y-1/2 transition-all duration-300 ease-in-out ${
-                            mode === "revenue" ? "right-[4px]" : "left-[4px]"
-                        }`}
+                        className={`absolute top-[50%] h-[22px] w-[22px] rounded-full bg-white shadow-sm transform -translate-y-1/2 transition-all duration-300 ease-in-out ${mode === "revenue" ? "right-[4px]" : "left-[4px]"
+                            }`}
                     />
                 </button>
             </div>
@@ -234,8 +241,18 @@ function Sell({ period = "all" }: SellProps) {
             ) : (
                 <>
                     <div id="chart-tooltip-sell" className="chart-tooltip" />
-                    <div className="h-[317px]">
-                        <Bar data={chartData} options={options} />
+                    <div
+                        className={
+                            period !== "all"
+                                ? "overflow-auto transactions-table-scroll"
+                                : ""
+                        }
+                    >
+                        <div
+                            className={`h-[317px] ${period !== "all" ? "max-3lg:min-w-[1000px]" : ""}`}
+                        >
+                            <Bar data={chartData} options={options} />
+                        </div>
                     </div>
                 </>
             )}
