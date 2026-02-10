@@ -129,35 +129,34 @@ function Sell({ period = "all" }: SellProps) {
                                 ? bucketLabel
                                 : bucketStart
                                     ? (() => {
-                                          const d = new Date(bucketStart);
-                                          return isNaN(d.getTime())
-                                              ? bucketStart
-                                              : d.toLocaleDateString(locale, {
-                                                    day: "numeric",
-                                                    month: "short",
-                                                    year: "numeric",
-                                                });
-                                      })()
+                                        const d = new Date(bucketStart);
+                                        return isNaN(d.getTime())
+                                            ? bucketStart
+                                            : d.toLocaleDateString(locale, {
+                                                day: "numeric",
+                                                month: "short",
+                                                year: "numeric",
+                                            });
+                                    })()
                                     : "";
 
                         const rawValue = tooltipModel.dataPoints[0]?.parsed.y ?? 0;
                         const value =
                             mode === "revenue"
                                 ? new Intl.NumberFormat(locale, {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                  }).format(rawValue)
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                }).format(rawValue)
                                 : new Intl.NumberFormat(locale).format(rawValue);
 
                         // Set HTML content
                         tooltipEl.innerHTML = `
                             <div class="chart-tooltip-block">
                                 <div class="chart-tooltip-date">${formattedDate}</div>
-                                <div class="chart-tooltip-value">${
-                                    mode === "revenue"
-                                        ? `${value} TMT`
-                                        : `${value} ${t.homeDirector.pieces}`
-                                }</div>
+                                <div class="chart-tooltip-value">${mode === "revenue"
+                                ? `${value} TMT`
+                                : `${value} ${t.homeDirector.pieces}`
+                            }</div>
                             </div>
                         `;
 
@@ -224,16 +223,14 @@ function Sell({ period = "all" }: SellProps) {
                     onClick={() =>
                         setMode((prev) => (prev === "revenue" ? "transactions" : "revenue"))
                     }
-                    className={`relative min-w-[56px] h-[30px] rounded-full cursor-pointer transition-all duration-300 ease-in-out ${
-                        mode === "revenue" ? "bg-[#2D85EA]" : "bg-[#E5F0FF]"
-                    }`}
+                    className={`relative min-w-[56px] h-[30px] rounded-full cursor-pointer transition-all duration-300 ease-in-out ${mode === "revenue" ? "bg-[#2D85EA]" : "bg-[#E5F0FF]"
+                        }`}
                     aria-pressed={mode === "transactions"}
                     aria-label="Toggle chart view"
                 >
                     <span
-                        className={`absolute top-[50%] h-[22px] w-[22px] rounded-full bg-white shadow-sm transform -translate-y-1/2 transition-all duration-300 ease-in-out ${
-                            mode === "revenue" ? "right-[4px]" : "left-[4px]"
-                        }`}
+                        className={`absolute top-[50%] h-[22px] w-[22px] rounded-full bg-white shadow-sm transform -translate-y-1/2 transition-all duration-300 ease-in-out ${mode === "revenue" ? "right-[4px]" : "left-[4px]"
+                            }`}
                     />
                 </button>
             </div>
@@ -244,8 +241,10 @@ function Sell({ period = "all" }: SellProps) {
             ) : (
                 <>
                     <div id="chart-tooltip-sell" className="chart-tooltip" />
-                    <div className="h-[317px]">
-                        <Bar data={chartData} options={options} />
+                    <div className="overflow-auto transactions-table-scroll">
+                        <div className="h-[317px] max-3lg:min-w-[1000px]">
+                            <Bar data={chartData} options={options} />
+                        </div>
                     </div>
                 </>
             )}
