@@ -247,6 +247,14 @@ export const ru = {
     cashbackVoucher: 'Кэшбек VOUCHER',
     loadError: 'Ошибка загрузки данных',
     loading: 'Загрузка...',
+    tooltips: {
+      currentBalance: 'Средства на вашем счёте',
+      creditDebt: 'Общая сумма долга по покупкам',
+      availablePayout: 'Средства, доступные для снятия в конце месяца',
+      cashback: 'Возврат процента с покупки на счёт выплат',
+      profit: 'Сумма дохода за выбранный период',
+      averageCheck: 'Средняя сумма одной сделки за выбранный период',
+    },
   },
   directorTransactions: {
     heading: 'Транзакции',

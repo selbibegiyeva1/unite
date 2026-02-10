@@ -190,7 +190,13 @@ function Service() {
                                         hoveredBlockId === block.id ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                                     }`}
                                 >
-                                    Расчёт по проценту категории
+                                    {block.id === "currentBalance" && t.homeDirector.tooltips.currentBalance}
+                                    {block.id === "creditDebt" && t.homeDirector.tooltips.creditDebt}
+                                    {block.id === "availablePayout" && t.homeDirector.tooltips.availablePayout}
+                                    {(block.id === "cashbackSteam" ||
+                                      block.id === "cashbackTopup" ||
+                                      block.id === "cashbackVoucher") &&
+                                        t.homeDirector.tooltips.cashback}
                                 </p>
                             </div>
                         </div>
