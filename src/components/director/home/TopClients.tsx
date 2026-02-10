@@ -80,7 +80,7 @@ function TopClients({ period = "all" }: TopClientsProps) {
     }
 
     return (
-        <div className="w-full p-6.5 border border-[#00000026] rounded-[16px] h-full flex flex-col">
+        <div className="w-full min-w-0 max-w-[352px] max-lg:max-w-full p-6.5 border border-[#00000026] rounded-[16px] h-full flex flex-col">
             <p className="font-medium text-[18px] mb-4">{t.homeDirector.topClientsTitle}</p>
 
             <div>

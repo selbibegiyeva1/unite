@@ -181,7 +181,7 @@ function SalesByProduct({ period = "all" }: SalesByProductProps) {
     }
 
     return (
-        <div className="w-full p-6.5 border border-[#00000026] rounded-[16px] flex flex-col justify-between gap-4">
+        <div className="w-full max-w-[460px] max-lg:max-w-full p-6.5 border border-[#00000026] rounded-[16px] flex flex-col justify-between gap-4">
             <div className="flex items-center justify-between gap-4">
                 <p className="font-medium text-[18px]">
                     {t.homeDirector.salesRevenue}{" "}
@@ -221,13 +221,13 @@ function SalesByProduct({ period = "all" }: SalesByProductProps) {
                         id="chart-tooltip-sales-by-product"
                         className="chart-tooltip"
                     />
-                    <div className="relative w-full max-w-[260px] m-auto aspect-square max-md:max-w-[220px]">
+                    <div className="relative w-full max-w-[218px] m-auto aspect-square max-md:max-w-[220px]">
                         <Doughnut data={chartData} options={options} />
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                             <p className="text-[#00000099] mb-1 font-medium">
                                 {t.homeDirector.totalLabel}
                             </p>
-                            <p className="text-[20px] font-semibold text-black text-center">
+                            <p className="text-[17px] font-semibold text-black text-center">
                                 {formattedTotal}
                             </p>
                         </div>

@@ -22,7 +22,7 @@ function HomeDirector() {
                 <div className="mt-5">
                     <Grid key={lang} period={periodValue} />
                 </div>
-                <div className="mt-[19px] gap-[19px] grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
+                <div className="mt-[19px] gap-[19px] flex max-lg:grid max-lg:grid-cols-2 max-sm:grid-cols-1">
                     <Sell period={periodValue} />
                     <SalesByProduct period={periodValue} />
                     <TopClients period={periodValue} />
