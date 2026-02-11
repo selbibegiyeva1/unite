@@ -17,6 +17,9 @@
     --breakpoint-1md: 600px;
     --breakpoint-0md: 470px;
     --breakpoint-xsm: 425px;
+
+    --breakpoint-grd1: 1300px;
+    --breakpoint-grd2: 650px;
 }
 
 @layer {
