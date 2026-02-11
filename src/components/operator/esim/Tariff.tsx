@@ -76,7 +76,7 @@ function Tariff({ activeTab, selectedCodeForApi, selectedName, selectedFlagUrl, 
                 </p>
             )}
 
-            <div className="mt-6.5 grid grid-cols-4 gap-8 max-2lg:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1">
+            <div className="mt-6.5 grid grid-cols-4 gap-8 max-2lg:grid-cols-3 max-lg:grid-cols-2" id="esimgrid">
                 {selectedCodeForApi && !isLoading && !isError && tariffs.length === 0 && (
                     <p className="text-sm text-[#00000099]">
                         {t.esim.tariff.empty}
