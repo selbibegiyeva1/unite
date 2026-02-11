@@ -9,9 +9,11 @@
 @theme {
     --breakpoint-3lg: 1600px;
     --breakpoint-2lg: 1440px;
-    --breakpoint-1lg: 1250px;
+    --breakpoint-1lg: 1400px;
     --breakpoint-slg: 1010px;
     --breakpoint-0lg: 868px;
+    --breakpoint-md: 820px;
+    --breakpoint-sm: 750px;
     --breakpoint-1md: 600px;
     --breakpoint-0md: 470px;
     --breakpoint-xsm: 425px;
